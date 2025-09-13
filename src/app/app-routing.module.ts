@@ -19,8 +19,8 @@ export const routes: Routes = [
     path: 'admin',
     loadComponent: () => import('./layouts/admin-layout/side-nav-outer-toolbar.component').then((m) => m.SideNavOuterToolbarComponent),
     children: [
-      { path: 'dashboard', loadComponent: () => import('./pages/admin-dashboard/admin-dashboard.component').then((m) => m.AdminDashboardComponent), data: { breadcrumb: 'Dashboard' }, canActivate: [ AuthGuardService ]},
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'connections', loadComponent: () => import('./pages/connections/connections-list.component').then((m) => m.ConnectionsListComponent), data: { breadcrumb: 'Connections' }, canActivate: [ AuthGuardService ]},
+      { path: '', redirectTo: 'connections', pathMatch: 'full' },
     ]
   },
   { path: '**', redirectTo: 'home'},

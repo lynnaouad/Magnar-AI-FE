@@ -1,0 +1,168 @@
+<div class="view-wrapper list-page table-wrapper">
+  <ng-container>
+    <dx-data-grid
+      class="dx-card content-block"
+      [dataSource]="dataSource"
+      [remoteOperations]="true"
+      [showBorders]="true"
+      [focusedRowEnabled]="false"
+      [focusedRowIndex]="0"
+      [columnAutoWidth]="true"
+      [columnHidingEnabled]="false"
+    >
+      <dxo-scrolling rowRenderingMode="virtual"> </dxo-scrolling>
+      <dxo-paging [pageSize]="5"> </dxo-paging>
+      <dxo-pager
+        [visible]="true"
+        [allowedPageSizes]="[5, 10, 20, 30, 40, 50, 100]"
+        displayMode="full"
+        [showPageSizeSelector]="true"
+        [showInfo]="true"
+        [showNavigationButtons]="true"
+      >
+      </dxo-pager>
+
+      <dxo-selection
+        selectAllMode="allPages"
+        showCheckBoxesMode="always"
+        mode="multiple"
+        [allowSelectAll]="false"
+      ></dxo-selection>
+
+      <dxo-filter-row [visible]="true" applyFilter="auto"></dxo-filter-row>
+
+      <dxo-pager [visible]="true"></dxo-pager>
+
+      <!----------------------------------- Toolbar ----------------------------------------->
+
+      <dxo-toolbar class="table-toolbar">
+        <dxi-item location="before">
+          <div class="grid-header">{{ "Connections" | translate }}</div>
+        </dxi-item>
+
+        <dxi-item location="after" locateInMenu="after">
+          <div *dxTemplate="let data of 'content'">
+            <dx-button
+              [text]="'Add' | translate"
+              icon="plus"
+              type="default"
+              stylingMode="contained"
+              (onClick)="onAddingNewRecord()"
+            ></dx-button>
+          </div>
+        </dxi-item>
+
+        <dxi-item name="exportButton"></dxi-item>
+        <dxi-item name="searchPanel" locateInMenu="auto"></dxi-item>
+      </dxo-toolbar>
+
+      <!----------------------------------- Columns ---------------------------------------->
+
+      <!-- Id column -->
+      <dxi-column dataField="id" [caption]="'Id' | translate"> </dxi-column>
+
+      <!-- Provider Name column -->
+      <dxi-column dataField="provider" [caption]="'Provider' | translate" [calculateCellValue]="translateProvider">
+      </dxi-column>
+
+            <!-- Created By Column -->
+      <dxi-column dataField="isDefault" [caption]="'Default' | translate" [calculateCellValue]="isDefaultText">
+      </dxi-column>
+
+      <!-- Created By Column -->
+      <dxi-column dataField="createdBy" [caption]="'CreatedBy' | translate">
+      </dxi-column>
+
+      <!-- Creation date Column -->
+      <dxi-column
+        dataField="createdAt"
+        [caption]="'CreationDate' | translate"
+        dataType="datetime"
+        format="d MMMM yyyy"
+      >
+      </dxi-column>
+
+      <!-- Edit & delete Column -->
+      <dxi-column cellTemplate="actionsTemplate"></dxi-column>
+
+      <div *dxTemplate="let cellInfo of 'actionsTemplate'">
+        <div class="table-btns">
+          <dx-button
+            [id]="'edit-btn-' + cellInfo.rowIndex"
+            class="table-edit-btn"
+            icon="edit"
+            stylingMode="contained"
+            (onClick)="onEditRecord(cellInfo.row.data)"
+          ></dx-button>
+
+          <dx-button
+            [id]="'delete-btn-' + cellInfo.rowIndex"
+            class="table-delete-btn"
+            icon="trash"
+            stylingMode="contained"
+            (onClick)="onDeleteRecord(cellInfo)"
+          ></dx-button>
+
+          <dx-tooltip
+            [target]="'#edit-btn-' + cellInfo.rowIndex"
+            showEvent="mouseenter"
+            hideEvent="mouseleave"
+            position="top"
+            [hideOnOutsideClick]="false"
+          >
+            <div
+              *dxTemplate="let data = data; of: 'content'"
+              style="text-align: left"
+            >
+              {{ "EditRecord" | translate }}
+            </div>
+          </dx-tooltip>
+
+          <dx-tooltip
+            [target]="'#delete-btn-' + cellInfo.rowIndex"
+            showEvent="mouseenter"
+            hideEvent="mouseleave"
+            position="top"
+            [hideOnOutsideClick]="false"
+          >
+            <div
+              *dxTemplate="let data = data; of: 'content'"
+              style="text-align: left"
+            >
+              {{ "DeleteRecord" | translate }}
+            </div>
+          </dx-tooltip>
+        </div>
+      </div>
+    </dx-data-grid>
+  </ng-container>
+
+  <ng-template #loading>
+    <dx-load-panel
+      [visible]="true"
+      [showPane]="false"
+      container=".content"
+      [position]="{ of: '.content' }"
+    >
+    </dx-load-panel>
+  </ng-template>
+</div>
+
+<!--------------------------------------------------------------------------------------------------------------------------------------------->
+
+<create-connection
+  [data]="newConnection"
+  [(showPopup)]="isPopupOpened"
+  (OnSubmit)="onSubmitPopup()"
+>
+</create-connection>
+
+<verification-popup-form
+  [title]="'DeleteConnection' | translate"
+  [message]="'DeleteConnectionValidation' | translate"
+  [(visible)]="isDeletePopupOpened"
+  (onConfirm)="deleteRecord()"
+  [(isLoading)]="deleteLoading"
+  [isWarningButton]="true"
+>
+</verification-popup-form>

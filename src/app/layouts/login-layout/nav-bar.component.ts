@@ -60,11 +60,6 @@ export class NavBarComponent implements OnInit {
   recruiterMenuItems: any[] = [];
   defaultMenuItems: any[] = [];
 
-  userCompanies: any[] = [];
-  roleName: string = '';
-
-  isSwitchCompanyPopupVisible: boolean = false;
-
   constructor(
     protected screen: ScreenService,
     private router: Router,

@@ -221,6 +221,18 @@
   "GenerateWithAI": "Generate with AI",
   "GenerateWithAIHeader": "Find your next great hire",
   "GenerateWithAIHeaderDescription": "90% of small businesses find a qualified candidate in just one day, highlighting the effectiveness of efficient hiring processes.",
+  "Connections": "Connections",
+  "Connection": "Connection",
+  "DeleteConnection": "Delete Connection",
+  "DeleteConnectionValidation": "Are you sure you want to delete this conenction ?",
+  "Provider": "Provider",
+  "Default": "Default",
+  "ON": "ON",
+  "OFF": "OFF",
+  "SqlServer": "SQL Server",
+  "API": "API",
+  "DatabaseName": "Database Name",
+  "InstanceName": "Instance Name",
 
   "NavBar.Home": "Home",
   "NavBar.MyCv": "My CV",
@@ -267,6 +279,9 @@
   "Yes": "Yes",
   "No": "No",
 
+  "ToastNotifications.RecordDeletedSuccessfully": "Record deleted successfully !",
+  "ToastNotifications.RecordUpdatedSuccessfully": "Record updated successfully !",
+  "ToastNotifications.RecordCreatedSuccessfully": "Record created successfully !",
   "ToastNotifications.ProfilePictureUpdated": "Profile picture updated successfully!",
   "ToastNotifications.DatesValidation": "End date cannot be earlier than start date.",
   "ToastNotifications.CertificationCreated": "Certification created successfully !",
@@ -490,6 +505,9 @@
   "ValidationMessages.CompanyIdRequired": "Company Id Required",
   "ValidationMessages.PromptRequired": "Prompt Required",
   "ValidationMessages.MaxTop10": "Max Top 10",
+
+  "ValidationMessages.CannotHaveMultipleDefaultConnections": "Cannot have multiple default connections",
+  "ValidationMessages.RequiredField": "This field is required !",
 
   "Pending": "Pending",
   "Approved": "Approved",

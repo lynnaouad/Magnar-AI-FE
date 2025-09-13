@@ -221,6 +221,17 @@
   "GenerateWithAI": "توليد مع الذكاء الاصطناعي",
   "GenerateWithAIHeader": "ابحث عن موظفك العظيم التالي", 
   "GenerateWithAIHeaderDescription": "٩٠٪ من الشركات الصغيرة تجد مرشحًا مؤهلاً في يوم واحد فقط، مما يبرز فعالية عمليات التوظيف الفعالة",
+  "Connections": "التكوينات",
+  "Connection": "التكوين",
+  "DeleteConnection": "حذف التكوين؟",
+  "DeleteConnectionValidation": "هل أنت متأكد أنك تريد حذف هذا التكوين؟",
+  "Default": "اساسي",
+  "ON": "تشغيل",
+  "OFF": "إيقاف",
+  "SqlServer": "SQL Server",
+  "API": "API",
+  "DatabaseName": "اسم قاعدة البيانات",
+  "InstanceName": "اسم مثيل الخادم",
 
   "NavBar.Home": "الصفحة الرئيسية",
   "NavBar.MyCv": "سيرتي الذاتية",
@@ -261,6 +272,10 @@
   "Policy.And": "و",
   "Policy.Privacy": "سياسة الخصوصية",
   "ChangePasswordPolicy": "سنرسل رابط إعادة تعيين إلى هذا البريد الإلكتروني إذا كان يتطابق مع حساب Magnar موجود.",
+  
+  "ToastNotifications.RecordDeletedSuccessfully": "تم حذف السجل بنجاح!",
+  "ToastNotifications.RecordUpdatedSuccessfully": "تم تحديث السجل بنجاح!",
+  "ToastNotifications.RecordCreatedSuccessfully": "تم إنشاء السجل بنجاح!",
   "ToastNotifications.ProfilePictureUpdated": "تم تحديث صورة الملف الشخصي بنجاح!",
   "ToastNotifications.DatesValidation": "تاريخ الانتهاء لا يمكن أن يكون قبل تاريخ البدء.",
   "ToastNotifications.CertificationCreated": "تم إنشاء الشهادة بنجاح!",
@@ -478,6 +493,9 @@
   "ValidationMessages.CompanyIdRequired": "مطلوب معرف الشركة",
   "ValidationMessages.PromptRequired": "مطلوب موجه",
   "ValidationMessages.MaxTop10": "يمكنك تحديد الحد الأقصى ١٠",
+
+  "ValidationMessages.CannotHaveMultipleDefaultConnections": "لا يمكن أن يكون هناك اتصالات افتراضية متعددة",
+  "ValidationMessages.RequiredField": "هذه الخانة مطلوبه",
 
   "Pending": "قيد الانتظار",
   "Approved": "موافق عليه",

@@ -57,7 +57,6 @@ export class SideNavOuterToolbarComponent implements OnInit, OnChanges, OnDestro
   minMenuSize = 0;
   shaderEnabled = false;
   swatchClassName = 'dx-swatch-additional';
-  isSwitchCompanyPopupVisible = false;
 
   defaultMenuItems: any[] = [];
 
@@ -173,7 +172,6 @@ export class SideNavOuterToolbarComponent implements OnInit, OnChanges, OnDestro
       this.menuItems = [];
       return;
     }
-    console.log("hh")
 
     this.menuItems = this.defaultMenuItems;
   }

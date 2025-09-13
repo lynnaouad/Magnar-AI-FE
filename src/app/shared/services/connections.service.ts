@@ -1,0 +1,47 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
+import { catchError } from 'rxjs';
+import { Utilities } from '../utils/utilities.service';
+
+@Injectable({ providedIn: 'root' })
+export class ConnectionsService {
+  backEndUrl: string = environment.apiUrl + '/api/Connections';
+
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private utilities: Utilities
+  ) {}
+
+  get(id: number) {
+    return this.http
+      .get(this.backEndUrl + `/${id}`)
+      .pipe(catchError(this.utilities.handleErrorGlobal));
+  }
+
+  getOdata(queryString: string) {
+    return this.http
+      .get(this.backEndUrl + `/odata?${queryString}`)
+      .pipe(catchError(this.utilities.handleErrorGlobal));
+  }
+
+  update(data: any) {
+    return this.http
+      .put(this.backEndUrl, data)
+      .pipe(catchError(this.utilities.handleErrorGlobal));
+  }
+
+  create(data: any) {
+    return this.http
+      .post(this.backEndUrl, data)
+      .pipe(catchError(this.utilities.handleErrorGlobal));
+  }
+
+  delete(id: any) {
+    return this.http
+      .delete(`${this.backEndUrl}/${id}`)
+      .pipe(catchError(this.utilities.handleErrorGlobal));
+  }
+}

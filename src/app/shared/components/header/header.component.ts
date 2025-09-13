@@ -64,8 +64,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
   languages = [];
 
-  CompanyName = '';
-
   selectedLanguage: string = 'en';
 
   constructor(

@@ -171,62 +171,6 @@ export class Utilities {
     }
   }
 
-  public resizeByteArrayImage(
-    byteArray: Uint8Array,
-    maxWidth: number,
-    maxHeight: number
-  ): Promise<string> {
-    return new Promise((resolve, reject) => {
-      // Convert byte array to Blob
-      const blob = new Blob([byteArray], { type: 'image/png' });
-
-      // Read Blob as Data URL
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const img = new Image();
-        img.src = event.target?.result as string;
-
-        img.onload = () => {
-          let width = img.width;
-          let height = img.height;
-
-          // Maintain aspect ratio
-          if (width > height) {
-            if (width > maxWidth) {
-              height *= maxWidth / width;
-              width = maxWidth;
-            }
-          } else {
-            if (height > maxHeight) {
-              width *= maxHeight / height;
-              height = maxHeight;
-            }
-          }
-
-          // Resize image using canvas
-          const canvas = document.createElement('canvas');
-          canvas.width = width;
-          canvas.height = height;
-          const ctx = canvas.getContext('2d');
-
-          if (ctx) {
-            ctx.drawImage(img, 0, 0, width, height);
-            // Convert to base64
-            const resizedBase64 = canvas.toDataURL('image/png');
-            resolve(resizedBase64);
-          } else {
-            reject('Canvas not supported');
-          }
-        };
-
-        img.onerror = reject;
-      };
-
-      reader.onerror = reject;
-      reader.readAsDataURL(blob);
-    });
-  }
-
   public resizeBase64Image(
     base64: string,
     maxWidth: number,
