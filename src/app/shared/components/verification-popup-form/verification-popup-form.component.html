@@ -1,0 +1,52 @@
+<dx-popup
+  cssClass="verification-popup"
+  [title]="title"
+  [(visible)]="visible"
+  [fullScreen]="!!(screen.xSmallScreenChanged | async)"
+  [width]="width"
+  [height]="height"
+  (onHidden)="closePopup()"
+>
+  <div class="container varification-popup-container">
+    <div class="verification-message">{{ message }}</div>
+
+    <div class="btns-container">
+      <dx-button *ngIf="addCancelBtn"
+        class="submit-btn"
+        width="100%"
+        stylingMode="contained"
+        type="default"
+        stylingMode="outlined"
+        (onClick)="cancel()"
+        [disabled]="isLoading || isCancelLoading"
+      >
+         <dx-load-indicator
+          *ngIf="isCancelLoading"
+          width="24px"
+          height="24px"
+          [visible]="true"
+        ></dx-load-indicator>
+
+        <div *ngIf="!isCancelLoading">{{ cancelButtonText | translate }}</div>
+      </dx-button>
+
+      <dx-button
+        class="submit-btn"
+        width="100%"
+        stylingMode="contained"
+        [type]="isWarningButton ? 'danger' : 'default'"
+        [disabled]="isLoading || isCancelLoading"
+        (onClick)="submit()"
+      >
+        <dx-load-indicator
+          *ngIf="isLoading"
+          width="24px"
+          height="24px"
+          [visible]="true"
+        ></dx-load-indicator>
+
+        <div *ngIf="!isLoading">{{ confirmButtonText | translate }}</div>
+      </dx-button>
+    </div>
+  </div>
+</dx-popup>

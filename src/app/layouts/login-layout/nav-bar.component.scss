@@ -1,0 +1,45 @@
+:host {
+  flex-direction: column;
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+.layout-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.content-container {
+  margin-top: 65px;
+  padding-top: 30px;
+  padding-right: 20px;
+  padding-left: 20px;
+  height: calc(100vh - 65px) !important;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.content{
+  height: 90% !important;
+  width: 100%;
+}
+
+.content-footer{
+  height: 10% !important;
+  width: 100%;
+}
+
+app-footer {
+  height: 100%;
+  width: 100%;;
+}

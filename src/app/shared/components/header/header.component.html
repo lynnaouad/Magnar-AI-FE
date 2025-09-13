@@ -1,0 +1,104 @@
+<header>
+  <dx-toolbar class="header-toolbar" [rtlEnabled]="languageService.isRtl()">
+    <!-- Side Bar toggle -->
+    <dxi-item
+      [visible]="menuToggleEnabled && isLoggedIn"
+      location="before"
+      widget="dxButton"
+      cssClass="menu-button"
+      [options]="{
+        icon: 'menu',
+        stylingMode: 'text',
+        onClick: toggleMenu
+      }"
+    >
+    </dxi-item>
+
+    <!-- Logo -->
+    <dxi-item location="before" *ngIf="!isMobile">
+      <div class="image-container" routerLink="\home">
+        <img [src]="companyLogo" class="user-image" />
+      </div>
+    </dxi-item>
+
+    <!-- Nav Bar Items for Desktop -->
+    <dxi-item *ngFor="let item of navItems" location="before">
+      <a class="nav-items" *ngIf="!isMobile" [routerLink]="item.routerLink">
+        {{ item.title }}
+      </a>
+    </dxi-item>
+
+    <!-- Dropdown for Mobile -->
+    <dxi-item
+      location="after"
+      locateInMenu="auto"
+      menuItemTemplate="menuItem"
+      [visible]="isMobile && navItems.length > 0"
+    >
+      <div *dxTemplate="let data of 'content'">
+        <dx-select-box
+          [items]="navItems"
+          displayExpr="title"
+          valueExpr="routerLink"
+          [(value)]="selectedNavItem"
+          (onValueChanged)="onNavItemSelected($event)"
+          placeholder="Select a page"
+        ></dx-select-box>
+      </div>
+    </dxi-item>
+
+    <!-- Language drop down -->
+    <dxi-item
+      location="after"
+      locateInMenu="auto"
+      menuItemTemplate="menuItem"
+      [visible]="!isLoggedIn"
+    >
+      <div *dxTemplate="let data of 'content'">
+        <dx-select-box
+          class="languages-list"
+          [dataSource]="languages"
+          displayExpr="language"
+          valueExpr="codeCulture"
+          [(value)]="selectedLanguage"
+          (onValueChanged)="changeLanguage($event.value)"
+        >
+        </dx-select-box>
+      </div>
+    </dxi-item>
+
+    <!-- User panel visible only if logged in -->
+    <dxi-item
+      location="after"
+      locateInMenu="auto"
+      menuItemTemplate="menuItem"
+      [visible]="isLoggedIn"
+    >
+      <div *dxTemplate="let data of 'content'">
+        <app-user-panel
+          [menuItems]="menuItems"
+          [imageUrl]="imageUrl"
+          [user]="user"
+          menuMode="context"
+          [languages]="languages"
+          [selectedLanguage]="selectedLanguage"
+          (onChangeLanguage)="changeLanguage($event)"
+        ></app-user-panel>
+      </div>
+    </dxi-item>
+
+    <div *dxTemplate="let data of 'menuItem'">
+      <div *ngIf="isLoggedIn">
+        <app-user-panel
+          [menuItems]="menuItems"
+          [imageUrl]="imageUrl"
+          [user]="user"
+          menuMode="list"
+          [languages]="languages"
+          [selectedLanguage]="selectedLanguage"
+          (onChangeLanguage)="changeLanguage($event)"
+        ></app-user-panel>
+      </div>
+    </div>
+  </dx-toolbar>
+</header>

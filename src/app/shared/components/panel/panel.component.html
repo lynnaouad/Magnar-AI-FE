@@ -1,0 +1,14 @@
+<div class="panel" [ngClass]="{ open: isOpened }">
+  <div class="data-wrapper">
+    <ng-container *ngIf="!isLoading">
+      <ng-content></ng-content>
+    </ng-container>
+    <dx-load-panel
+      container=".panel"
+      [width]="300"
+      [visible]="isLoading"
+      [showPane]="false"
+      [position]="{ of: '.panel' }"
+    ></dx-load-panel>
+  </div>
+</div>

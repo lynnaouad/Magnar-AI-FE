@@ -1,0 +1,14 @@
+<dx-date-box
+  class="custom-text"
+  [placeholder]="'NotSelected' | translate"
+  stylingMode="filled"
+  valueChangeEvent="keyup input change"
+  [(value)]="value"
+  [readOnly]="!isEditing"
+  [label]="label"
+  pickerType="calendar"
+  (onValueChanged)="valueChanged($event)"
+  displayFormat="dd MMM y"
+>
+  <dx-validator [validationRules]="validators"></dx-validator>
+</dx-date-box>

@@ -1,0 +1,53 @@
+<dx-toolbar class="custom-toolbar-form">
+  <dxi-item location="before"
+    ><span class="toolbar-title">{{ title }}</span>
+  </dxi-item>
+
+  <!-- Edit btn -->
+  <dxi-item location="after" [visible]="!readOnly && !isEditing && editToolbar">
+    <div (click)="handleEditClick()">
+      <i class="dx-icon dx-icon-edit stack-icon" id="icon-edit"></i>
+    </div>
+  </dxi-item>
+
+  <!-- Add btn -->
+  <dxi-item location="after" [visible]="!readOnly && addToolbar">
+    <div (click)="handleAddClick()">
+      <i class="dx-icon dx-icon-add stack-icon" id="icon-add"></i>
+    </div>
+  </dxi-item>
+
+  <!-- Save btn -->
+  <dxi-item
+    location="after"
+    locateInMenu="auto"
+    menuItemTemplate="menuItem"
+    [visible]="isEditing && editToolbar"
+  >
+    <div *dxTemplate="let data of 'content'">
+      <dx-button
+        icon="todo"
+        stylingMode="contained"
+        type="default"
+        (onClick)="handleSaveButtonClick($event)"
+      ></dx-button>
+    </div>
+  </dxi-item>
+
+  <!-- Cancel btn -->
+  <dxi-item
+    location="after"
+    locateInMenu="auto"
+    menuItemTemplate="menuItem"
+    [visible]="isEditing && editToolbar"
+  >
+    <div *dxTemplate="let data of 'content'">
+      <dx-button
+        icon="remove"
+        (onClick)="handleCancelClick()"
+        stylingMode="outlined"
+        type="normal"
+      ></dx-button>
+    </div>
+  </dxi-item>
+</dx-toolbar>

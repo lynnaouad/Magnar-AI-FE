@@ -1,0 +1,23 @@
+[
+  {
+    "code": "ar",
+    "language": "العربية",
+    "culture": "",
+    "fileName": "primeng-ar.json",
+    "codeCulture": "ar-LB"
+  },
+    {
+    "code": "ar",
+    "language": "العربية (السعودية)",
+    "culture": "SA",
+    "fileName": "primeng-ar-SA.json",
+    "codeCulture": "ar-SA"
+  },
+  {
+    "code": "en",
+    "language": "English",
+    "culture": "US",
+    "fileName": "primeng-en-US.json",
+    "codeCulture": "en-US"
+  }
+]

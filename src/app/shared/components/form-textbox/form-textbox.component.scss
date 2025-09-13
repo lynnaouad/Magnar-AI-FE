@@ -1,0 +1,29 @@
+::ng-deep .custom-text .dx-label span {
+  font-size: 17px !important;
+  color: var(--dx-magnar-blue);
+  min-height: 30px !important;
+}
+
+::ng-deep .custom-text.dx-texteditor.dx-state-readonly {
+  border: none !important;
+}
+
+::ng-deep
+  .custom-text.dx-texteditor.dx-state-readonly.dx-state-focused::before {
+  border-bottom: none;
+}
+
+::ng-deep
+  .custom-text.dx-texteditor.dx-state-readonly.dx-editor-filled
+  .dx-texteditor-input {
+  padding-left: 0px;
+}
+
+::ng-deep .custom-text.dx-texteditor.dx-state-readonly.dx-editor-filled .dx-placeholder::before {
+  padding-left: 0px;
+}
+
+.dx-texteditor.dx-editor-filled.dx-state-disabled,
+.dx-texteditor.dx-editor-filled.dx-state-readonly{
+  background-color: transparent !important;
+}

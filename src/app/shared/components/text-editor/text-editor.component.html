@@ -1,0 +1,14 @@
+<dx-html-editor
+  [height]="height"
+  [(value)]="value"
+  (valueChange)="change()"
+  [readOnly]="readonly"
+  [placeholder]="placeholder"
+>
+  <dxo-toolbar
+    [items]="toolbarItems"
+    [multiline]="false"
+    *ngIf="!disableOptions"
+  >
+  </dxo-toolbar>
+</dx-html-editor>

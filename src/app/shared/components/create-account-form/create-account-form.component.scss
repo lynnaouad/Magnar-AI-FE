@@ -1,0 +1,15 @@
+#recaptcha-container {
+  :host-context(.screen-x-small) & {
+    transform: scale(1);
+    transform-origin: 0 0;
+  }
+}
+
+.policy-info,
+.resend-verification {
+  text-align: center;
+}
+
+::ng-deep .dx-texteditor-input {
+  min-width: 300px;
+}

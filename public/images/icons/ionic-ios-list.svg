@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="19.918" height="15.769" viewBox="0 0 19.918 15.769">
+  <g id="Icon_ionic-ios-list" data-name="Icon ionic-ios-list" opacity="0.15">
+    <path id="Path_4712" data-name="Path 4712" d="M7.4,17.484a1.452,1.452,0,1,1-1.452-1.452A1.452,1.452,0,0,1,7.4,17.484Z" transform="translate(-4.5 -9.599)" fill="#707070"/>
+    <path id="Path_4713" data-name="Path 4713" d="M7.4,8.765A1.452,1.452,0,1,1,5.952,7.313,1.452,1.452,0,0,1,7.4,8.765Z" transform="translate(-4.5 -7.313)" fill="#707070"/>
+    <path id="Path_4714" data-name="Path 4714" d="M7.4,26.2A1.452,1.452,0,1,1,5.952,24.75,1.452,1.452,0,0,1,7.4,26.2Z" transform="translate(-4.5 -11.886)" fill="#707070"/>
+    <path id="Path_4715" data-name="Path 4715" d="M25.645,16.875H13.17a.83.83,0,0,0,0,1.66H25.645a.83.83,0,1,0,0-1.66Z" transform="translate(-6.556 -9.821)" fill="#707070"/>
+    <path id="Path_4716" data-name="Path 4716" d="M25.645,25.594H13.17a.83.83,0,1,0,0,1.66H25.645a.83.83,0,1,0,0-1.66Z" transform="translate(-6.556 -12.107)" fill="#707070"/>
+    <path id="Path_4717" data-name="Path 4717" d="M13.17,9.816H25.645a.83.83,0,1,0,0-1.66H13.17a.83.83,0,0,0,0,1.66Z" transform="translate(-6.556 -7.534)" fill="#707070"/>
+  </g>
+</svg>

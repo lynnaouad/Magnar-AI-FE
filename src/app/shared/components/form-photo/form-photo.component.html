@@ -1,0 +1,69 @@
+<form id="form" #form method="post" action="" enctype="multipart/form-data">
+  <div
+    [ngStyle]="{
+      'width.px': size,
+      'height.px': size,
+      'max-height.px': size,
+      border: imageUrl ? 'none' : '2px dashed #ccc'
+    }"
+    class="photo"
+    [class.photo-editable]="editable"
+  >
+    <!-- Display the selected image -->
+    <img
+      *ngIf="imageUrl"
+      [src]="imageUrl"
+      alt="Profile Photo"
+      class="photo-image"
+    />
+
+    <!-- Edit icon (only show if no image is selected) -->
+    <i *ngIf="editable && !imageUrl" class="edit-icon dx-icon-photooutline"></i>
+  </div>
+
+  <dx-file-uploader
+    *ngIf="editable"
+    [dialogTrigger]="hostRef"
+    uploadMode="useForm"
+    [visible]="false"
+    accept="image/*"
+    [allowedFileExtensions]="['.jpg', '.jpeg', '.png', '.gif']"
+    (onValueChanged)="onValueChanged($event)"
+  ></dx-file-uploader>
+</form>
+
+<dx-popup
+  [title]="'EditImage' | translate"
+  [(visible)]="cropImagePopupVisible"
+  [fullScreen]="!!(screen.xSmallScreenChanged | async)"
+  [wrapperAttr]="{ class: 'crop-image-popup' }"
+  (onHidden)="cancelCrop()"
+  [width]="'50%'"
+  height="auto"
+>
+  <div class="popup-content">
+    <div class="popup-image-cropper">
+      <image-cropper
+        [imageFile]="imageFile"
+        [maintainAspectRatio]="true"
+        [aspectRatio]="1 / 1"
+        format="png"
+        [imageQuality]="100"
+        [roundCropper]="true"
+        [autoCrop]="true"
+        (imageCropped)="imageCropped($event)"
+      >
+      </image-cropper>
+    </div>
+
+    <div class="popup-actions">
+      <dx-button
+        [text]="'Upload' | translate"
+        type="default"
+        stylingMode="contained"
+        (onClick)="confirmCrop()"
+        [disabled]="!croppedImage"
+      ></dx-button>
+    </div>
+  </div>
+</dx-popup>

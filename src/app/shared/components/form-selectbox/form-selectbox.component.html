@@ -1,0 +1,15 @@
+<dx-select-box
+  class="custom-text"
+  stylingMode="filled"
+  [(value)]="value"
+  [searchEnabled]="true"
+  [dataSource]="items"
+  [displayExpr]="displayExpr"
+  [valueExpr]="valueExpr"
+  [readOnly]="!isEditing"
+  [label]="label"
+  [placeholder]="'NotSelected' | translate"
+  (onValueChanged)="valueChanged($event)"
+>
+  <dx-validator [validationRules]="validators"></dx-validator>
+</dx-select-box>

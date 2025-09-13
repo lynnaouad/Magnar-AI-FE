@@ -1,0 +1,33 @@
+<app-header
+  class="layout-header"
+  [menuToggleEnabled]="true"
+  (menuToggle)="menuOpened = !menuOpened"
+  [menuItems]="menuItems"
+>
+</app-header>
+
+<dx-drawer
+  class="layout-body"
+  position="before"
+  [closeOnOutsideClick]="shaderEnabled"
+  [openedStateMode]="menuMode"
+  [revealMode]="menuRevealMode"
+  [minSize]="minMenuSize"
+  [shading]="shaderEnabled"
+  [(opened)]="menuOpened"
+>
+  <app-side-navigation-menu
+    [sidebarMenuItems]="sideBarMenu"
+    [compactMode]="!menuOpened"
+    [selectedItem]="selectedRoute"
+    [ngClass]="swatchClassName"
+    *dxTemplate="let dataMenu of 'panel'"
+    (selectedItemChanged)="navigationChanged($event)"
+    (openMenu)="navigationClick()"
+  >
+  </app-side-navigation-menu>
+
+  <div class="recruiter-content">
+    <router-outlet></router-outlet>
+  </div>
+</dx-drawer>

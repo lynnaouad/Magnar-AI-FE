@@ -1,0 +1,22 @@
+.login-form {
+  .link-conatiner {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+
+    .link{
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .link:hover{
+      text-decoration:underline;
+    }
+  }
+
+  ::ng-deep .form-text {
+    margin: 10px 0;
+    color: var(--base-text-color-alpha-7);
+  }
+}

@@ -1,0 +1,34 @@
+<dx-scroll-view height="100%" width="100%">
+  <div class="user-info-container">
+    <div class="container">
+      <div class="user-info">
+        <div class="image-container">
+          <img [src]="imageUrl" alt="Profile Photo" class="user-image" />
+        </div>
+        <div class="user-name">{{ user.usernameOrEmail }}</div>
+      </div>
+    </div>
+    <dx-list
+      #userInfoList
+      [items]="menuItems"
+      [elementAttr]="{
+        class: 'user-info-list'
+      }"
+      (onItemClick)="handleListItemClick($event)"
+    ></dx-list>
+
+    <div class="language-dropdown-container">
+      <div><i class="dx-icon dx-icon-globe"></i></div>
+      <dx-select-box
+        class="languages-list"
+        [dataSource]="languages"
+        [searchEnabled]="true"
+        displayExpr="language"
+        valueExpr="codeCulture"
+        [(value)]="selectedLanguage"
+        (onValueChanged)="changeLanguage($event)"
+      >
+      </dx-select-box>
+    </div>
+  </div>
+</dx-scroll-view>

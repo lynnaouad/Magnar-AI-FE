@@ -1,0 +1,13 @@
+<dx-number-box
+  class="custom-text"
+  stylingMode="filled"
+  valueChangeEvent="keyup input change"
+  [label]="label"
+  [(value)]="value"
+  [readOnly]="!isEditing"
+  (onValueChanged)="valueChanged($event)"
+  [showSpinButtons]="true"
+  placeholder="0"
+>
+  <dx-validator [validationRules]="validators"></dx-validator>
+</dx-number-box>

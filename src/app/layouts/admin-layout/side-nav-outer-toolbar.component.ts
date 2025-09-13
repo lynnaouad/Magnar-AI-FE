@@ -1,0 +1,180 @@
+import {
+  Component,
+  OnInit,
+  Input,
+  ViewChild,
+  OnChanges,
+  SimpleChanges,
+  OnDestroy,
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router, NavigationEnd, RouterModule } from '@angular/router';
+
+import { DxTreeViewTypes } from 'devextreme-angular/ui/tree-view';
+import { DxDrawerModule, DxDrawerTypes } from 'devextreme-angular/ui/drawer';
+import {
+  DxScrollViewModule,
+  DxScrollViewComponent,
+} from 'devextreme-angular/ui/scroll-view';
+
+import {
+  SideNavigationMenuComponent,
+  HeaderComponent,
+} from '../../shared/components';
+import { AuthService, ScreenService } from '../../shared/services';
+import { LanguageService } from '../../shared/services/language.service';
+import { Navigation } from '../../app-navigation';
+
+@Component({
+  selector: 'app-side-nav-outer-toolbar',
+  templateUrl: './side-nav-outer-toolbar.component.html',
+  styleUrls: ['./side-nav-outer-toolbar.component.scss'],
+  standalone: true,
+  imports: [
+    SideNavigationMenuComponent,
+    DxDrawerModule,
+    HeaderComponent,
+    DxScrollViewModule,
+    CommonModule,
+    RouterModule
+],
+})
+export class SideNavOuterToolbarComponent implements OnInit, OnChanges, OnDestroy {
+  @ViewChild(DxScrollViewComponent, { static: true })
+  scrollView!: DxScrollViewComponent;
+  selectedRoute = '';
+
+  menuOpened!: boolean;
+  temporaryMenuOpened = false;
+  menuItems: any[] = [];
+  sideBarMenu: any[] = [];
+
+  @Input()
+  title!: string;
+
+  menuMode: DxDrawerTypes.OpenedStateMode = 'shrink';
+  menuRevealMode: DxDrawerTypes.RevealMode = 'expand';
+  minMenuSize = 0;
+  shaderEnabled = false;
+  swatchClassName = 'dx-swatch-additional';
+  isSwitchCompanyPopupVisible = false;
+
+  defaultMenuItems: any[] = [];
+
+     @ViewChild(SideNavigationMenuComponent, { static: false })
+     sideNavContent!: SideNavigationMenuComponent;
+
+  constructor(
+    private screen: ScreenService,
+    private router: Router,
+    private authService: AuthService,
+    private languageService: LanguageService,
+  ) {
+
+    this.languageService
+      .getTranslations(['SignOut'])
+      .subscribe((translations) => {
+        this.defaultMenuItems = [
+          {
+            text: translations['SignOut'],
+            icon: 'runner',
+            code: 'SignOut',
+            order: 1,
+            click: () => {
+              this.authService.logOut();
+              this.navigateTo('/login');
+            },
+          },
+        ];
+      });
+  }
+
+  ngOnInit() {
+    this.setSidebarMenuItems();
+    this.setNavMenuItems();
+
+    this.menuOpened = this.screen.sizes['screen-large'];
+
+    this.router.events.subscribe((val) => {
+      if (val instanceof NavigationEnd) {
+        this.selectedRoute = val.urlAfterRedirects.split('?')[0];
+      }
+    });
+
+    this.screen.changed.subscribe(() => this.updateDrawer());
+
+    this.updateDrawer();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {}
+
+  ngOnDestroy(): void {
+  }
+
+  updateDrawer() {
+    const isXSmall = this.screen.sizes['screen-x-small'];
+    const isLarge = this.screen.sizes['screen-large'];
+
+    this.menuMode = isLarge ? 'shrink' : 'overlap';
+    this.menuRevealMode = isXSmall ? 'slide' : 'expand';
+    this.minMenuSize = isXSmall ? 0 : 60;
+    this.shaderEnabled = !isLarge;
+  }
+
+  get hideMenuAfterNavigation() {
+    return this.menuMode === 'overlap' || this.temporaryMenuOpened;
+  }
+
+  get showMenuAfterClick() {
+    return !this.menuOpened;
+  }
+
+  navigationChanged(event: DxTreeViewTypes.ItemClickEvent) {
+    const path = (event.itemData as any).path;
+    const pointerEvent = event.event;
+
+    if (path && this.menuOpened) {
+      if (event.node?.selected) {
+        pointerEvent?.preventDefault();
+      } else {
+        this.router.navigate([path]);
+        this.scrollView?.instance?.scrollTo(0);
+      }
+
+      if (this.hideMenuAfterNavigation) {
+        this.temporaryMenuOpened = false;
+        this.menuOpened = false;
+        pointerEvent?.stopPropagation();
+      }
+    } else {
+      pointerEvent?.preventDefault();
+    }
+  }
+
+  navigationClick() {
+    if (this.showMenuAfterClick) {
+      this.temporaryMenuOpened = true;
+      this.menuOpened = true;
+    }
+  }
+
+  navigateTo(route: string) {
+    this.router.navigate([route]);
+  }
+
+  async setSidebarMenuItems() {
+    this.sideBarMenu = Navigation;
+  }
+
+  async setNavMenuItems() {
+    let isLoggedIn = this.authService.loggedIn;
+
+    if (!isLoggedIn) {
+      this.menuItems = [];
+      return;
+    }
+    console.log("hh")
+
+    this.menuItems = this.defaultMenuItems;
+  }
+}

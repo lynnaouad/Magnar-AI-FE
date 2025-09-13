@@ -1,0 +1,33 @@
+<div class="paginator">
+  <!-- Previous button -->
+  <dx-button
+    class="navigation-button"
+    stylingMode="outlined"
+    type="default"
+    (click)="previousPage()"
+    [disabled]="currentPage === 1"
+  >
+    <b>&lt;</b>
+  </dx-button>
+
+  <!-- Page numbers -->
+  <button
+    *ngFor="let page of getPagesToShow()"
+    class="paginator-button"
+    [class.active]="page === currentPage"
+    (click)="goToPage(page)"
+  >
+    {{ formatNumber(page) }}
+  </button>
+
+  <!-- Next button -->
+  <dx-button
+    class="navigation-button"
+    stylingMode="outlined"
+    type="default"
+    (click)="nextPage()"
+    [disabled]="currentPage === totalNbPages"
+  >
+    <b>&gt;</b>
+  </dx-button>
+</div>

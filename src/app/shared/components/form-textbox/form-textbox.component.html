@@ -1,0 +1,22 @@
+<dx-text-box 
+  class="custom-text"
+  stylingMode="filled"
+  valueChangeEvent="keyup input change"
+  [label]="label"
+  [(value)]="value"
+  [readOnly]="!isEditing"
+  (onValueChanged)="valueChanged($event)"
+  [placeholder]="'NotSpecified' | translate"
+>
+  <dx-validator [validationRules]="validators"></dx-validator>
+  <dxi-button
+    *ngIf="icon"
+    name="icon"
+    location="before"
+    [options]="{
+      icon: icon,
+      elementAttr: { class: 'form-editor-icon' },
+      stylingMode: 'text'
+    }"
+  ></dxi-button>
+</dx-text-box>

@@ -1,0 +1,280 @@
+<dx-scroll-view
+  height="100%"
+  width="100%"
+  class="view-wrapper-scroll single-card"
+>
+  <app-card-auth title="{{ 'Register' | translate }}">
+    <form class="create-account-form" (submit)="onSubmit($event)">
+      <dx-form
+        [formData]="formData"
+        [disabled]="loading"
+        [colCount]="4"
+        (onFieldDataChanged)="accountCreated = false"
+      >
+        <!-- Username -->
+        <dxi-item
+          dataField="username"
+          editorType="dxTextBox"
+          [editorOptions]="{
+              stylingMode: 'filled',
+              placeholder: ('PlaceHolders.Username' | translate),
+              mode: 'text',
+              inputAttr: { autocomplete: 'username' },
+            }"
+          [colSpan]="2"
+          cssClass="form-item"
+        >
+          <dxi-validation-rule
+            type="required"
+            [message]="'ValidationRules.RequiredField' | translate"
+          ></dxi-validation-rule>
+          <dxo-label [visible]="false"></dxo-label>
+        </dxi-item>
+
+        <!-- First Name -->
+        <dxi-item
+          dataField="firstName"
+          editorType="dxTextBox"
+          [editorOptions]="{
+            stylingMode: 'filled',
+            placeholder: ('PlaceHolders.FirstName' | translate),
+            mode: 'text',
+            inputAttr: { autocomplete: 'first-name' }
+          }"
+          [colSpan]="2"
+          cssClass="form-item"
+        >
+          <dxi-validation-rule
+            type="required"
+            [message]="'ValidationRules.RequiredField' | translate"
+          ></dxi-validation-rule>
+          <dxo-label [visible]="false"></dxo-label>
+        </dxi-item>
+
+        <!-- Middle Name -->
+        <dxi-item
+          dataField="middleName"
+          editorType="dxTextBox"
+          [editorOptions]="{
+            stylingMode: 'filled',
+            placeholder: ('PlaceHolders.MiddleName' | translate),
+            mode: 'text',
+            inputAttr: { autocomplete: 'middle-name' }
+          }"
+          [colSpan]="2"
+          cssClass="form-item"
+        >
+          <dxo-label [visible]="false"></dxo-label>
+        </dxi-item>
+
+        <!-- Last Name -->
+        <dxi-item
+          dataField="lastName"
+          editorType="dxTextBox"
+          [editorOptions]="{
+            stylingMode: 'filled',
+            placeholder: ('PlaceHolders.LastName' | translate),
+            mode: 'text',
+            inputAttr: { autocomplete: 'family-name' }
+          }"
+          [colSpan]="2"
+          cssClass="form-item"
+        >
+          <dxi-validation-rule
+            type="required"
+            [message]="'ValidationRules.RequiredField' | translate"
+          ></dxi-validation-rule>
+          <dxo-label [visible]="false"></dxo-label>
+        </dxi-item>
+
+        <!-- Phone Number -->
+        <dxi-item
+          dataField="phoneNumber"
+          editorType="dxTextBox"
+          [editorOptions]="{
+            stylingMode: 'filled',
+            placeholder: ('PlaceHolders.PhoneNumber' | translate),
+            mode: 'text',
+            inputAttr: { autocomplete: 'tel' }
+          }"
+          [colSpan]="2"
+          cssClass="form-item"
+        >
+          <dxo-label [visible]="false"></dxo-label>
+        </dxi-item>
+
+        <!-- Email -->
+        <dxi-item
+          dataField="email"
+          editorType="dxTextBox"
+          [editorOptions]="{
+            stylingMode: 'filled',
+            placeholder: ('PlaceHolders.Email' | translate),
+            mode: 'email',
+            inputAttr: { autocomplete: 'email' }
+          }"
+          [colSpan]="2"
+          cssClass="form-item"
+        >
+          <dxi-validation-rule
+            type="required"
+            [message]="'ValidationRules.RequiredField' | translate"
+          ></dxi-validation-rule>
+          <dxi-validation-rule
+            type="email"
+            [message]="'ValidationRules.InvalidEmail' | translate"
+          ></dxi-validation-rule>
+          <dxo-label [visible]="false"></dxo-label>
+        </dxi-item>
+
+        <!-- Password -->
+        <dxi-item
+          dataField="password"
+          editorType="dxTextBox"
+          [editorOptions]="{
+            stylingMode: 'filled',
+            placeholder: ('PlaceHolders.Password' | translate),
+            mode: 'password'
+          }"
+          [colSpan]="2"
+          cssClass="form-item"
+        >
+          <dxi-validation-rule
+            type="required"
+            [message]="'ValidationRules.RequiredField' | translate"
+          ></dxi-validation-rule>
+          <dxo-label [visible]="false"></dxo-label>
+        </dxi-item>
+
+        <!-- Confirm Password -->
+        <dxi-item
+          dataField="confirmedPassword"
+          editorType="dxTextBox"
+          [editorOptions]="{
+            stylingMode: 'filled',
+            placeholder: ('PlaceHolders.ConfirmPassword' | translate),
+            mode: 'password'
+          }"
+          [colSpan]="2"
+          cssClass="form-item"
+        >
+          <dxi-validation-rule
+            type="required"
+            [message]="'ValidationRules.RequiredField' | translate"
+          ></dxi-validation-rule>
+          <dxi-validation-rule
+            type="custom"
+            [message]="'ValidationRules.PasswordsDoNotMatch' | translate"
+            [validationCallback]="confirmPassword"
+          >
+          </dxi-validation-rule>
+          <dxo-label [visible]="false"></dxo-label>
+        </dxi-item>
+
+        <!-- Recaptcha -->
+        <dxi-item [colSpan]="4">
+          <div *ngIf="!(siteKey$ | async); else recaptchaContainer">
+            {{ "LoadingReCaptcha" | translate }}
+          </div>
+          <ng-template #recaptchaContainer>
+            <div
+              id="recaptcha-container"
+              class="g-recaptcha"
+              data-sitekey="siteKey$ | async"
+            ></div>
+          </ng-template>
+        </dxi-item>
+
+        <dxi-item *ngIf="!accountCreated" [colSpan]="2"><span></span></dxi-item>
+
+        <dxi-item itemType="button" *ngIf="!accountCreated">
+          <dxo-button-options
+            width="100%"
+            type="default"
+            [useSubmitBehavior]="true"
+            [template]="'createAccountTemplate'"
+          >
+          </dxo-button-options>
+        </dxi-item>
+
+        <dxi-item *ngIf="accountCreated" [colSpan]="1"><span></span></dxi-item>
+
+        <dxi-item itemType="button" *ngIf="accountCreated" [colSpan]="2">
+          <dxo-button-options
+            width="100%"
+            type="default"
+            [useSubmitBehavior]="false"
+            [template]="'resendEmailConfirmationTemplate'"
+          >
+          </dxo-button-options>
+        </dxi-item>
+
+        <dxi-item itemType="button">
+          <dxo-button-options
+            width="100%"
+            type="default"
+            stylingMode="outlined"
+            [useSubmitBehavior]="false"
+            [template]="'cancelTemplate'"
+            class="create-acc-btn"
+          >
+          </dxo-button-options>
+        </dxi-item>
+
+        <dxi-item [colSpan]="4">
+          <div class="policy-info">
+            {{'Policy.Info' | translate}}
+            <a routerLink="#">{{'Policy.Terms' | translate}}</a> {{'Policy.And' | translate}}
+            <a routerLink="#">{{'Policy.Privacy' | translate}}</a>
+          </div>
+        </dxi-item>
+
+        <ng-container *dxTemplate="let item of 'createAccountTemplate'">
+          <div>
+            <span class="dx-button-text">
+              <ng-container *ngIf="loading; else notLoading">
+                <dx-load-indicator
+                  width="24px"
+                  height="24px"
+                  [visible]="true"
+                ></dx-load-indicator>
+              </ng-container>
+
+              <ng-template #notLoading>{{ "Submit" | translate }}</ng-template>
+            </span>
+          </div>
+        </ng-container>
+
+        <ng-container *dxTemplate="let item of 'cancelTemplate'">
+          <div (click)="onCancel()">
+            <div>
+              <span class="dx-button-text">
+                <ng-container> {{ "Cancel" | translate }} </ng-container>
+              </span>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-container
+          *dxTemplate="let item of 'resendEmailConfirmationTemplate'"
+        >
+          <div (click)="resendEmailConfirmation()">
+            <span class="dx-button-text">
+              <ng-container *ngIf="loading; else notLoading">
+                <dx-load-indicator
+                  width="24px"
+                  height="24px"
+                  [visible]="true"
+                ></dx-load-indicator>
+              </ng-container>
+
+              <ng-template #notLoading>{{
+                "ResendEmailConfirmation" | translate
+              }}</ng-template>
+            </span>
+          </div>
+        </ng-container>
+      </dx-form>
+    </form>
+  </app-card-auth>
+</dx-scroll-view>

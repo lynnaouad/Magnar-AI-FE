@@ -1,0 +1,80 @@
+@use "../../../../variables.scss" as *;
+
+.user-info-container{
+  width: 230px;
+}
+
+.container{
+  border-bottom: 1px solid var(--dx-color-border);
+  display: flex;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  cursor: default;
+  text-align: center;
+  padding: 5px;
+  margin-bottom: 8px;
+  
+
+  .user-name {
+    font-size: 14px;
+    color: var(--base-text-color);
+  }
+
+  .image-container {
+    overflow: hidden;
+    border-radius: 50%;
+    height:50px;
+    width: 50px;
+    border: 1px solid var(--dx-color-border);
+
+    .user-image {
+      width: 100%;
+      height: 100%;
+      background-repeat: no-repeat;
+      background-color: #fff;
+      object-fit: cover;
+
+    }
+  }
+}
+.user-info-container .dx-list.user-info-list{
+border-bottom: 1px solid var(--dx-color-border);
+}
+
+.user-info-container .dx-list.user-info-list.dx-scrollable.dx-widget {
+  height: auto;
+  
+}
+
+.view-profile-btn{
+  margin: auto auto;
+  width: 90%;
+  margin-bottom: 10px;
+  align-self: center;
+}
+
+.language-dropdown-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0px 15px;
+}
+
+.languages-list{
+  border: 0;
+}
+
+
+/*********************************** Arabic *******************************************/
+
+
+:dir(ltr) .image-container{
+  margin-right: 7px;
+}
+
+:dir(rtl) .image-container {
+  margin-left: 7px;
+}

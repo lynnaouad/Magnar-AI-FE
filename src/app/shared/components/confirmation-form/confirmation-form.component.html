@@ -1,0 +1,38 @@
+<dx-scroll-view
+  height="100%"
+  width="100%"
+  class="view-wrapper-scroll single-card confirmation-wrapper"
+>
+  <app-card-auth>
+    <div class="confirmation-message">{{'UserConfirmed' | translate}}</div>
+
+    <form class="create-account-form" (submit)="onSubmit($event)">
+      <dx-form>
+        <dxi-item itemType="button">
+          <dxo-button-options
+            width="100%"
+            type="default"
+            [useSubmitBehavior]="true"
+            [template]="'signInTemplate'"
+          >
+          </dxo-button-options>
+        </dxi-item>
+
+        <ng-container *dxTemplate="let item of 'signInTemplate'">
+          <div>
+            <span class="dx-button-text">
+              <ng-container *ngIf="loading; else notLoading">
+                <dx-load-indicator
+                  width="24px"
+                  height="24px"
+                  [visible]="true"
+                ></dx-load-indicator>
+              </ng-container>
+              <ng-template #notLoading>{{'SignIn' | translate}}</ng-template>
+            </span>
+          </div>
+        </ng-container>
+      </dx-form>
+    </form>
+  </app-card-auth>
+</dx-scroll-view>

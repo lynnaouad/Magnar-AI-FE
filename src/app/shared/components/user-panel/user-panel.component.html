@@ -1,0 +1,39 @@
+<div class="user-panel">
+  <dx-drop-down-button
+    *ngIf="menuMode === 'context'"
+    stylingMode="text"
+    dropDownContentTemplate="dropDownTemplate"
+    [icon]="imageUrl"
+    [elementAttr]="{
+      class: 'user-button'
+    }"
+    [dropDownOptions]="{
+      width: 'auto'
+    }"
+    (onContentReady)="handleDropDownButtonContentReady($event)"
+  >
+    <div *dxTemplate="let data of 'dropDownTemplate'">
+      <user-menu-section
+        [menuItems]="menuItems"
+        [imageUrl]="imageUrl"
+        [showAvatar]="false"
+        [user]="user"
+        [languages]="languages"
+        [selectedLanguage]="selectedLanguage"
+        (onChangeLanguage)="changeLanguage($event)"
+      ></user-menu-section>
+    </div>
+  </dx-drop-down-button>
+
+  <div *ngIf="menuMode === 'list'">
+    <user-menu-section
+      [menuItems]="menuItems"
+      [imageUrl]="imageUrl"
+      [showAvatar]="true"
+      [user]="user"
+      [languages]="languages"
+      [selectedLanguage]="selectedLanguage"
+      (onChangeLanguage)="changeLanguage($event)"
+    ></user-menu-section>
+  </div>
+</div>

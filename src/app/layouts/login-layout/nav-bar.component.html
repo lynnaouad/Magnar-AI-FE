@@ -1,0 +1,15 @@
+<app-header
+  class="layout-header"
+  [menuToggleEnabled]="false"
+  (menuToggle)="(false)"
+  [menuItems]="menuItems"
+  [navItems]="navItems"
+>
+</app-header>
+
+<div class="content-container">
+  <div class="content">
+    <router-outlet></router-outlet>
+  </div>
+
+</div>

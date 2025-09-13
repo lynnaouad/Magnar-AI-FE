@@ -1,0 +1,26 @@
+.buttons-container{
+    width: 100%;
+    display: flex;
+    justify-content: end;
+}
+
+.container{
+display: flex;
+flex-direction: column;
+}
+
+.varification-popup-container{
+    position: relative;
+}
+
+.verification-message{
+    font-size: 16px;
+    font-weight: 400;
+    margin-bottom: 20px;
+}
+
+.btns-container{
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}

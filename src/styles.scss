@@ -1,0 +1,452 @@
+/* You can add global styles to this file, and also import other style files */
+
+@use "variables.scss" as *;
+
+@import url("../node_modules/devexpress-dashboard/dist/css/dx-dashboard.light.css");
+
+
+[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="ltr"] {
+  direction: ltr;
+  text-align: left;
+}
+
+/*********************************** Card *******************************************/
+// Used to align the auth-card at the middle of the sceen
+.view-wrapper-scroll
+  > .dx-scrollable-wrapper
+  > .dx-scrollable-container
+  > .dx-scrollable-content {
+  height: 100%;
+
+  & > .dx-scrollview-content {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+  }
+}
+
+::ng-deep .content {
+  :host-context(.screen-small) & {
+    padding: 0 !important;
+  }
+}
+
+/*********************************** Splitter *******************************************/
+
+.dx-splitter .dx-resize-handle {
+  background-color: transparent !important;
+}
+
+.dx-splitter .dx-resize-handle:focus {
+  color: rgba(0, 0, 0, 0.685);
+}
+
+.dx-resize-handle.dx-resize-handle-horizontal.dx-resize-handle-resizable {
+  background-color: #fafafa !important;
+  width: 20px !important;
+}
+
+/*********************************** Scroller Bars *******************************************/
+
+/* For WebKit browsers */
+::-webkit-scrollbar {
+  width: 5px; /* Width of the scrollbar */
+  height: 12px; /* Height of the scrollbar (for horizontal scrollbar) */
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Background of the scrollbar track */
+  border-radius: 10px; /* Rounded corners for the track */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cecece; /* Color of the scrollbar thumb */
+  border-radius: 10px; /* Rounded corners for the thumb */
+}
+
+/*********************************** Inputs *******************************************/
+
+.dx-texteditor-input {
+  padding-top: 6px !important;
+  padding-bottom: 6px !important;
+  font-size: 16px;
+}
+
+/*********************************** Buttons *******************************************/
+.dx-button {
+  min-height: 40px !important;
+  font-size: 16px;
+}
+
+a {
+  cursor: pointer;
+}
+
+.round-outlined-btn {
+  padding: 5px;
+  background-color: transparent;
+  border-radius: 30px;
+  border: 2px solid var(--dx-magnar-blue);
+  color: var(--dx-magnar-blue);
+  font-weight: 300;
+  cursor: pointer;
+  text-align: center;
+}
+
+.round-outlined-btn:hover {
+  border: 2px solid var(--dx-magnar-blue-hover);
+  color: var(--dx-magnar-blue-hover);
+}
+
+/*********************************** Tables *******************************************/
+
+.table-wrapper
+  .dx-toolbar.table-toolbar.dx-toolbar.dx-widget.dx-visibility-change-handler.dx-collection {
+  padding: 10px;
+  background-color: white !important;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05), 0 0 4px rgba(0, 0, 0, 0.15);
+}
+
+.table-wrapper .dx-datagrid-header-panel {
+  padding: 10px !important;
+}
+
+.table-wrapper .grid-header {
+  font-size: 25px;
+  padding-left: 10px;
+}
+
+.table-wrapper
+  .dx-show-invalid-badge.dx-textbox.dx-texteditor.dx-editor-outlined.dx-searchbox.dx-show-clear-button.dx-texteditor-empty.dx-widget {
+  width: 200px;
+}
+
+.table-wrapper
+  .dx-button.dx-widget.dx-button.dx-button-mode-contained.dx-button-default.dx-button-has-text.dx-button-has-icon {
+  font-size: 12px;
+  padding: 0px;
+}
+
+.table-wrapper .table-btns {
+  display: flex;
+}
+
+.table-wrapper .table-btns dx-button.table-edit-btn,
+.table-wrapper .table-btns dx-button.table-delete-btn,
+.table-wrapper .table-btns dx-button.table-share-btn,
+.table-wrapper .table-btns dx-button.table-revert-btn,
+.table-wrapper .table-btns dx-button.table-clear-btn,
+.table-wrapper .table-btns dx-button.table-view-btn,
+.table-wrapper .table-btns dx-button.table-download-btn {
+  background: none !important;
+  box-shadow: none !important;
+}
+
+.table-wrapper .table-btns dx-button.table-edit-btn .dx-icon-edit,
+.table-wrapper .table-btns dx-button.table-delete-btn .dx-icon-trash,
+.table-wrapper .table-btns dx-button.table-share-btn .dx-icon-share,
+.table-wrapper .table-btns dx-button.table-revert-btn .dx-icon-revert,
+.table-wrapper .table-btns dx-button.table-clear-btn .dx-icon-clear,
+.table-wrapper .table-btns dx-button.table-view-btn .dx-icon-eyeopen,
+.table-wrapper .table-btns dx-button.table-download-btn .dx-icon-download  {
+  font-size: 20px;
+  color: black;
+}
+
+.table-wrapper .table-btns dx-button.table-edit-btn .dx-icon-edit:hover {
+  color: rgba(2, 85, 2, 0.568);
+  font-weight: bold;
+}
+
+.table-wrapper .table-btns dx-button.table-delete-btn .dx-icon-trash:hover {
+  color: rgba(139, 0, 0, 0.815);
+  font-weight: bold;
+}
+
+.table-wrapper .table-btns dx-button.table-view-btn .dx-icon-eyeopen:hover {
+  color: var(--dx-magnar-blue);
+  font-weight: bold;
+}
+
+.table-wrapper .table-btns dx-button.table-revert-btn .dx-icon-revert:hover,
+.table-wrapper .table-btns dx-button.table-share-btn .dx-icon-share:hover,
+.table-wrapper .table-btns dx-button.table-clear-btn .dx-icon-clear:hover,
+.table-wrapper .table-btns dx-button.table-download-btn .dx-icon-download:hover {
+  color: rgba(0, 38, 255, 0.815);
+  font-weight: bold;
+}
+
+/*********************************** File Uploader *******************************************/
+
+.dx-fileuploader-wrapper {
+  padding: 0px !important;
+}
+
+.uploaded-file {
+  padding: 8px;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  margin-top: 15px;
+}
+
+.uploaded-file a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.uploaded-file a:hover {
+  text-decoration: underline;
+}
+
+.uploaded-file .dx-icon:hover {
+  font-weight: bold;
+}
+
+/*********************************** Stack *******************************************/
+
+.stack-icon {
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 25px;
+  color: var(--dx-magnar-blue);
+}
+
+.stack-icon:hover {
+  color: var(--dx-magnar-blue-hover);
+}
+
+.stack-list {
+  margin-top: 10px;
+}
+
+.stack-item-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.stack-item {
+  display: flex;
+  flex-direction: row;
+}
+
+.stack-details {
+  flex: 1;
+}
+
+.stack-details h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.stack-details p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.stack-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.stack-show-more {
+  border-top: 1px solid var(--dx-color-border);
+  text-align: center;
+  margin-top: 10px;
+}
+
+.stack-show-more div {
+  margin-top: 10px;
+  cursor: pointer;
+  color: var(--dx-magnar-blue);
+  font-weight: 500;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stack-show-more div:hover {
+  color: var(--dx-magnar-blue-hover);
+}
+
+.stack-separator {
+  height: 1px;
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  background: var(--dx-color-border);
+}
+
+/*********************************** Popup *******************************************/
+
+.dx-overlay-content.dx-popup-normal.dx-popup-draggable.dx-resizable {
+  max-height: 95vh !important;
+  height: auto !important;
+}
+
+.popup-body {
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/*********************************** Form *******************************************/
+
+dx-form {
+  height: 100% !important;
+}
+
+dx-form .dx-layout-manager.dx-widget {
+  height: 100% !important;
+}
+
+/*********************************** General *******************************************/
+
+.color-green {
+  color: green;
+}
+
+.color-red {
+  color: red;
+}
+
+.color-orange {
+  color: orange;
+}
+
+.h-separator {
+  height: 1px;
+  width: 100%;
+  background: var(--dx-color-border);
+}
+
+app-card-auth {
+  dx-toolbar {
+    margin-bottom: 15px;
+  }
+
+  .title {
+    font-size: 25px;
+    font-weight: bold;
+  }
+
+  .dx-icon-user {
+    color: black;
+    font-weight: bold;
+    font-size: 25px;
+    margin-right: 5px;
+  }
+
+  .button-container {
+    display: flex;
+    gap: 10px;
+  }
+
+  .save-btn {
+    font-weight: 500;
+  }
+}
+
+::ng-deep .email-icons-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+
+  :host-context(.screen-x-small) & {
+    margin-top: 0;
+    justify-content: flex-start;
+  }
+
+  .dx-icon-close,
+  .dx-icon-revert {
+    width: fit-content;
+    font-size: 25px;
+    font-weight: bold;
+  }
+
+  .dx-icon-close {
+    color: var(--dx-ligth-color-danger);
+  }
+
+  .dx-icon-revert {
+    cursor: pointer;
+  }
+
+  .dx-icon-revert:hover {
+    color: var(--dx-magnar-blue);
+  }
+}
+
+.dx-icon-warning {
+  font-weight: bolder;
+}
+
+.strong-pass-warning {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  color: var(--dx-magnar-blue);
+  cursor: pointer;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-right: 5px;
+  width: fit-content;
+}
+
+.dx-datagrid-text-content {
+  color: var(--dx-magnar-blue) !important;
+}
+
+.status-pending {
+  background-color: orange;
+}
+
+.status-approved {
+  background-color: green;
+}
+
+.status-rejected {
+  background-color: red;
+}
+
+span.page-header {
+  font-size: 26px;
+}
+
+:dir(ltr) td.dx-datagrid-action{
+  text-align: left !important;
+}
+
+:dir(rtl) td.dx-datagrid-action{
+  text-align: right !important;
+}
+
+.dx-data-row td.dx-command-select.dx-editor-cell{
+  text-align: center !important;
+}
+
+
+:dir(ltr) .dx-data-row td {
+  text-align: left !important;
+}
+
+:dir(rtl) .dx-data-row td {
+  text-align: right !important;
+}
+
+

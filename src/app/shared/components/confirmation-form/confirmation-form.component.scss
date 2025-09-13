@@ -1,0 +1,15 @@
+.confirmation-message{
+    display: block;
+    font-size: 16px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+::ng-deep .confirmation-wrapper .auth-card .dx-card{
+    padding: 0 20px 20px 20px !important;
+}
+
+::ng-deep .confirmation-wrapper .auth-card .dx-card.content{
+    width: 20% !important;
+    min-width: 20% !important;
+}

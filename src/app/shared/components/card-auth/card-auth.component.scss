@@ -1,0 +1,127 @@
+@use "../../../../variables.scss" as *;
+
+:host {
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+}
+
+.auth-card {
+  display: flex;
+  flex-grow: 1;
+  margin-bottom: 30px;
+
+  ::ng-deep .dx-button-text {
+    text-transform: none;
+  }
+
+  .dx-card {
+    margin: auto auto;
+    padding: 24px;
+    flex-grow: 0;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.04);
+
+    &.content {
+      height: auto;
+      min-width: 30%;
+    }
+
+    :host-context(.screen-x-small) & {
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
+      box-shadow: none;
+      margin: 0;
+      border: 0;
+      flex-grow: 1;
+    }
+
+    .header {
+      margin-bottom: 24px;
+      margin-top: 24px;
+
+      .title {
+        color: var(--base-text-color);
+        text-align: center;
+        line-height: 24px;
+        font-weight: 600;
+        font-size: 35px;
+      }
+
+      .description {
+        color: var(--base-text-color-alpha);
+        line-height: 16px;
+        font-size: 12px;
+        margin-top: 32px;
+        text-align: center;
+      }
+    }
+  }
+}
+
+
+dx-toolbar {
+  margin-bottom: 15px;
+}
+
+.title {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.dx-icon-user {
+  color: black;
+  font-weight: bold;
+  font-size: 25px;
+  margin-right: 5px;
+}
+
+.dx-icon-close,
+.dx-icon-revert {
+  width: fit-content;
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.dx-icon-close {
+  color: var(--dx-ligth-color-danger);
+}
+
+.dx-icon-revert {
+  cursor: pointer;
+}
+
+.dx-icon-revert:hover {
+  color: var(--dx-magnar-blue);
+}
+
+.icons-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 22%;
+
+  :host-context(.screen-x-small) & {
+    margin-top: 0;
+    justify-content: flex-start;
+  }
+}
+
+.button-container {
+  display: flex;
+  gap: 10px;
+}
+
+.save-btn {
+  font-weight: 500;
+}
+
+.light-btn-container .dx-button {
+  background-color: var(--dx-magnar-blue-light);
+  font-size: 14px;
+}
+
+.light-btn-container .dx-button:hover {
+  background-color: var(--dx-magnar-blue-light-hover);
+}
