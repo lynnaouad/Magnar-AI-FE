@@ -233,6 +233,15 @@
   "API": "API",
   "DatabaseName": "Database Name",
   "InstanceName": "Instance Name",
+  "DatabaseSchema": "Database Schema",
+  "PreviewFormat": "Preview Format",
+  "TableDescription": "Table Description",
+  "Columns": "Columns",
+  "Table": "Table",
+  "AvailableTables": "Available Tables",
+  "SelectedTables": "Selected Tables",
+  "ColumnsDescription": "Columns Description",
+  "AddTable": "Add Table",
 
   "NavBar.Home": "Home",
   "NavBar.MyCv": "My CV",
@@ -417,6 +426,7 @@
   "Errors.VectorSearchNotEnabled": "Vector search feature isn't enabled",
   "Errors.CannotGenerateDashboard": "Cannot generate dashboard",
   "Errors.GenerateDashboardError": "An error occured while generating your dashboard, kindly try again.",
+  "Errors.NoDefaultConnectionConfigured": "No default connection is configured",
   
   "ExceptionMessages.ValidationError": "One or more validation failures have occurred.",
 

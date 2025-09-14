@@ -232,6 +232,15 @@
   "API": "API",
   "DatabaseName": "اسم قاعدة البيانات",
   "InstanceName": "اسم مثيل الخادم",
+  "DatabaseSchema": "مخطط قاعدة البيانات",
+  "PreviewFormat": "تنسيق المعاينة",
+  "TableDescription": "وصف الجدول",
+  "Columns": "الأعمدة",
+  "Table": "جدول قاعدة البيانات",
+  "AvailableTables": "الجداول المتاحة",
+  "SelectedTables": "الجداول المختارة",
+  "ColumnsDescription": "وصف الأعمدة",
+   "AddTable": "إضافة جدول",
 
   "NavBar.Home": "الصفحة الرئيسية",
   "NavBar.MyCv": "سيرتي الذاتية",
@@ -409,6 +418,7 @@
   "Errors.ErrorOccured": "حدث خطأ.",
   "Errors.CannotGenerateJobDescription": "لقد حدث خطأ أثناء إنشاء وصف الوظيفة الخاص بك، يرجى المحاولة مرة أخرى.",
   "Errors.VectorSearchNotEnabled": "لم يتم تفعيل ميزة البحث عن المتجهات",
+  "Errors.NoDefaultConnectionConfigured": "لم يتم تكوين اتصال افتراضي",
 
   "ExceptionMessages.ValidationError": "حدثت واحدة أو أكثر من حالات الفشل في التحقق.",
 

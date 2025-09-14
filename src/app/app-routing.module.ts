@@ -20,6 +20,8 @@ export const routes: Routes = [
     loadComponent: () => import('./layouts/admin-layout/side-nav-outer-toolbar.component').then((m) => m.SideNavOuterToolbarComponent),
     children: [
       { path: 'connections', loadComponent: () => import('./pages/connections/connections-list.component').then((m) => m.ConnectionsListComponent), data: { breadcrumb: 'Connections' }, canActivate: [ AuthGuardService ]},
+      { path: 'database-schema', loadComponent: () => import('./pages/database-schema/database-schema.component').then((m) => m.DatabaseSchemaComponent), data: { breadcrumb: 'Database Schema' }, canActivate: [ AuthGuardService ]},
+      
       { path: '', redirectTo: 'connections', pathMatch: 'full' },
     ]
   },

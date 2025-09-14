@@ -6,4 +6,12 @@ export const Navigation = [
     icon: 'preferences',
     selected: true,
   },
+
+  {
+    id: 'DatabaseSchema',
+    text: 'DatabaseSchema',
+    path: '/admin/database-schema',
+    icon: 'tableproperties',
+    selected: false,
+  },
 ];

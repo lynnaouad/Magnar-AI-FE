@@ -1,0 +1,143 @@
+<div class="grid">
+  <!-- Available Tables -->
+  <section>
+    <h3>{{ "AvailableTables" | translate }}</h3>
+
+    <dx-data-grid
+      class="dx-card content-block tables-grid"
+      [dataSource]="availableTables()"
+      [remoteOperations]="true"
+      [showBorders]="true"
+      [focusedRowEnabled]="false"
+      [focusedRowIndex]="0"
+      [columnAutoWidth]="true"
+      [columnHidingEnabled]="false"
+      (onRowClick)="this.openTable($event.data.fullName)"
+    >
+      <dxo-scrolling rowRenderingMode="virtual"> </dxo-scrolling>
+      <dxo-paging [pageSize]="5"> </dxo-paging>
+      <dxo-pager
+        [visible]="true"
+        [allowedPageSizes]="[5, 10, 20, 30, 40, 50, 100]"
+        displayMode="full"
+        [showPageSizeSelector]="true"
+        [showInfo]="true"
+        [showNavigationButtons]="true"
+      >
+      </dxo-pager>
+
+      <dxo-filter-row [visible]="true" applyFilter="auto"></dxo-filter-row>
+
+      <dxo-pager [visible]="true"></dxo-pager>
+
+      <dxi-column
+        dataField="fullName"
+        [caption]="'Table' | translate"
+      ></dxi-column>
+    </dx-data-grid>
+  </section>
+
+  <!-- Selected Tables -->
+  <section>
+    <h3>{{ "SelectedTables" | translate }}</h3>
+    <dx-data-grid
+      class="dx-card content-block tables-grid"
+      [dataSource]="selectedBlocks()"
+      [showBorders]="true"
+      [remoteOperations]="true"
+      [showBorders]="true"
+      [focusedRowEnabled]="false"
+      [focusedRowIndex]="0"
+      [columnAutoWidth]="true"
+      [columnHidingEnabled]="false"
+      (onRowClick)="openSelected($event.data)"
+    >
+      <dxo-scrolling rowRenderingMode="virtual"> </dxo-scrolling>
+      <dxo-paging [pageSize]="5"> </dxo-paging>
+      <dxo-pager
+        [visible]="true"
+        [allowedPageSizes]="[5, 10, 20, 30, 40, 50, 100]"
+        displayMode="full"
+        [showPageSizeSelector]="true"
+        [showInfo]="true"
+        [showNavigationButtons]="true"
+      >
+      </dxo-pager>
+
+      <dxo-filter-row [visible]="true" applyFilter="auto"></dxo-filter-row>
+
+      <dxo-pager [visible]="true"></dxo-pager>
+
+      <dxi-column dataField="fullTableName" caption="Table"></dxi-column>
+      <dxi-column
+        dataField="hasComments"
+        caption="Has Comments"
+        [calculateCellValue]="hasCommentsDisplay"
+      ></dxi-column>
+    </dx-data-grid>
+  </section>
+</div>
+
+<!------------------------------------------------------------------------------------->
+
+<!-- Popup for schema -->
+<dx-popup
+  [title]="'DatabaseSchema' | translate"
+  [visible]="isPopupVisible()"
+  [fullScreen]="!!(screen.xSmallScreenChanged | async)"
+  [wrapperAttr]="{ class: 'database-schema-popup' }"
+  (onHidden)="closePopup()"
+  width="80%"
+  #popupRef
+>
+  <div *dxTemplate="let data of 'content'" class="schema">
+    <h4>{{ "PreviewFormat" | translate }}</h4>
+    <br />
+    <div class="preview" [innerHTML]="formatExample()"></div>
+
+    <br />
+
+    <div style="display: flex; width: 100%; margin-bottom: 10px">
+      <div>
+        <dx-button
+          width="150px"
+          text="{{ 'AddTable' | translate }}"
+          stylingMode="contained"
+          type="default"
+          (onClick)="save()"
+        >
+        </dx-button>
+      </div>
+    </div>
+
+    <br />
+
+    <h4>{{ "TableDescription" | translate }}</h4>
+    <br />
+    <dx-text-area
+      [value]="tableDescription()"
+      valueChangeEvent="input"
+      (onValueChanged)="tableDescription.set($event.value)"
+      [height]="80"
+    >
+    </dx-text-area>
+
+    <br />
+    <h4>{{ "ColumnsDescription" | translate }}</h4>
+    <br />
+
+    <div *ngFor="let c of currentTableInfo()?.columns" class="row">
+      <div class="meta">
+        [{{ c.columnName }}] ({{ c.dataType }}{{ c.isPrimaryKey ? ", PK" : ""
+        }}{{ c.isNullable ? ", nullable" : "" }})
+      </div>
+      <dx-text-box
+        [value]="columnComments()[c.columnName] ?? ''"
+        valueChangeEvent="input"
+        (onValueChanged)="updateColumnComment(c.columnName, $event.value)"
+      >
+      </dx-text-box>
+      <br />
+    </div>
+  </div>
+</dx-popup>
