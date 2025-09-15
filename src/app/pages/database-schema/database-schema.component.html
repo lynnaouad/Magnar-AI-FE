@@ -13,6 +13,8 @@
       [columnAutoWidth]="true"
       [columnHidingEnabled]="false"
       (onRowClick)="this.openTable($event.data.fullName)"
+      [selection]="{ mode: 'multiple' }"
+      [(selectedRowKeys)]="selectedAvailableKeys"
     >
       <dxo-scrolling rowRenderingMode="virtual"> </dxo-scrolling>
       <dxo-paging [pageSize]="5"> </dxo-paging>
@@ -35,6 +37,17 @@
         [caption]="'Table' | translate"
       ></dxi-column>
     </dx-data-grid>
+
+    <div style="margin-top: 10px">
+      <dx-button
+        text="{{ 'AddSelectedTables' | translate }}"
+        type="default"
+        stylingMode="contained"
+        (onClick)="addSelectedTables()"
+        [disabled]="!selectedAvailableKeys.length"
+      >
+      </dx-button>
+    </div>
   </section>
 
   <!-- Selected Tables -->
@@ -82,10 +95,10 @@
 
 <!-- Popup for schema -->
 <dx-popup
-  [title]="'DatabaseSchema' | translate"
+  [title]="'TableSchema' | translate"
   [visible]="isPopupVisible()"
   [fullScreen]="!!(screen.xSmallScreenChanged | async)"
-  [wrapperAttr]="{ class: 'database-schema-popup' }"
+  [wrapperAttr]="{ class: 'table-schema-popup' }"
   (onHidden)="closePopup()"
   width="80%"
   #popupRef
@@ -101,7 +114,7 @@
       <div>
         <dx-button
           width="150px"
-          text="{{ 'AddTable' | translate }}"
+          text="{{ 'UpdateSchema' | translate }}"
           stylingMode="contained"
           type="default"
           (onClick)="save()"
@@ -128,8 +141,7 @@
 
     <div *ngFor="let c of currentTableInfo()?.columns" class="row">
       <div class="meta">
-        [{{ c.columnName }}] ({{ c.dataType }}{{ c.isPrimaryKey ? ", PK" : ""
-        }}{{ c.isNullable ? ", nullable" : "" }})
+        <b> [{{ c.columnName }}] </b>
       </div>
       <dx-text-box
         [value]="columnComments()[c.columnName] ?? ''"

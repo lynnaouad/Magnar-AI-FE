@@ -24,6 +24,7 @@ import CustomStore from 'devextreme/data/custom_store';
 import { OdataUtilityService } from '../../shared/services/odata-utility.service';
 import { LanguageService } from '../../shared/services/language.service';
 import { forkJoin } from 'rxjs';
+import { ToastNotificationManager } from '../../shared/utils/toast-notification.service';
 
 @Component({
   selector: 'app-database-schema',
@@ -47,10 +48,12 @@ export class DatabaseSchemaComponent implements OnInit {
   constructor(
     private schemaService: SchemaService,
     private sanitizer: DomSanitizer,
-    private odataUtilityService: OdataUtilityService,
+    private toastNotificationManager: ToastNotificationManager,
     private languageService: LanguageService,
     public screen: ScreenService
   ) {}
+
+  selectedAvailableKeys: string[] = [];
 
   addTableLoading: boolean = false;
 
@@ -119,8 +122,8 @@ export class DatabaseSchemaComponent implements OnInit {
     lines.push(`Table: <b>${i.fullName}</b>`);
     lines.push(
       this.tableDescription()
-        ? `<span style="color:red; font-weight:bold">${this.tableDescription()}</span>`
-        : '<span style="color:red; font-weight:bold">[[Description]]</span>'
+        ? `<span style="color:#1856FA;"><i>${this.tableDescription()}</i></span>`
+        : '<span style="color:#828a93;</i></span>'
     );
     lines.push('Columns:');
 
@@ -136,8 +139,8 @@ export class DatabaseSchemaComponent implements OnInit {
     for (const c of i.columns) {
       const desc = this.columnComments()[c.columnName];
       const displayDesc = desc
-        ? `<span style="color:red; font-weight:bold">${desc}</span>`
-        : '<span style="color:red; font-weight:bold">[[Description]]</span>';
+        ? `<span style="color:#1856FA;"><i>${desc}</i></span>`
+        : '<span style="color:#828a93;"><i>[[Description]]</i></span>';
 
       const fkInfo = fkMap[c.columnName] ? `, ${fkMap[c.columnName]}` : '';
 
@@ -161,8 +164,11 @@ export class DatabaseSchemaComponent implements OnInit {
       columnComments: this.columnComments(),
     };
 
-    this.schemaService.annotate(req).subscribe(() => {
+    this.schemaService.annotate([req]).subscribe(() => {
       this.isPopupVisible.set(false);
+      this.toastNotificationManager.success(
+        'ToastNotifications.SchemaUpdatedSuccessfully'
+      );
       this.refresh();
     });
   }
@@ -226,4 +232,24 @@ export class DatabaseSchemaComponent implements OnInit {
       ? this.languageService.translateInstant('Yes')
       : this.languageService.translateInstant('No');
   };
+
+  addSelectedTables() {
+    if (!this.selectedAvailableKeys.length) return;
+
+    const requests = this.selectedAvailableKeys.map((x: any) => {
+      return {
+        fullTableName: x.fullName,
+        tableDescription: '', // no description
+        columnComments: {}, // no comments
+      };
+    });
+
+    this.schemaService.annotate(requests).subscribe(() => {
+      this.isPopupVisible.set(false);
+      this.toastNotificationManager.success(
+        'ToastNotifications.SchemaUpdatedSuccessfully'
+      );
+      this.refresh();
+    });
+  }
 }

@@ -51,22 +51,19 @@
 
       <!----------------------------------- Columns ---------------------------------------->
 
-      <!-- Id column -->
       <dxi-column dataField="id" [caption]="'Id' | translate"> </dxi-column>
 
-      <!-- Provider Name column -->
+      <dxi-column dataField="name" [caption]="'Name' | translate"> </dxi-column>
+
       <dxi-column dataField="provider" [caption]="'Provider' | translate" [calculateCellValue]="translateProvider">
       </dxi-column>
 
-            <!-- Created By Column -->
       <dxi-column dataField="isDefault" [caption]="'Default' | translate" [calculateCellValue]="isDefaultText">
       </dxi-column>
 
-      <!-- Created By Column -->
       <dxi-column dataField="createdBy" [caption]="'CreatedBy' | translate">
       </dxi-column>
 
-      <!-- Creation date Column -->
       <dxi-column
         dataField="createdAt"
         [caption]="'CreationDate' | translate"

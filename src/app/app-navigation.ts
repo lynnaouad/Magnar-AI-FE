@@ -14,4 +14,12 @@ export const Navigation = [
     icon: 'tableproperties',
     selected: false,
   },
+
+   {
+    id: 'Dashboard',
+    text: 'Dashboard',
+    path: '/admin/dashboard',
+    icon: 'datatrending',
+    selected: false,
+  },
 ];

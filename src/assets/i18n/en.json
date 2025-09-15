@@ -242,6 +242,10 @@
   "SelectedTables": "Selected Tables",
   "ColumnsDescription": "Columns Description",
   "AddTable": "Add Table",
+  "TestConnection": "Test Connection",
+  "UpdateSchema": "Update Schema",
+  "AddSelectedTables": "Add Selected Tables",
+  "TableSchema": "Table Schema",
 
   "NavBar.Home": "Home",
   "NavBar.MyCv": "My CV",
@@ -337,7 +341,9 @@
   "ToastNotifications.HiringStateUpdated": "Hiring State updated successfully !",
   "ToastNotifications.CvRateUpdatedSuccessfully": "Cv Rate Updated Successfully !",
   "ToastNotifications.FillPrompt": "Fill the prompt !",
+  "ToastNotifications.SchemaUpdatedSuccessfully": "Schema updated succesfully",
 
+  "PlaceHolders.DescribeDashboardPrompt": "Describe what you want to see in the dashboard...",
   "PlaceHolders.Username": "Username",
   "PlaceHolders.UsernameOrEmail": "Username or Email",
   "PlaceHolders.Password": "Password",
@@ -427,6 +433,8 @@
   "Errors.CannotGenerateDashboard": "Cannot generate dashboard",
   "Errors.GenerateDashboardError": "An error occured while generating your dashboard, kindly try again.",
   "Errors.NoDefaultConnectionConfigured": "No default connection is configured",
+  "Errors.ConnectionSuccessful": "Connection Successful",
+  "Errors.ConnectionFailed": "Connection Failed",
   
   "ExceptionMessages.ValidationError": "One or more validation failures have occurred.",
 

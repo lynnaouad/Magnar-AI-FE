@@ -240,7 +240,11 @@
   "AvailableTables": "الجداول المتاحة",
   "SelectedTables": "الجداول المختارة",
   "ColumnsDescription": "وصف الأعمدة",
-   "AddTable": "إضافة جدول",
+  "AddTable": "إضافة جدول",
+  "TestConnection": "اختبار الاتصال",
+  "UpdateSchema": "تحديث المخطط",
+  "AddSelectedTables": "إضافة الجداول المحددة",
+  "TableSchema": "مخطط الجدول",
 
   "NavBar.Home": "الصفحة الرئيسية",
   "NavBar.MyCv": "سيرتي الذاتية",
@@ -331,7 +335,9 @@
   "ToastNotifications.HiringStateUpdated": "تم تحديث ولاية التوظيف بنجاح!",
   "ToastNotifications.CvRateUpdatedSuccessfully": "!تم تحديث معدل السيرة الذاتية بنجاح",
   "ToastNotifications.FillPrompt": "إملأ النص المطلوب!",
+  "ToastNotifications.SchemaUpdatedSuccessfully": "تم تحديث المخطط بنجاح",
 
+  "PlaceHolders.DescribeDashboardPrompt": "صف ما تريد أن تراه في لوحة المعلومات...",
   "PlaceHolders.Username": "اسم المستخدم",
   "PlaceHolders.UsernameOrEmail": "اسم المستخدم أو البريد الإلكتروني",
   "PlaceHolders.Password": "كلمة المرور",
@@ -419,6 +425,8 @@
   "Errors.CannotGenerateJobDescription": "لقد حدث خطأ أثناء إنشاء وصف الوظيفة الخاص بك، يرجى المحاولة مرة أخرى.",
   "Errors.VectorSearchNotEnabled": "لم يتم تفعيل ميزة البحث عن المتجهات",
   "Errors.NoDefaultConnectionConfigured": "لم يتم تكوين اتصال افتراضي",
+  "Errors.ConnectionSuccessful": "تم الاتصال بنجاح",
+  "Errors.ConnectionFailed": "فشل الاتصال",
 
   "ExceptionMessages.ValidationError": "حدثت واحدة أو أكثر من حالات الفشل في التحقق.",
 

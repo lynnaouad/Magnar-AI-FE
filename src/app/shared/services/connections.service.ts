@@ -44,4 +44,10 @@ export class ConnectionsService {
       .delete(`${this.backEndUrl}/${id}`)
       .pipe(catchError(this.utilities.handleErrorGlobal));
   }
+
+  testConnection(conn: any) {
+    return this.http
+      .post<any>(`${this.backEndUrl}/test`, conn)
+      .pipe(catchError(this.utilities.handleErrorGlobal));
+  }
 }

@@ -1,0 +1,70 @@
+<div class="main-dashboard-container">
+  <div class="description-section">
+    <form
+      class="dashboard-generator-form"
+      (submit)="onPromptSubmit($event)"
+      method="post"
+      action=""
+    >
+      <dx-form [colCount]="1" #dashboardGenerationForm [formData]="data">
+        <!-- Description -->
+        <dxi-item [colSpan]="2">
+          <dx-text-area
+            [(value)]="data.prompt"
+            valueChangeEvent="input"
+            [height]="200"
+            [placeholder]="'PlaceHolders.DescribeDashboardPrompt' | translate"
+          >
+          </dx-text-area>
+        </dxi-item>
+
+        <dxi-item
+          editorType="dxSelectBox"
+          dataField="selectedChartType"
+          [editorOptions]="{
+          stylingMode: 'filled',
+          placeholder: 'PlaceHolders.Select' | translate,
+          items: chartTypes,
+          displayExpr: 'name',
+          valueExpr: 'id',
+        }"
+        >
+          <dxo-label template="typeLabel"></dxo-label>
+        </dxi-item>
+
+        <dxi-item>
+          <dx-button
+            class="submit-btn"
+            width="100%"
+            stylingMode="contained"
+            type="default"
+            [useSubmitBehavior]="true"
+            [disabled]="generateLoading"
+          >
+            <dx-load-indicator
+              *ngIf="generateLoading"
+              width="24px"
+              height="24px"
+              [visible]="true"
+            ></dx-load-indicator>
+
+            <div *ngIf="!generateLoading">{{ "Generate" | translate }}</div>
+          </dx-button>
+        </dxi-item>
+
+        <div *dxTemplate="let data of 'typeLabel'">
+          <span>{{ "Type" | translate }}</span>
+        </div>
+      </dx-form>
+    </form>
+  </div>
+  <div class="dashboard-viewer-section">
+    <dx-dashboard-control
+      #dashboard
+      [endpoint]="backendUrl"
+      workingMode="Viewer"
+      (onBeforeRender)="onBeforeRender($event)"
+    >
+    </dx-dashboard-control>
+  </div>
+</div>

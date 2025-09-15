@@ -33,6 +33,7 @@ import { Utilities } from '../../../shared/utils/utilities.service';
 import { ConnectionsService } from '../../../shared/services/connections.service';
 import { TypesService } from '../../../shared/services/types.service';
 import { ConnectionDto } from '../../../Dtos/ConnectionDto';
+import { tap } from 'lodash';
 
 @Component({
   selector: 'create-connection',
@@ -51,16 +52,17 @@ import { ConnectionDto } from '../../../Dtos/ConnectionDto';
     DxiButtonModule,
     TextEditorComponent,
     DxSelectBoxModule,
-    DxLoadIndicatorModule
+    DxLoadIndicatorModule,
   ],
 })
 export class CreateConnectionComponent implements OnInit, OnChanges {
   submitLoading = false;
+  testConnLoading = false;
   providerTypes: any[] = [];
 
   @Input() showPopup: boolean = false;
   @Input() data!: ConnectionDto;
-  
+
   @Output() showPopupChange = new EventEmitter<boolean>();
   @Output() OnClose = new EventEmitter<boolean>();
   @Output() OnSubmit = new EventEmitter<boolean>();
@@ -86,12 +88,12 @@ export class CreateConnectionComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['showPopup'] && this.showPopup) 
-      {
-        if(this.data && this.data.provider){
-          console.log(this.data.provider);
-          this.data.provider = this.providerTypes.find(pt => pt.name === this.data.provider)?.id;
-        }
+    if (changes['showPopup'] && this.showPopup) {
+      if (this.data && this.data.provider) {
+        this.data.provider = this.providerTypes.find(
+          (pt) => pt.name === this.data.provider
+        )?.id;
+      }
     }
   }
 
@@ -127,8 +129,10 @@ export class CreateConnectionComponent implements OnInit, OnChanges {
 
     let id = this.data?.id;
 
-    if(this.data.provider !== 1 && this.data?.details?.sqlServerConfiguration)
-    {
+    if (
+      this.data.provider !== 1 &&
+      this.data?.details?.sqlServerConfiguration
+    ) {
       this.data.details.sqlServerConfiguration = null;
     }
 
@@ -167,6 +171,27 @@ export class CreateConnectionComponent implements OnInit, OnChanges {
           this.handleSubmitEvent();
         });
     }
+  }
+
+  testConnection() {
+    if (!this.form?.instance?.validate().isValid) {
+      return;
+    }
+
+    this.testConnLoading = true;
+    this.connectionService
+      .testConnection(this.data)
+      .pipe(
+        take(1),
+        finalize(() => (this.testConnLoading = false))
+      )
+      .subscribe((res) => {
+        if (res === true) {
+          this.toastNotificationManager.success('Errors.ConnectionSuccessful');
+        } else {
+          this.toastNotificationManager.error('Errors.ConnectionFailed');
+        }
+      });
   }
 
   removeIdFromRouteParam() {
