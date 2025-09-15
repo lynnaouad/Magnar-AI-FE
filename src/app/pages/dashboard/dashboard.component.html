@@ -1,12 +1,12 @@
 <div class="main-dashboard-container">
-  <div class="description-section">
+  <div style="width: 40%">
     <form
       class="dashboard-generator-form"
       (submit)="onPromptSubmit($event)"
       method="post"
       action=""
     >
-      <dx-form [colCount]="1" #dashboardGenerationForm [formData]="data">
+      <dx-form [colCount]="2" #dashboardGenerationForm [formData]="data">
         <!-- Description -->
         <dxi-item [colSpan]="2">
           <dx-text-area
@@ -31,6 +31,7 @@
         >
           <dxo-label template="typeLabel"></dxo-label>
         </dxi-item>
+        <dxi-item><span></span></dxi-item>
 
         <dxi-item>
           <dx-button
@@ -58,11 +59,12 @@
       </dx-form>
     </form>
   </div>
+
   <div class="dashboard-viewer-section">
     <dx-dashboard-control
       #dashboard
       [endpoint]="backendUrl"
-      workingMode="Viewer"
+      workingMode="Designer"
       (onBeforeRender)="onBeforeRender($event)"
     >
     </dx-dashboard-control>
