@@ -132,7 +132,6 @@
       valueChangeEvent="input"
       (onValueChanged)="tableDescription.set($event.value)"
       [height]="100"
-      style="width: 70%"
     >
     </dx-text-area>
 
@@ -144,13 +143,13 @@
       <div class="meta">
         <b> {{ c.columnName }} </b>
       </div>
-      <dx-text-box
-        style="width: 70%"
+      <dx-text-area
+        [height]="100"
         [value]="columnComments()[c.columnName] ?? ''"
         valueChangeEvent="input"
         (onValueChanged)="updateColumnComment(c.columnName, $event.value)"
       >
-      </dx-text-box>
+      </dx-text-area>
       <br />
     </div>
   </div>

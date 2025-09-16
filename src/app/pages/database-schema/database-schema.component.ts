@@ -119,12 +119,13 @@ export class DatabaseSchemaComponent implements OnInit {
     if (!i) return '';
 
     const lines: string[] = [];
-    lines.push(`Table: <b>${i.fullName}</b>`);
+    lines.push(`Table: <b>${i.fullName}`);
     lines.push(
       this.tableDescription()
-        ? `<span style="color:#1856FA;"><i>${this.tableDescription()}</i></span>`
-        : '<span style="color:#828a93;</i></span>'
+        ? `<span style="color:#1856FA;"><i>${this.tableDescription()}</i></span><br>`
+        : `<span style="color:#828a93;"><i>[[Description]]</i></span><br>`
     );
+
     lines.push('Columns:');
 
     // build FK lookup map
@@ -138,6 +139,7 @@ export class DatabaseSchemaComponent implements OnInit {
     // iterate columns, check if also FK
     for (const c of i.columns) {
       const desc = this.columnComments()[c.columnName];
+
       const displayDesc = desc
         ? `<span style="color:#1856FA;"><i>${desc}</i></span>`
         : '<span style="color:#828a93;"><i>[[Description]]</i></span>';
@@ -147,8 +149,10 @@ export class DatabaseSchemaComponent implements OnInit {
       lines.push(
         `- <b>[${c.columnName}]</b> <span>(${c.dataType}${
           c.isPrimaryKey ? ', PK' : ''
-        }${!c.isNullable ? '' : ', nullable'}${fkInfo}) </span>: ${displayDesc}`
+        }${!c.isNullable ? '' : ', nullable'}${fkInfo}) </span>`
       );
+
+      lines.push(displayDesc + '<br>');
     }
 
     return this.sanitizer.bypassSecurityTrustHtml(lines.join('<br>'));
@@ -196,18 +200,47 @@ export class DatabaseSchemaComponent implements OnInit {
         return;
       }
 
-      // Parse saved comments from RawBlockText
-      const comments: Record<string, string | null> = {};
+      // --- Parse saved column comments (multi-line) ---
+      const comments: Record<string, string> = {};
       const lines = block.rawBlockText.split(/\r?\n/);
-      for (const line of lines) {
-        const colMatch = /^- \[(.+?)\](?: ?: (.*))?$/.exec(line.trim());
+
+      let currentCol: string | null = null;
+      let buffer: string[] = [];
+
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].trim();
+
+        // New column start
+        const colMatch = /^- \[(.+?)\]$/.exec(line);
         if (colMatch) {
-          comments[colMatch[1]] = colMatch[2] ?? '';
+          // Save previous
+          if (currentCol) {
+            comments[currentCol] = buffer.join('\n').trim();
+          }
+          currentCol = colMatch[1];
+          buffer = [];
+          continue;
+        }
+
+        // Description line or continuation
+        if (currentCol) {
+          if (/^Description\s*:?(.*)$/i.test(line)) {
+            const desc = line.split(':', 2)[1] ?? '';
+            buffer.push(desc.trim());
+          } else {
+            // continuation of description
+            buffer.push(line);
+          }
         }
       }
 
-      // Merge DB columns with parsed comments
-      const merged: Record<string, string | null> = {};
+      // Save last column
+      if (currentCol) {
+        comments[currentCol] = buffer.join('\n').trim();
+      }
+
+      // --- Merge DB columns with parsed comments ---
+      const merged: Record<string, string> = {};
       tableInfo.columns.forEach((c: any) => {
         merged[c.columnName] = comments[c.columnName] ?? '';
       });
@@ -215,17 +248,57 @@ export class DatabaseSchemaComponent implements OnInit {
       this.currentTableInfo.set(tableInfo);
       this.columnComments.set(merged);
 
-      // Parse table description safely
-      const descMatch = /^Description:\s*(.*)$/m.exec(block.rawBlockText);
-      let desc = descMatch ? descMatch[1].trim() : '';
-      if (!desc || /^columns:?$/i.test(desc)) {
-        desc = '';
-      }
+      // --- Parse table description safely (multi-line until "Columns:") ---
+      const tableDescMatch = /^Description:\s*([\s\S]*?)(?=^\s*Columns:)/m.exec(
+        block.rawBlockText
+      );
+
+      let desc = tableDescMatch ? tableDescMatch[1].trim() : '';
       this.tableDescription.set(desc);
 
       this.isPopupVisible.set(true);
     });
   }
+
+  onTableDescriptionChanged(e: any) {
+    let value: string = e.value ?? '';
+
+    value = this.sanitizeMultiline(value);
+
+    this.tableDescription.set(value);
+
+     e.component?.option('value', value);
+  }
+
+  onCommentDescriptionChanged(columnName: any, e: any) {
+    let value: string = e ?? '';
+
+    value = this.sanitizeMultiline(value);
+
+    this.updateColumnComment(columnName, e);
+
+    e.component?.option('value', value);
+  }
+
+  // Reuse everywhere (table + columns)
+private sanitizeMultiline(input: string | null | undefined): string {
+  let v = (input ?? '').replace(/\r\n/g, '\n');
+
+  // If it's only whitespace/newlines (incl. a single "\n"), clear it
+  if (/^\s*$/.test(v)) return '';
+
+  // Collapse 2+ consecutive newlines into a single newline
+  v = v.replace(/\n{2,}/g, '\n');
+
+  // Optional: remove leading newlines (avoid starting with a blank line)
+  v = v.replace(/^\n+/, '');
+
+  // Remove trailing newlines
+  v = v.replace(/\n+$/, '');
+
+  return v;
+}
+
 
   hasCommentsDisplay = (row: any) => {
     return row.hasComments
