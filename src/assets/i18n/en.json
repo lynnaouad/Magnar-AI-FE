@@ -246,6 +246,8 @@
   "UpdateSchema": "Update Schema",
   "AddSelectedTables": "Add Selected Tables",
   "TableSchema": "Table Schema",
+  "ChangeType": "Change Type",
+  "DashboardTypes": "Dashboard Types",
 
   "NavBar.Home": "Home",
   "NavBar.MyCv": "My CV",
@@ -435,6 +437,7 @@
   "Errors.NoDefaultConnectionConfigured": "No default connection is configured",
   "Errors.ConnectionSuccessful": "Connection Successful",
   "Errors.ConnectionFailed": "Connection Failed",
+  "Errors.CannotGenerateDashboardUpdateSchema": "Cannot Generate Dashboard! Kindly add tables to your schema or add further remarks.",
   
   "ExceptionMessages.ValidationError": "One or more validation failures have occurred.",
 

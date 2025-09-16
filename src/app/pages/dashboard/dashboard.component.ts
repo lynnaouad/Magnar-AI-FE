@@ -1,6 +1,12 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { DxDashboardControlModule } from 'devexpress-dashboard-angular';
-import { DxButtonModule, DxFormModule, DxLoadIndicatorModule, DxTextAreaModule } from 'devextreme-angular';
+import {
+  DxButtonModule,
+  DxFormModule,
+  DxLoadIndicatorModule,
+  DxPopupModule,
+  DxTextAreaModule,
+} from 'devextreme-angular';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { TranslateModule } from '@ngx-translate/core';
 import { TextEditorComponent } from '../../shared/components/text-editor/text-editor.component';
@@ -10,6 +16,7 @@ import { environment } from '../../../environments/environment';
 import { take } from 'lodash';
 import { finalize } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { ScreenService } from '../../shared/services';
 
 @Component({
   selector: 'app-dashboard',
@@ -25,23 +32,29 @@ import { CommonModule } from '@angular/common';
     DxButtonModule,
     DxTextAreaModule,
     DxLoadIndicatorModule,
-    CommonModule
+    CommonModule,
+    DxPopupModule,
   ],
 })
 export class DashboardComponent implements OnInit {
   generateLoading: boolean = false;
+  changeTypeLoading: boolean = false;
+
   private dashboardControl: any;
   data: any = { selectedChartType: 1, prompt: '' };
 
   chartTypes: any[] = [];
 
-  backendUrl = environment.apiUrl + "/api/dashboard"
+  backendUrl = environment.apiUrl + '/api/dashboard';
+
+  showPopup: boolean = false;
 
   @ViewChild('dashboard', { static: true }) dashboard!: ElementRef<any>;
 
   constructor(
     private typesService: TypesService,
     private dashboardService: DashboardService,
+    public screen: ScreenService
   ) {}
 
   ngOnInit(): void {
@@ -67,8 +80,8 @@ export class DashboardComponent implements OnInit {
     e.preventDefault();
     this.dashboardControl.unloadDashboard();
 
-    console.log("ff" )
-    console.log(this.data.prompt )
+    console.log('ff');
+    console.log(this.data.prompt);
 
     if (!this.data.prompt || this.data.prompt.trim() === '') {
       return;
@@ -76,18 +89,49 @@ export class DashboardComponent implements OnInit {
 
     this.generateLoading = true;
 
+    this.data.selectedChartType = this.chartTypes.find((x) => (x.id = 1)).id;
+
     let data = {
       Prompt: this.data.prompt,
       ChartType: this.data.selectedChartType,
     };
 
-    this.dashboardService.get(data).pipe(
-      finalize(() => this.generateLoading = false)
-    )
-    .subscribe((res: any) => {
-      if (this.dashboardControl) {
-        this.dashboardControl.loadDashboard(res.dashboardId);
-      }
-    });
+    this.dashboardService
+      .get(data)
+      .pipe(finalize(() => (this.generateLoading = false)))
+      .subscribe((res: any) => {
+        if (this.dashboardControl) {
+          this.dashboardControl.loadDashboard(res.dashboardId);
+        }
+      });
+  }
+
+  async onChangeDashboardType(e: Event) {
+    e.preventDefault();
+
+    this.changeTypeLoading = true;
+
+    let data = {
+      ChartType: this.data.selectedChartType,
+    };
+
+    this.dashboardService
+      .changeType(data)
+      .pipe(
+        finalize(() => {
+          this.changeTypeLoading = false;
+          this.closePopup();
+        })
+      )
+      .subscribe((res: any) => {
+        if (this.dashboardControl) {
+          this.dashboardControl.loadDashboard(res.dashboardId);
+        }
+      });
+  }
+
+  closePopup() {
+    this.showPopup = false;
+    this.data.selectedChartType = this.chartTypes.find((x) => (x.id = 1)).id;
   }
 }

@@ -245,6 +245,8 @@
   "UpdateSchema": "تحديث المخطط",
   "AddSelectedTables": "إضافة الجداول المحددة",
   "TableSchema": "مخطط الجدول",
+  "ChangeType": "تغيير النوع",
+  "DashboardTypes": "أنواع لوحة المعلومات",
 
   "NavBar.Home": "الصفحة الرئيسية",
   "NavBar.MyCv": "سيرتي الذاتية",

@@ -20,4 +20,10 @@ export class DashboardService {
       .post(this.backEndUrl, data)
       .pipe(catchError(this.utilities.handleErrorGlobal));
   }
+
+  changeType(data: any) {
+    return this.http
+      .post(this.backEndUrl + `/change-type`, data)
+      .pipe(catchError(this.utilities.handleErrorGlobal));
+  }
 }
