@@ -35,6 +35,7 @@ import { ConnectionsService } from '../../../shared/services/connections.service
 import { TypesService } from '../../../shared/services/types.service';
 import { ConnectionDto } from '../../../Dtos/ConnectionDto';
 import { tap } from 'lodash';
+import { PasswordTextBoxComponent } from '../../../shared/components/password-text-box/password-text-box.component';
 
 @Component({
   selector: 'create-connection',
@@ -54,7 +55,8 @@ import { tap } from 'lodash';
     TextEditorComponent,
     DxSelectBoxModule,
     DxLoadIndicatorModule,
-    DxSwitchModule
+    DxSwitchModule,
+    PasswordTextBoxComponent
   ],
 })
 export class CreateConnectionComponent implements OnInit, OnChanges {

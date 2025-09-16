@@ -5,6 +5,7 @@ import {
   DxFormModule,
   DxLoadIndicatorModule,
   DxPopupModule,
+  DxSelectBoxModule,
   DxTextAreaModule,
 } from 'devextreme-angular';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
@@ -34,11 +35,11 @@ import { ScreenService } from '../../shared/services';
     DxLoadIndicatorModule,
     CommonModule,
     DxPopupModule,
+    DxSelectBoxModule,
   ],
 })
 export class DashboardComponent implements OnInit {
   generateLoading: boolean = false;
-  changeTypeLoading: boolean = false;
 
   private dashboardControl: any;
   data: any = { selectedChartType: 1, prompt: '' };
@@ -46,7 +47,6 @@ export class DashboardComponent implements OnInit {
   chartTypes: any[] = [];
 
   backendUrl = environment.apiUrl + '/api/dashboard';
-
 
   @ViewChild('dashboard', { static: true }) dashboard!: ElementRef<any>;
 
@@ -101,8 +101,10 @@ export class DashboardComponent implements OnInit {
   }
 
   onChangeDashboardType() {
-
-    this.changeTypeLoading = true;
+    console.log(this.data.selectedChartType)
+    if (this.data.selectedChartType == null) {
+      return;
+    }
 
     let data = {
       ChartType: this.data.selectedChartType,
@@ -110,13 +112,9 @@ export class DashboardComponent implements OnInit {
 
     this.dashboardService
       .changeType(data)
-      .pipe(
-        finalize(() => {
-          this.changeTypeLoading = false;
-        })
-      )
+      .pipe(finalize(() => {}))
       .subscribe((res: any) => {
-        if (this.dashboardControl) {
+        if (this.dashboardControl && res.dashboardId) {
           this.dashboardControl.loadDashboard(res.dashboardId);
         }
       });
