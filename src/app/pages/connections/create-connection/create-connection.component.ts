@@ -18,6 +18,7 @@ import {
   DxLoadIndicatorModule,
   DxPopupModule,
   DxSelectBoxModule,
+  DxSwitchModule,
   DxTextAreaModule,
   DxValidationGroupModule,
 } from 'devextreme-angular';
@@ -53,6 +54,7 @@ import { tap } from 'lodash';
     TextEditorComponent,
     DxSelectBoxModule,
     DxLoadIndicatorModule,
+    DxSwitchModule
   ],
 })
 export class CreateConnectionComponent implements OnInit, OnChanges {
