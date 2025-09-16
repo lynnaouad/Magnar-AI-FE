@@ -225,10 +225,9 @@ export class DatabaseSchemaComponent implements OnInit {
         // Description line or continuation
         if (currentCol) {
           if (/^Description\s*:?(.*)$/i.test(line)) {
-            const desc = line.split(':', 2)[1] ?? '';
-            buffer.push(desc.trim());
+            const desc = line.substring(line.indexOf(':') + 1).trim();
+            buffer.push(desc);
           } else {
-            // continuation of description
             buffer.push(line);
           }
         }
