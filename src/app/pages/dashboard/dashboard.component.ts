@@ -47,7 +47,6 @@ export class DashboardComponent implements OnInit {
 
   backendUrl = environment.apiUrl + '/api/dashboard';
 
-  showPopup: boolean = false;
 
   @ViewChild('dashboard', { static: true }) dashboard!: ElementRef<any>;
 
@@ -80,16 +79,11 @@ export class DashboardComponent implements OnInit {
     e.preventDefault();
     this.dashboardControl.unloadDashboard();
 
-    console.log('ff');
-    console.log(this.data.prompt);
-
     if (!this.data.prompt || this.data.prompt.trim() === '') {
       return;
     }
 
     this.generateLoading = true;
-
-    this.data.selectedChartType = this.chartTypes.find((x) => (x.id = 1)).id;
 
     let data = {
       Prompt: this.data.prompt,
@@ -106,8 +100,7 @@ export class DashboardComponent implements OnInit {
       });
   }
 
-  async onChangeDashboardType(e: Event) {
-    e.preventDefault();
+  onChangeDashboardType() {
 
     this.changeTypeLoading = true;
 
@@ -120,7 +113,6 @@ export class DashboardComponent implements OnInit {
       .pipe(
         finalize(() => {
           this.changeTypeLoading = false;
-          this.closePopup();
         })
       )
       .subscribe((res: any) => {
@@ -128,10 +120,5 @@ export class DashboardComponent implements OnInit {
           this.dashboardControl.loadDashboard(res.dashboardId);
         }
       });
-  }
-
-  closePopup() {
-    this.showPopup = false;
-    this.data.selectedChartType = this.chartTypes.find((x) => (x.id = 1)).id;
   }
 }

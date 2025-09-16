@@ -20,6 +20,22 @@
           </dx-text-area>
         </dxi-item>
 
+        <dxi-item
+          editorType="dxSelectBox"
+          dataField="selectedChartType"
+          [editorOptions]="{
+          stylingMode: 'filled',
+          placeholder: 'PlaceHolders.Select' | translate,
+          items: chartTypes,
+          displayExpr: 'name',
+          valueExpr: 'id',
+        }"
+        >
+          <dxo-label template="typeLabel">{{ "Type" | translate }}</dxo-label>
+        </dxi-item>
+
+        <dxi-item [colSpan]="4"></dxi-item>
+
         <dxi-item>
           <dx-button
             class="submit-btn"
@@ -47,7 +63,7 @@
             stylingMode="contained"
             type="default"
             [useSubmitBehavior]="false"
-            (click)="showPopup = true"
+            (click)="onChangeDashboardType()"
             [disabled]="changeTypeLoading"
           >
             <dx-load-indicator
@@ -62,6 +78,10 @@
             </div>
           </dx-button>
         </dxi-item>
+
+        <div *dxTemplate="let data of 'typeLabel'">
+          <span>{{ "Type" | translate }}</span>
+        </div>
       </dx-form>
     </form>
   </div>
@@ -76,64 +96,3 @@
     </dx-dashboard-control>
   </div>
 </div>
-
-<dx-popup
-  [title]="'DashboardTypes' | translate"
-  [(visible)]="showPopup"
-  [fullScreen]="!!(screen.xSmallScreenChanged | async)"
-  [wrapperAttr]="{ class: 'create-connection-popup' }"
-  (onHidden)="closePopup()"
-  width="20%"
-  height="auto"
-  #popupRef
->
-  <form
-    class="create-connection-form"
-    method="post"
-    action=""
-    (submit)="onChangeDashboardType($event)"
-  >
-    <dx-form [formData]="data" #createConnectionForm>
-      <dxi-item
-        editorType="dxSelectBox"
-        dataField="selectedChartType"
-        [editorOptions]="{
-          stylingMode: 'filled',
-          placeholder: 'PlaceHolders.Select' | translate,
-          items: chartTypes,
-          displayExpr: 'name',
-          valueExpr: 'id',
-        }"
-      >
-        <dxo-label template="typeLabel">{{ "Type" | translate }}</dxo-label>
-      </dxi-item>
-
-      <dxi-item>
-        <dx-button
-          class="submit-btn"
-          width="100%"
-          stylingMode="contained"
-          type="default"
-          [useSubmitBehavior]="true"
-          (click)="showPopup = true"
-          [disabled]="changeTypeLoading"
-        >
-          <dx-load-indicator
-            *ngIf="changeTypeLoading"
-            width="24px"
-            height="24px"
-            [visible]="true"
-          ></dx-load-indicator>
-
-          <div *ngIf="!changeTypeLoading">
-            {{ "ChangeType" | translate }}
-          </div>
-        </dx-button>
-      </dxi-item>
-
-      <div *dxTemplate="let data of 'typeLabel'">
-        <span>{{ "Type" | translate }}</span>
-      </div>
-    </dx-form>
-  </form>
-</dx-popup>
