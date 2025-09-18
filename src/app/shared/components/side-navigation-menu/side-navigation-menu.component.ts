@@ -11,6 +11,7 @@ import {
   OnChanges,
   SimpleChanges,
   OnInit,
+  inject,
 } from '@angular/core';
 import {
   DxTreeViewModule,
@@ -24,6 +25,9 @@ import { cloneDeep, forEach } from 'lodash';
 import { BehaviorSubject, filter } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { NavigationEnd, Router } from '@angular/router';
+import { select, Store } from '@ngrx/store';
+import { AppState } from '../../../app-store/states/app.state';
+import { WorkspaceIdObserver } from '../../../app-store/Observables/WorkspaceIdObserver.service';
 
 @Component({
   selector: 'app-side-navigation-menu',
@@ -56,6 +60,7 @@ export class SideNavigationMenuComponent
     this.menu.instance.selectItem(value);
   }
 
+  workspaceId: number = 0;
   selectedId: any = null;
 
   // BehaviorSubject to store menu items
@@ -65,8 +70,13 @@ export class SideNavigationMenuComponent
   constructor(
     private elementRef: ElementRef,
     private languageService: LanguageService,
-    private router: Router
+    private router: Router,
+    private companyObserver: WorkspaceIdObserver
   ) {
+    this.companyObserver.workspaceId$.subscribe((id) => {
+      this.workspaceId = id ?? 0;
+      this.updateMenuItems();
+    });
   }
 
   private _compactMode = false;
@@ -93,12 +103,28 @@ export class SideNavigationMenuComponent
 
     if (menuItems.length > 0) {
       const updatedItems: any[] = menuItems.map((item) => {
+        if (item.path) {
+          let parts: any[] = item.path.split('/');
+
+          if (parts.includes(':workspaceId')) {
+            parts[2] = this.workspaceId;
+            item.path = parts.join('/');
+          }
+        }
 
         item.text = this.languageService.translateInstant(item.text);
         item.selected = item.id === this.selectedId;
 
         if (item.items != null && item.items.length > 0) {
           item.items.map((innerMenu: any) => {
+            if (innerMenu.path) {
+              let parts: any[] = innerMenu.path.split('/');
+              console.log(parts);
+              // if (parts.includes('workspaces')) {
+              //   parts[2] = this.companyId;
+              //   innerMenu.path = parts.join('/');
+              // }
+            }
 
             innerMenu.text = this.languageService.translateInstant(
               innerMenu.text

@@ -30,7 +30,7 @@
 
       <dxo-toolbar class="table-toolbar">
         <dxi-item location="before">
-          <div class="grid-header">{{ "Connections" | translate }}</div>
+          <div class="grid-header">{{ "Providers" | translate }}</div>
         </dxi-item>
 
         <dxi-item location="after" locateInMenu="after">
@@ -140,16 +140,16 @@
 
 <!--------------------------------------------------------------------------------------------------------------------------------------------->
 
-<create-connection
-  [data]="newConnection"
+<create-provider
+  [data]="newProvider"
   [(showPopup)]="isPopupOpened"
   (OnSubmit)="onSubmitPopup()"
 >
-</create-connection>
+</create-provider>
 
 <verification-popup-form
-  [title]="'DeleteConnection' | translate"
-  [message]="'DeleteConnectionValidation' | translate"
+  [title]="'DeleteProvider' | translate"
+  [message]="'DeleteProviderValidation' | translate"
   [(visible)]="isDeletePopupOpened"
   (onConfirm)="deleteRecord()"
   [(isLoading)]="deleteLoading"

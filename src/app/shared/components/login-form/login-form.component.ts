@@ -99,7 +99,7 @@ export class LoginFormComponent implements OnInit {
           if (returnUrl != null) {
             this.router.navigateByUrl(returnUrl);
           } else {
-            this.router.navigate(['admin']);
+            this.router.navigate(['workspaces']);
           }
         });
       });

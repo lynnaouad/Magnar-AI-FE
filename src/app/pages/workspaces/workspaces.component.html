@@ -1,0 +1,172 @@
+<div class="view-wrapper list-page table-wrapper">
+  <div style="margin-bottom: 5px">
+    <h3>{{ "Workspaces" | translate }}</h3>
+  </div>
+
+  <div>
+    <dx-button
+      [text]="'Add' | translate"
+      icon="plus"
+      stylingMode="contained"
+      type="default"
+      (onClick)="addNewWorkspace()"
+    ></dx-button>
+  </div>
+
+  <dx-load-indicator
+    class="custom-loader"
+    id="large-indicator"
+    height="60"
+    width="60"
+    *ngIf="displayLoader"
+  ></dx-load-indicator>
+
+  <ng-container>
+    <div class="workspaces-block">
+      <div class="workspaces-container">
+        <div class="workspaces" *ngFor="let item of workspaces">
+          <div class="workspace" (click)="openWorkspace(item)" style="display: flex; flex-direction: column">
+            <div style="display: flex; justify-content: flex-end">
+              <div>
+                <span
+                  class="menu-trigger"
+                  #menuTrigger
+                  (click)="menu.instance.show()"
+                >
+                  <i class="fa-solid fa-bars"></i>
+                </span>
+
+                <dx-context-menu
+                  #menu
+                  [target]="menuTrigger"
+                  [items]="menuItems"
+                  [showEvent]="'dxclick'"
+                  (onItemClick)="onMenuClick($event, item)"
+                  [focusStateEnabled]="false"
+                  [position]="{
+                        my: { x: 'left', y: 'top' },
+                        at: { x: 'left', y: 'bottom' },
+                    }"
+                >
+                  <div *dxTemplate="let data of 'editTemplate'">
+                    <i class="fa fa-edit edit-menu-item"></i>
+                    <span class="edit-menu-item-text">{{ data.text }}</span>
+                  </div>
+
+                  <div *dxTemplate="let data of 'deleteTemplate'">
+                    <i class="fa fa-trash delete-menu-item"></i>
+                    <span class="delete-menu-item-text">{{ data.text }}</span>
+                  </div>
+                </dx-context-menu>
+              </div>
+            </div>
+            <div class="workspace-icon-container">
+              <div>
+                <i class="fas fa-network-wired"></i>
+              </div>
+            </div>
+            <div class="workspace-name">
+              <span>{{ item.name }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<!----------------------------------------------------------------------->
+
+<dx-popup
+  [title]="'Workspace' | translate"
+  [(visible)]="showPopup"
+  [fullScreen]="!!(screen.xSmallScreenChanged | async)"
+  [wrapperAttr]="{ class: 'create-workdpace-popup' }"
+  (onHidden)="closePopup()"
+  width="40%"
+  height="auto"
+  #popupRef
+>
+  <form
+    class="create-workspace-form"
+    (submit)="onSubmit($event)"
+    method="post"
+    action=""
+  >
+    <dx-form
+      [formData]="newWorkspace"
+      [disabled]="submitLoading"
+      [colCount]="1"
+      #createWorkspaceForm
+    >
+      <dxi-item itemType="group" [colSpan]="2" [colCount]="2">
+        <dxi-item
+          [colCount]="1"
+          dataField="name"
+          editorType="dxTextBox"
+          [editorOptions]="{
+        stylingMode: 'filled',
+        mode: 'text',
+        inputAttr: { autocomplete: 'name' },
+      }"
+          cssClass="form-item"
+        >
+          <dxi-validation-rule
+            type="required"
+            [message]="'ValidationRules.RequiredField' | translate"
+          ></dxi-validation-rule>
+          <dxo-label template="nameLabel"></dxo-label>
+        </dxi-item>
+      </dxi-item>
+
+      <div *dxTemplate="let data of 'nameLabel'">
+        <span>{{ "Name" | translate }}</span>
+      </div>
+
+      <dxi-item>
+        <text-editor [(value)]="newWorkspace.description"></text-editor>
+
+        <dxo-label template="DescriptionLabel"></dxo-label>
+      </dxi-item>
+
+      <div *dxTemplate="let data of 'DescriptionLabel'">
+        <span>{{ "Description" | translate }}</span>
+      </div>
+
+      <dxi-item itemType="group" [colCount]="5">
+        <dxi-item [colSpan]="4"><span></span></dxi-item>
+        <dxi-item [colSpan]="1">
+          <dx-button
+            class="submit-btn"
+            width="100%"
+            stylingMode="contained"
+            type="default"
+            [useSubmitBehavior]="true"
+            [disabled]="submitLoading"
+          >
+            <dx-load-indicator
+              *ngIf="submitLoading"
+              width="24px"
+              height="24px"
+              [visible]="true"
+            ></dx-load-indicator>
+
+            <div *ngIf="!submitLoading">{{ "Submit" | translate }}</div>
+          </dx-button>
+        </dxi-item>
+      </dxi-item>
+    </dx-form>
+  </form>
+</dx-popup>
+
+<!----------------------------------------------------------------------->
+
+<verification-popup-form
+  [title]="'DeleteWorkspace' | translate"
+  [message]="'DeleteWorkspaceValidation' | translate"
+  [(visible)]="isDeletePopupOpened"
+  (onConfirm)="deleteRecord()"
+  [(isLoading)]="deleteLoading"
+  [isWarningButton]="true"
+>
+</verification-popup-form>

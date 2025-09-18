@@ -36,10 +36,12 @@ import { Navigation } from '../../app-navigation';
     HeaderComponent,
     DxScrollViewModule,
     CommonModule,
-    RouterModule
-],
+    RouterModule,
+  ],
 })
-export class SideNavOuterToolbarComponent implements OnInit, OnChanges, OnDestroy {
+export class SideNavOuterToolbarComponent
+  implements OnInit, OnChanges, OnDestroy
+{
   @ViewChild(DxScrollViewComponent, { static: true })
   scrollView!: DxScrollViewComponent;
   selectedRoute = '';
@@ -58,39 +60,16 @@ export class SideNavOuterToolbarComponent implements OnInit, OnChanges, OnDestro
   shaderEnabled = false;
   swatchClassName = 'dx-swatch-additional';
 
-  defaultMenuItems: any[] = [];
-
-     @ViewChild(SideNavigationMenuComponent, { static: false })
-     sideNavContent!: SideNavigationMenuComponent;
+  @ViewChild(SideNavigationMenuComponent, { static: false })
+  sideNavContent!: SideNavigationMenuComponent;
 
   constructor(
     private screen: ScreenService,
-    private router: Router,
-    private authService: AuthService,
-    private languageService: LanguageService,
-  ) {
-
-    this.languageService
-      .getTranslations(['SignOut'])
-      .subscribe((translations) => {
-        this.defaultMenuItems = [
-          {
-            text: translations['SignOut'],
-            icon: 'runner',
-            code: 'SignOut',
-            order: 1,
-            click: () => {
-              this.authService.logOut();
-              this.navigateTo('/login');
-            },
-          },
-        ];
-      });
-  }
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.setSidebarMenuItems();
-    this.setNavMenuItems();
 
     this.menuOpened = this.screen.sizes['screen-large'];
 
@@ -107,8 +86,7 @@ export class SideNavOuterToolbarComponent implements OnInit, OnChanges, OnDestro
 
   ngOnChanges(changes: SimpleChanges): void {}
 
-  ngOnDestroy(): void {
-  }
+  ngOnDestroy(): void {}
 
   updateDrawer() {
     const isXSmall = this.screen.sizes['screen-x-small'];
@@ -163,16 +141,5 @@ export class SideNavOuterToolbarComponent implements OnInit, OnChanges, OnDestro
 
   async setSidebarMenuItems() {
     this.sideBarMenu = Navigation;
-  }
-
-  async setNavMenuItems() {
-    let isLoggedIn = this.authService.loggedIn;
-
-    if (!isLoggedIn) {
-      this.menuItems = [];
-      return;
-    }
-
-    this.menuItems = this.defaultMenuItems;
   }
 }

@@ -10,23 +10,23 @@ import { DxPopupModule } from 'devextreme-angular/ui/popup';
 import { DxScrollViewModule } from 'devextreme-angular/ui/scroll-view';
 import { DxToolbarModule } from 'devextreme-angular/ui/toolbar';
 import { DxTooltipModule } from 'devextreme-angular/ui/tooltip';
-import { CreateConnectionComponent } from './create-connection/create-connection.component';
 import { cloneDeep } from 'lodash';
 import { finalize, take } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { VerificationPopupFormComponent } from '../../shared/components/verification-popup-form/verification-popup-form.component';
 import { ScreenService } from '../../shared/services';
 import { ToastNotificationManager } from '../../shared/utils/toast-notification.service';
-import { ConnectionsService } from '../../shared/services/connections.service';
+import { ProvidersService } from '../../shared/services/providers.service';
 import CustomStore from 'devextreme/data/custom_store';
 import { OdataUtilityService } from '../../shared/services/odata-utility.service';
-import { ConnectionDto } from '../../Dtos/ConnectionDto';
+import { ProviderDto } from '../../Dtos/ProviderDto';
 import { LanguageService } from '../../shared/services/language.service';
+import { CreateProviderComponent } from './create-provider/create-provider.component';
 
 @Component({
-  selector: 'app-connections-list',
-  templateUrl: './connections-list.component.html',
-  styleUrl: './connections-list.component.scss',
+  selector: 'app-providers-list',
+  templateUrl: './providers-list.component.html',
+  styleUrl: './providers-list.component.scss',
   standalone: true,
   imports: [
     DxButtonModule,
@@ -40,17 +40,17 @@ import { LanguageService } from '../../shared/services/language.service';
     DxLoadIndicatorModule,
     DxPopupModule,
     TranslateModule,
-    CreateConnectionComponent,
+    CreateProviderComponent,
     VerificationPopupFormComponent,
   ],
 })
-export class ConnectionsListComponent implements OnInit {
+export class ProvidersListComponent implements OnInit {
   isLoading = false;
   deleteLoading = false;
   isPopupOpened = false;
   dataSource: any;
 
-  newConnection: ConnectionDto = new ConnectionDto();
+  newProvider: ProviderDto = new ProviderDto();
   totalCount = 0;
 
   tempIdToDelete = '';
@@ -58,7 +58,7 @@ export class ConnectionsListComponent implements OnInit {
 
   constructor(
     protected screen: ScreenService,
-    private connectionsService: ConnectionsService,
+    private providersService: ProvidersService,
     private toastNotificationManager: ToastNotificationManager,
     private router: Router,
     private route: ActivatedRoute,
@@ -80,7 +80,7 @@ export class ConnectionsListComponent implements OnInit {
             []
           );
 
-          this.connectionsService.getOdata(queryString).subscribe(
+          this.providersService.getOdata(queryString).subscribe(
             (res: any) => {
               resolve({
                 data: res?.value ?? [],
@@ -111,12 +111,12 @@ export class ConnectionsListComponent implements OnInit {
 
   onAddingNewRecord() {
     this.reset();
-    this.newConnection = new ConnectionDto();
+    this.newProvider = new ProviderDto();
     this.isPopupOpened = true;
   }
 
   onEditRecord(record: any) {
-    this.newConnection = cloneDeep(record);
+    this.newProvider = cloneDeep(record);
     this.isPopupOpened = true;
 
     this.router.navigate([], {
@@ -138,7 +138,7 @@ export class ConnectionsListComponent implements OnInit {
       return;
     }
 
-    this.connectionsService
+    this.providersService
       .delete(this.tempIdToDelete)
       .pipe(
         take(1),
@@ -146,7 +146,7 @@ export class ConnectionsListComponent implements OnInit {
       )
       .subscribe((res: any) => {
         this.toastNotificationManager.success(
-          'ToastNotifications.RecordDeletesSuccessfully'
+          'ToastNotifications.RecordDeletedSuccessfully'
         );
 
         this.tempIdToDelete = '';
@@ -161,6 +161,6 @@ export class ConnectionsListComponent implements OnInit {
   }
 
   reset() {
-    this.newConnection = new ConnectionDto();
+    this.newProvider = new ProviderDto();
   }
 }

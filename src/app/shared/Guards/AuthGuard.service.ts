@@ -6,8 +6,10 @@ import {
   RouterStateSnapshot,
 } from '@angular/router';
 import { AuthService } from '../services';
+import { WorkspaceService } from '../services/workspace.service';
+import { catchError, map, of } from 'rxjs';
 
-const defaultPath = '/';
+const defaultPath = '/workspaces';
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuardService implements CanActivate {
@@ -15,17 +17,16 @@ export class AuthGuardService implements CanActivate {
 
   constructor(
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private workspaceService: WorkspaceService
   ) {}
 
   async canActivate(
     route: ActivatedRouteSnapshot,
     routerState: RouterStateSnapshot
   ): Promise<boolean> {
+    const workspaceId = Number(route.paramMap.get('id'));
     const isLoggedIn = this.authService.loggedIn;
-
-    let routerUrl = routerState.url;
-    let parts = routerUrl.split('/');
 
     const isAuthForm = [
       'login',
@@ -41,14 +42,25 @@ export class AuthGuardService implements CanActivate {
       return false;
     }
 
-    if (!isLoggedIn && !isAuthForm) {
-      this.redirectToLogin();
+    if (workspaceId) {
+      this.workspaceService.haveAccess(workspaceId).pipe(
+        map((accessAllowed) => {
+          if (accessAllowed) {
+            return true;
+          }
+
+          this.router.navigate(['/workspaces']);
+          return false;
+        }),
+        catchError(() => of(this.router.parseUrl('/workspaces')))
+      ).subscribe();
     }
 
-    return isLoggedIn || isAuthForm;
-  }
+    if (!isLoggedIn && !isAuthForm) {
+      this.router.navigate(['/login']);
+      return false;
+    }
 
-  private redirectToLogin(): void {
-    this.router.navigate(['/login']);
+    return true;
   }
 }

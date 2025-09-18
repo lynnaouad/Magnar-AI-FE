@@ -6,8 +6,8 @@ import { catchError } from 'rxjs';
 import { Utilities } from '../utils/utilities.service';
 
 @Injectable({ providedIn: 'root' })
-export class ConnectionsService {
-  backEndUrl: string = environment.apiUrl + '/api/Connections';
+export class ProvidersService {
+  backEndUrl: string = environment.apiUrl + '/api/Providers';
 
   constructor(
     private http: HttpClient,
@@ -45,7 +45,7 @@ export class ConnectionsService {
       .pipe(catchError(this.utilities.handleErrorGlobal));
   }
 
-  testConnection(conn: any) {
+  TestConnection(conn: any) {
     return this.http
       .post<any>(`${this.backEndUrl}/test`, conn)
       .pipe(catchError(this.utilities.handleErrorGlobal));

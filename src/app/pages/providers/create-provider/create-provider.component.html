@@ -1,15 +1,15 @@
 <dx-popup
-  [title]="'Connection' | translate"
+  [title]="'Provider' | translate"
   [(visible)]="showPopup"
   [fullScreen]="!!(screen.xSmallScreenChanged | async)"
-  [wrapperAttr]="{ class: 'create-connection-popup' }"
+  [wrapperAttr]="{ class: 'create-provider-popup' }"
   (onHidden)="closePopup()"
   width="40%"
   height="auto"
   #popupRef
 >
   <form
-    class="create-connection-form"
+    class="create-provider-form"
     (submit)="onSubmit($event)"
     method="post"
     action=""
@@ -18,24 +18,8 @@
       [formData]="data"
       [disabled]="submitLoading"
       [colCount]="1"
-      #createConnectionForm
+      #createProviderForm
     >
-      <dxi-item
-        [colCount]="1"
-        dataField="isDefault"
-        editorType="dxSwitch"
-        [editorOptions]="{
-          onText: 'ON' | translate,
-          offText: 'OFF' | translate
-        }"
-      >
-        <dxo-label template="defaultLabel"></dxo-label>
-      </dxi-item>
-
-      <div *dxTemplate="let data of 'defaultLabel'">
-        <span>{{ "Default" | translate }}</span>
-      </div>
-
       <dxi-item itemType="group" [colSpan]="2" [colCount]="2">
         <dxi-item
           dataField="name"
@@ -59,7 +43,7 @@
             class="custom-text"
             stylingMode="filled"
             [searchEnabled]="false"
-            [(value)]="data.provider"
+            [(value)]="data.type"
             displayExpr="nameTranslated"
             valueExpr="id"
             [items]="providerTypes"
@@ -83,7 +67,7 @@
 
       <dxi-item itemType="group" [colSpan]="2" [colCount]="2">
         <dxi-item
-          *ngIf="data?.provider === 1"
+          *ngIf="data?.type === 1"
           dataField="details.sqlServerConfiguration.instanceName"
           editorType="dxTextBox"
           [editorOptions]="{
@@ -101,7 +85,7 @@
         </dxi-item>
 
         <dxi-item
-          *ngIf="data?.provider === 1"
+          *ngIf="data?.type === 1"
           dataField="details.sqlServerConfiguration.databaseName"
           editorType="dxTextBox"
           [editorOptions]="{
@@ -129,7 +113,7 @@
 
       <dxi-item itemType="group" [colSpan]="2" [colCount]="2">
         <dxi-item
-          *ngIf="data?.provider === 1"
+          *ngIf="data?.type === 1"
           dataField="details.sqlServerConfiguration.username"
           editorType="dxTextBox"
           [editorOptions]="{
@@ -147,7 +131,7 @@
         </dxi-item>
 
         <dxi-item
-          *ngIf="data?.provider === 1"
+          *ngIf="data?.type === 1"
           dataField="details.sqlServerConfiguration.password"
           editorType="dxTextBox"
           [editorOptions]="{
@@ -182,7 +166,7 @@
             type="default"
             [useSubmitBehavior]="false"
             [disabled]="testConnLoading"
-            (onClick)="testConnection()"
+            (onClick)="TestConnection()"
           >
             <dx-load-indicator
               *ngIf="testConnLoading"

@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { AuthGuardService } from './shared/Guards/AuthGuard.service';
+import { workspaceResolver } from './app-store/resolvers/workspace.resolver';
 
 export const routes: Routes = [
   {
@@ -14,16 +15,25 @@ export const routes: Routes = [
       { path: '', redirectTo: 'login', pathMatch: 'full' }, 
     ]
   },
+  {
+    path: 'workspaces',
+    loadComponent: () => import('./layouts/login-layout/nav-bar.component').then((m) => m.NavBarComponent),
+    children: [
+       { path: '', loadComponent: () => import('./pages/workspaces/workspaces.component').then((m) => m.WorkspacesComponent), canActivate: [ AuthGuardService ]},
+    ]
+  },
 
   {
-    path: 'admin',
+    path: 'workspaces/:workspaceId',
+    resolve: [workspaceResolver],
     loadComponent: () => import('./layouts/admin-layout/side-nav-outer-toolbar.component').then((m) => m.SideNavOuterToolbarComponent),
+    canActivate: [AuthGuardService],
     children: [
-      { path: 'connections', loadComponent: () => import('./pages/connections/connections-list.component').then((m) => m.ConnectionsListComponent), data: { breadcrumb: 'Connections' }, canActivate: [ AuthGuardService ]},
-      { path: 'database-schema', loadComponent: () => import('./pages/database-schema/database-schema.component').then((m) => m.DatabaseSchemaComponent), data: { breadcrumb: 'Database Schema' }, canActivate: [ AuthGuardService ]},
-      { path: 'dashboard', loadComponent: () => import('./pages/dashboard/dashboard.component').then((m) => m.DashboardComponent), data: { breadcrumb: 'Dashboard' }, canActivate: [ AuthGuardService ]},
+      { path: 'providers', loadComponent: () => import('./pages/providers/providers-list.component').then((m) => m.ProvidersListComponent)},
+      { path: 'database-schema', loadComponent: () => import('./pages/database-schema/database-schema.component').then((m) => m.DatabaseSchemaComponent)},
+      { path: 'dashboard', loadComponent: () => import('./pages/dashboard/dashboard.component').then((m) => m.DashboardComponent)},
       
-      { path: '', redirectTo: 'connections', pathMatch: 'full' },
+      { path: '', redirectTo: 'providers', pathMatch: 'full' },
     ]
   },
   { path: '**', redirectTo: 'login'},

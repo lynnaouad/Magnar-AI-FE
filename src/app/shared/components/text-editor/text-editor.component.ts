@@ -35,8 +35,6 @@ export class TextEditorComponent implements OnChanges, OnInit {
 
   toolbarItems: any[] = [];
 
-  private previousValue: string | null | undefined = null;
-
   constructor(
     private cdr: ChangeDetectorRef,
     private translateService: TranslateService
@@ -116,15 +114,6 @@ export class TextEditorComponent implements OnChanges, OnInit {
   }
 
   ngOnInit(): void {}
-
-  change() {
-    setTimeout(() => {
-      if (this.value !== this.previousValue) {
-        this.previousValue = this.value;
-        this.valueChange.emit(this.value);
-      }
-    });
-  }
 
   generateWithAI() {
     this.onGenerateWithAI.emit(this.canGenerateWithAI);

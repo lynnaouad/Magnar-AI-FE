@@ -1,10 +1,10 @@
 <dx-html-editor
   [height]="height"
   [(value)]="value"
-  (valueChange)="change()"
   [readOnly]="readonly"
   [placeholder]="placeholder"
->
+  (onFocusOut)="valueChange.emit(value ?? '')"
+  >
   <dxo-toolbar
     [items]="toolbarItems"
     [multiline]="false"

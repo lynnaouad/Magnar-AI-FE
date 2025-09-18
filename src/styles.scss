@@ -4,7 +4,6 @@
 
 @import url("../node_modules/devexpress-dashboard/dist/css/dx-dashboard.light.css");
 
-
 [dir="rtl"] {
   direction: rtl;
   text-align: right;
@@ -154,7 +153,7 @@ a {
 .table-wrapper .table-btns dx-button.table-revert-btn .dx-icon-revert,
 .table-wrapper .table-btns dx-button.table-clear-btn .dx-icon-clear,
 .table-wrapper .table-btns dx-button.table-view-btn .dx-icon-eyeopen,
-.table-wrapper .table-btns dx-button.table-download-btn .dx-icon-download  {
+.table-wrapper .table-btns dx-button.table-download-btn .dx-icon-download {
   font-size: 20px;
   color: black;
 }
@@ -177,7 +176,10 @@ a {
 .table-wrapper .table-btns dx-button.table-revert-btn .dx-icon-revert:hover,
 .table-wrapper .table-btns dx-button.table-share-btn .dx-icon-share:hover,
 .table-wrapper .table-btns dx-button.table-clear-btn .dx-icon-clear:hover,
-.table-wrapper .table-btns dx-button.table-download-btn .dx-icon-download:hover {
+.table-wrapper
+  .table-btns
+  dx-button.table-download-btn
+  .dx-icon-download:hover {
   color: rgba(0, 38, 255, 0.815);
   font-weight: bold;
 }
@@ -428,18 +430,17 @@ span.page-header {
   font-size: 26px;
 }
 
-:dir(ltr) td.dx-datagrid-action{
+:dir(ltr) td.dx-datagrid-action {
   text-align: left !important;
 }
 
-:dir(rtl) td.dx-datagrid-action{
+:dir(rtl) td.dx-datagrid-action {
   text-align: right !important;
 }
 
-.dx-data-row td.dx-command-select.dx-editor-cell{
+.dx-data-row td.dx-command-select.dx-editor-cell {
   text-align: center !important;
 }
-
 
 :dir(ltr) .dx-data-row td {
   text-align: left !important;
@@ -449,4 +450,56 @@ span.page-header {
   text-align: right !important;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5 {
+  margin: 0;
+}
 
+.fa-solid.fa-bars {
+  cursor: pointer !important;
+}
+
+.dx-context-menu .dx-menu-items-container {
+  background-color: white !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 10px;
+}
+
+.dx-context-menu .dx-menu-item {
+  color: #333;
+}
+
+.dx-context-menu .dx-menu-item.dx-state-hover {
+  background-color: #cecece48;
+}
+
+.custom-loader {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+}
+
+.edit-menu-item {
+  color: #1856fa;
+  margin-right: 9px;
+}
+
+.edit-menu-item-text {
+  font-weight: 400;
+  color: #1856fa;
+}
+
+.delete-menu-item {
+  color: #dc3545;
+  margin-right: 9px;
+}
+
+.delete-menu-item-text {
+  color: #dc3545;
+  font-weight: 400;
+}

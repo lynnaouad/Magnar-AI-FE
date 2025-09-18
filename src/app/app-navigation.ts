@@ -1,8 +1,8 @@
 export const Navigation = [
   {
-    id: 'Connections',
-    text: 'Connections',
-    path: '/admin/connections',
+    id: 'Providers',
+    text: 'Providers',
+    path: '/workspaces/:workspaceId/providers',
     icon: 'preferences',
     selected: true,
   },
@@ -10,7 +10,7 @@ export const Navigation = [
   {
     id: 'DatabaseSchema',
     text: 'DatabaseSchema',
-    path: '/admin/database-schema',
+    path: '/workspaces/:workspaceId/database-schema',
     icon: 'tableproperties',
     selected: false,
   },
@@ -18,7 +18,7 @@ export const Navigation = [
    {
     id: 'Dashboard',
     text: 'Dashboard',
-    path: '/admin/dashboard',
+    path: '/workspaces/:workspaceId/dashboard',
     icon: 'datatrending',
     selected: false,
   },

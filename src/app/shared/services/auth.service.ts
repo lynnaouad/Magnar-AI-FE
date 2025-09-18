@@ -6,6 +6,8 @@ import { ConfigurationService } from './configuration.service';
 import { ToastNotificationManager } from '../utils/toast-notification.service';
 import { saveAs } from 'file-saver-es';
 import { Utilities } from '../utils/utilities.service';
+import { Store } from '@ngrx/store';
+import { setWorkspace } from '../../app-store/actions/workspace.actions';
 
 export interface IUser {
   userId: string;
@@ -27,7 +29,8 @@ export class AuthService {
     private router: Router,
     private http: HttpClient,
     private configurationService: ConfigurationService,
-    private utilities: Utilities
+    private utilities: Utilities,
+    private store: Store
   ) {
     this.controllerUrl = this.configurationService.apiUri + '/api/accounts/';
   }
@@ -59,6 +62,7 @@ export class AuthService {
 
   async logOut() {
     this.resetSessionStorage();
+    this.store.dispatch(setWorkspace({ "workspaceId": 0 }));
   }
 
   refreshToken() {

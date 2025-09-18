@@ -44,9 +44,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   menuToggleEnabled = false;
 
   @Input()
-  menuItems: any[] = [];
-
-  @Input()
   navItems: any[] = [];
 
   user: IUser = {
@@ -63,29 +60,34 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   companyLogo: any = this.defaultLogo;
 
   languages = [];
+  menuItems: any[] = [];
 
   selectedLanguage: string = 'en';
 
   constructor(
     private authService: AuthService,
     private router: Router,
-    protected languageService: LanguageService,
+    protected languageService: LanguageService
   ) {
     this.checkIfMobile();
     this.getLanguages();
+  }
+
+  navigateTo(route: string) {
+    this.router.navigate([route]);
   }
 
   async ngOnInit() {
     this.user = this.authService.CurrentUser;
 
     this.isLoggedIn = this.authService.loggedIn;
+
+    this.setNavMenuItems();
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-  }
+  ngOnChanges(changes: SimpleChanges): void {}
 
-  ngOnDestroy(): void {
-  }
+  ngOnDestroy(): void {}
 
   getLanguages() {
     this.languageService.getSupportedLanguages().subscribe((res: any) => {
@@ -93,6 +95,32 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
       this.selectedLanguage = this.languageService.getLocale();
     });
+  }
+
+  async setNavMenuItems() {
+    let isLoggedIn = this.authService.loggedIn;
+
+    if (!isLoggedIn) {
+      this.menuItems = [];
+      return;
+    }
+
+    this.languageService
+      .getTranslations(['SignOut'])
+      .subscribe((translations) => {
+        this.menuItems = [
+          {
+            text: translations['SignOut'],
+            icon: 'runner',
+            code: 'SignOut',
+            order: 1,
+            click: () => {
+              this.authService.logOut();
+              this.navigateTo('/login');
+            },
+          },
+        ];
+      });
   }
 
   changeLanguage(selected: string) {

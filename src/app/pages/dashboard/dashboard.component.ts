@@ -101,7 +101,6 @@ export class DashboardComponent implements OnInit {
   }
 
   onChangeDashboardType() {
-    console.log(this.data.selectedChartType)
     if (this.data.selectedChartType == null) {
       return;
     }

@@ -31,16 +31,16 @@ import { ScreenService, AuthService } from '../../../shared/services';
 import { LanguageService } from '../../../shared/services/language.service';
 import { ToastNotificationManager } from '../../../shared/utils/toast-notification.service';
 import { Utilities } from '../../../shared/utils/utilities.service';
-import { ConnectionsService } from '../../../shared/services/connections.service';
+import { ProvidersService } from '../../../shared/services/providers.service';
 import { TypesService } from '../../../shared/services/types.service';
-import { ConnectionDto } from '../../../Dtos/ConnectionDto';
+import { ProviderDto as ProviderDto } from '../../../Dtos/ProviderDto';
 import { tap } from 'lodash';
 import { PasswordTextBoxComponent } from '../../../shared/components/password-text-box/password-text-box.component';
 
 @Component({
-  selector: 'create-connection',
-  templateUrl: './create-connection.component.html',
-  styleUrl: './create-connection.component.scss',
+  selector: 'create-provider',
+  templateUrl: './create-provider.component.html',
+  styleUrl: './create-provider.component.scss',
   standalone: true,
   imports: [
     TranslateModule,
@@ -56,22 +56,22 @@ import { PasswordTextBoxComponent } from '../../../shared/components/password-te
     DxSelectBoxModule,
     DxLoadIndicatorModule,
     DxSwitchModule,
-    PasswordTextBoxComponent
+    PasswordTextBoxComponent,
   ],
 })
-export class CreateConnectionComponent implements OnInit, OnChanges {
+export class CreateProviderComponent implements OnInit, OnChanges {
   submitLoading = false;
   testConnLoading = false;
   providerTypes: any[] = [];
 
   @Input() showPopup: boolean = false;
-  @Input() data!: ConnectionDto;
+  @Input() data!: ProviderDto;
 
   @Output() showPopupChange = new EventEmitter<boolean>();
   @Output() OnClose = new EventEmitter<boolean>();
   @Output() OnSubmit = new EventEmitter<boolean>();
 
-  @ViewChild('createConnectionForm', { static: false })
+  @ViewChild('createProviderForm', { static: false })
   form!: DxFormComponent;
 
   @ViewChild('popupRef') popupRef: any;
@@ -84,7 +84,7 @@ export class CreateConnectionComponent implements OnInit, OnChanges {
     private router: Router,
     private languageService: LanguageService,
     private route: ActivatedRoute,
-    private connectionService: ConnectionsService
+    private providerService: ProvidersService
   ) {}
 
   ngOnInit(): void {
@@ -93,9 +93,9 @@ export class CreateConnectionComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['showPopup'] && this.showPopup) {
-      if (this.data && this.data.provider) {
-        this.data.provider = this.providerTypes.find(
-          (pt) => pt.name === this.data.provider
+      if (this.data && this.data.type) {
+        this.data.type = this.providerTypes.find(
+          (pt) => pt.name === this.data.type
         )?.id;
       }
     }
@@ -134,7 +134,7 @@ export class CreateConnectionComponent implements OnInit, OnChanges {
     let id = this.data?.id;
 
     if (
-      this.data.provider !== 1 &&
+      this.data.type !== 1 &&
       this.data?.details?.sqlServerConfiguration
     ) {
       this.data.details.sqlServerConfiguration = null;
@@ -143,7 +143,7 @@ export class CreateConnectionComponent implements OnInit, OnChanges {
     if (id) {
       // Update
 
-      this.connectionService
+      this.providerService
         .update(this.data)
         .pipe(
           take(1),
@@ -161,7 +161,7 @@ export class CreateConnectionComponent implements OnInit, OnChanges {
     } else {
       // Insert
 
-      this.connectionService
+      this.providerService
         .create(this.data)
         .pipe(
           take(1),
@@ -177,14 +177,14 @@ export class CreateConnectionComponent implements OnInit, OnChanges {
     }
   }
 
-  testConnection() {
+  TestConnection() {
     if (!this.form?.instance?.validate().isValid) {
       return;
     }
 
     this.testConnLoading = true;
-    this.connectionService
-      .testConnection(this.data)
+    this.providerService
+      .TestConnection(this.data)
       .pipe(
         take(1),
         finalize(() => (this.testConnLoading = false))

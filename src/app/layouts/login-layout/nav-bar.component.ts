@@ -80,7 +80,7 @@ export class NavBarComponent implements OnInit {
             code: 'SignOut',
             click: () => {
               this.authService.logOut();
-              this.navigateTo('/home');
+              this.navigateTo('/login');
             },
           },
         ];
