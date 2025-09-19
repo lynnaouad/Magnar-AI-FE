@@ -30,7 +30,10 @@ export const routes: Routes = [
     canActivate: [AuthGuardService],
     children: [
       { path: 'providers', loadComponent: () => import('./pages/providers/providers-list.component').then((m) => m.ProvidersListComponent)},
-      { path: 'database-schema', loadComponent: () => import('./pages/database-schema/database-schema.component').then((m) => m.DatabaseSchemaComponent)},
+      { path: 'providers/create', loadComponent: () => import('./pages/providers/steps/provider-configuration/provider-configuration.component').then((m) => m.ProviderConfigurationComponent)},
+      { path: 'providers/:id', loadComponent: () => import('./pages/providers/steps/provider-configuration/provider-configuration.component').then((m) => m.ProviderConfigurationComponent)},
+     { path: 'providers/:id/database-schema', loadComponent: () => import('./pages/providers/steps/select-database-schema/select-database-schema.component').then((m) => m.SelectDatabaseSchemaComponent)},
+     
       { path: 'dashboard', loadComponent: () => import('./pages/dashboard/dashboard.component').then((m) => m.DashboardComponent)},
       
       { path: '', redirectTo: 'providers', pathMatch: 'full' },

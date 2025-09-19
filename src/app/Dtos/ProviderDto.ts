@@ -1,5 +1,6 @@
 export class ProviderDto {
   id: number = 0;
+  workspaceId!: number;
   type!: number;
   details: ProviderDetailsDto | null = null;
   CreatedAt!: Date;

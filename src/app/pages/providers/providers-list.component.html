@@ -58,9 +58,6 @@
       <dxi-column dataField="provider" [caption]="'Provider' | translate" [calculateCellValue]="translateProvider">
       </dxi-column>
 
-      <dxi-column dataField="isDefault" [caption]="'Default' | translate" [calculateCellValue]="isDefaultText">
-      </dxi-column>
-
       <dxi-column dataField="createdBy" [caption]="'CreatedBy' | translate">
       </dxi-column>
 
@@ -139,13 +136,6 @@
 </div>
 
 <!--------------------------------------------------------------------------------------------------------------------------------------------->
-
-<create-provider
-  [data]="newProvider"
-  [(showPopup)]="isPopupOpened"
-  (OnSubmit)="onSubmitPopup()"
->
-</create-provider>
 
 <verification-popup-form
   [title]="'DeleteProvider' | translate"

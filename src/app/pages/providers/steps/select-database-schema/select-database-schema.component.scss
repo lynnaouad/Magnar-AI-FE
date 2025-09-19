@@ -1,0 +1,37 @@
+h4 {
+  margin: 0 !important;
+}
+
+.preview {
+  font-family: monospace; /* keep the pre look */
+  white-space: pre-wrap; /* keep newlines */
+}
+
+:host ::ng-deep .tables-grid .dx-datagrid-rowsview .dx-data-row {
+  cursor: pointer;
+}
+
+:host ::ng-deep .tables-grid .dx-datagrid-rowsview .dx-data-row:hover {
+  background-color: #f5f5f5; // light gray
+}
+
+::ng-deep .dx-treeview-node-is-leaf .dx-checkbox {
+  display: none;
+}
+
+/* make the comment a single truncated line */
+:host ::ng-deep .one-line {
+  display: block;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* optional subtle style */
+:host ::ng-deep .table-comment {
+  font-size: 12px;
+  opacity: 0.75;
+  margin-top: 2px;
+  color: var(--dx-magnar-blue);
+}

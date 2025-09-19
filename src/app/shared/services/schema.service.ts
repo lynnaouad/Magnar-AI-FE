@@ -4,6 +4,7 @@ import { catchError, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Router } from '@angular/router';
 import { Utilities } from '../utils/utilities.service';
+import { ProviderDto } from '../../Dtos/ProviderDto';
 
 @Injectable({
   providedIn: 'root',
@@ -16,27 +17,21 @@ export class SchemaService {
     private utilities: Utilities
   ) {}
 
-  getTables(): Observable<any[]> {
+  getTablesFromDatabase(configuration: ProviderDto): Observable<any[]> {
     return this.http
-      .get<any[]>(`${this.apiUrl}/tables`)
+      .post(`${this.apiUrl}/tables`, configuration)
       .pipe(catchError(this.utilities.handleErrorGlobal));
   }
 
-  getTableInfo(schemaName: string, tableName: string): Observable<any[]> {
+  annotate(requests: any[], providerId: number) {
     return this.http
-      .get<any[]>(`${this.apiUrl}/tables/${schemaName}/${tableName}`)
+      .post(`${this.apiUrl}/annotate?providerId=${providerId}`, requests)
       .pipe(catchError(this.utilities.handleErrorGlobal));
   }
 
-  annotate(requests: any[]) {
+  getSelctedTables( providerId: number) {
     return this.http
-      .post(`${this.apiUrl}/annotate`, requests)
-      .pipe(catchError(this.utilities.handleErrorGlobal));
-  }
-
-  readSelected() {
-    return this.http
-      .get(`${this.apiUrl}/selected`)
+      .get(`${this.apiUrl}/selected?providerId=${providerId}`)
       .pipe(catchError(this.utilities.handleErrorGlobal));
   }
 }

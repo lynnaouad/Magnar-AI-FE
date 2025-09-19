@@ -1,0 +1,175 @@
+<div class="page-container">
+  <h2>{{ "DatabaseSchema" | translate }}</h2>
+
+  <dx-load-indicator
+    class="custom-loader"
+    id="large-indicator"
+    height="60"
+    width="60"
+    *ngIf="displayLoader"
+  ></dx-load-indicator>
+
+  <div class="grid">
+    <section>
+      <div>
+        <p>{{ "DatabaseSchemaDescriptionPage" | translate }}</p>
+      </div>
+
+      <div style="margin-bottom: 20px">
+        <dx-button
+          text="{{ 'Cancel' | translate }}"
+          type="default"
+          stylingMode="contained"
+          (onClick)="cancel()"
+        >
+        </dx-button>
+
+        &nbsp;
+
+        <dx-button
+          text="{{ 'Submit' | translate }}"
+          type="default"
+          stylingMode="contained"
+          [disabled]="displayLoader"
+          (onClick)="submit()"
+        >
+        </dx-button>
+      </div>
+
+      <div class="search-box">
+        <dx-text-box
+          width="30%"
+          [(value)]="searchText"
+          valueChangeEvent="keyup"
+          (onValueChanged)="filterTree()"
+          [placeholder]="'Search' | translate"
+          [showClearButton]="true"
+        >
+        </dx-text-box>
+      </div>
+
+      <dx-tree-view
+        #tree
+        [items]="filteredTreeItems"
+        dataStructure="plain"
+        keyExpr="id"
+        parentIdExpr="parentId"
+        displayExpr="name"
+        [expandNodesRecursive]="false"
+        selectionMode="multiple"
+        [showCheckBoxesMode]="'selectAll'"
+        [selectedExpr]="'selected'"
+        (onSelectionChanged)="onSelectionChanged($event)"
+          (onContentReady)="primeSelection()"
+        (onItemClick)="onItemClick($event)"
+        class="database-treeview"
+      >
+        <div *dxTemplate="let item of 'item'">
+          <ng-container [ngSwitch]="item.type">
+            <!-- Table Node -->
+            <div *ngSwitchCase="'table'" class="tree-table">
+              <span>{{ item.name }}</span
+              ><br />
+              <div
+                class="table-comment one-line"
+                *ngIf="item.data.tableDescription"
+                [title]="item.data.tableDescription"
+              >
+                {{ item.data.tableDescription }}
+              </div>
+            </div>
+
+            <!-- Column Node -->
+            <div *ngSwitchCase="'column'" class="tree-column">
+              <i class="dx-icon dx-icon-columnfield"></i>
+              <span
+                ><b>{{ item.name }}</b></span
+              >
+              <small class="datatype"
+                >&nbsp;&nbsp;({{ item.data.dataType
+                }}<span *ngIf="item.data.isNullable">, nullable</span>)
+              </small>
+              <span *ngIf="item.data.isPrimaryKey" class="pk"> <i class="dx-icon dx-icon-key"></i></span>
+              <span *ngIf="item.data.isForeignKey" class="fk">
+                <i class="dx-icon dx-icon-link"></i>
+                <small
+                  ><span *ngIf="item.data?.foreignKeyReferencedTable">{{
+                    item.data.foreignKeyReferencedTable
+                  }}</span></small
+                >
+              </span>
+
+              <div
+                class="table-comment one-line"
+                *ngIf="item.data.columnDescription"
+                [title]="item.data.columnDescription"
+              >
+                {{ item.data.columnDescription }}
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </dx-tree-view>
+    </section>
+  </div>
+
+  <dx-popup
+    [title]="selectedTable?.fullName ?? ''"
+    [(visible)]="tablePopupVisible"
+    [fullScreen]="!!(screen.xSmallScreenChanged | async)"
+    [wrapperAttr]="{ class: 'create-workdpace-popup' }"
+    (onHidden)="tablePopupVisible = false"
+    width="40%"
+    height="auto"
+  >
+    <div *dxTemplate="let data of 'content'">
+      <dx-text-area
+        [(value)]="selectedTable!.tableDescription"
+        [placeholder]="'PlaceHolders.TableDescription' | translate"
+      >
+      </dx-text-area>
+
+      <br />
+
+      <dx-button
+        class="submit-btn"
+        width="20%"
+        stylingMode="contained"
+        type="default"
+        [text]="'Save' | translate"
+        (onClick)="closeTablePopup()"
+      >
+      </dx-button>
+    </div>
+  </dx-popup>
+
+  <dx-popup
+    [title]="selectedColumn?.columnName ?? ''"
+    [(visible)]="columnPopupVisible"
+    [fullScreen]="!!(screen.xSmallScreenChanged | async)"
+    [wrapperAttr]="{ class: 'create-workdpace-popup' }"
+    (onHidden)="columnPopupVisible = false"
+    width="40%"
+    height="auto"
+  >
+    <div *dxTemplate="let data of 'content'">
+      <dx-text-area
+        [(value)]="selectedColumn!.columnDescription"
+        [placeholder]="'PlaceHolders.ColumnDescription' | translate"
+      >
+      </dx-text-area>
+
+      <br />
+
+      <dx-button
+        class="submit-btn"
+        width="20%"
+        stylingMode="contained"
+        type="default"
+        [text]="'Save' | translate"
+        (onClick)="closeColumnPopup()"
+      >
+      </dx-button>
+    </div>
+  </dx-popup>
+</div>

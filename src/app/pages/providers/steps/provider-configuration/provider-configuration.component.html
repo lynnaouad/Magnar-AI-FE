@@ -1,0 +1,280 @@
+<div class="page-container">
+  <h2>
+    {{ (isCreateForm ? "CreateProvider" : "UpdateProvider") | translate }}
+  </h2>
+  <br />
+  <form class="create-provider-form" method="post" action="">
+    <dx-form
+      [(formData)]="data"
+      [disabled]="nextLoading"
+      #createProviderForm
+      [colCount]="2"
+    >
+      <dxi-item itemType="group" [colSpan]="2" [colCount]="5">
+        <!-- Cancel -->
+        <dxi-item template="cancelTpl" [colSpan]="1">
+          <dxo-label [visible]="false"></dxo-label>
+        </dxi-item>
+
+        <!-- Next (create mode) -->
+        <dxi-item *ngIf="isCreateForm" template="nextTpl" [colSpan]="1">
+          <dxo-label [visible]="false"></dxo-label>
+        </dxi-item>
+
+        <!-- Submit (edit mode) -->
+        <dxi-item *ngIf="!isCreateForm" template="submitTpl" [colSpan]="1">
+          <dxo-label [visible]="false"></dxo-label>
+        </dxi-item>
+      </dxi-item>
+
+      <dxi-item
+        itemType="group"
+        [colSpan]="2"
+        [colCount]="2"
+        cssClass="custom-group"
+      >
+        <dxi-item><span></span></dxi-item>
+        <dxi-item><span></span></dxi-item>
+      </dxi-item>
+
+      <!-- Name + Provider type -->
+      <dxi-item
+        itemType="group"
+        [colCount]="2"
+        [colSpan]="2"
+        cssClass="custom-group"
+      >
+        <dxi-item
+          dataField="name"
+          editorType="dxTextBox"
+          [editorOptions]="{
+            stylingMode: 'filled',
+            mode: 'text',
+            inputAttr: { autocomplete: 'name' }
+          }"
+          cssClass="form-item"
+        >
+          <dxi-validation-rule
+            type="required"
+            [message]="'ValidationRules.RequiredField' | translate"
+          ></dxi-validation-rule>
+          <dxo-label template="nameLabel"></dxo-label>
+        </dxi-item>
+
+        <dxi-item
+          dataField="type"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: providerTypes,
+            displayExpr: 'nameTranslated',
+            valueExpr: 'id',
+            stylingMode: 'filled',
+            searchEnabled: false
+          }"
+        >
+          <dxo-label [text]="'Provider' | translate"></dxo-label>
+          <dxi-validation-rule
+            type="required"
+            [message]="'ValidationRules.RequiredField' | translate"
+          ></dxi-validation-rule>
+        </dxi-item>
+      </dxi-item>
+
+      <!-- SQL Server config fields -->
+      <dxi-item
+        itemType="group"
+        [colCount]="2"
+        [colSpan]="2"
+        cssClass="custom-group"
+      >
+        <dxi-item
+          *ngIf="data?.type === 1"
+          dataField="details.sqlServerConfiguration.instanceName"
+          editorType="dxTextBox"
+          [editorOptions]="{
+            stylingMode: 'filled',
+            mode: 'text',
+            inputAttr: { autocomplete: 'instanceName' }
+          }"
+          cssClass="form-item"
+        >
+          <dxi-validation-rule
+            type="required"
+            [message]="'ValidationRules.RequiredField' | translate"
+          ></dxi-validation-rule>
+          <dxo-label template="instanceNameLabel"></dxo-label>
+        </dxi-item>
+
+        <dxi-item
+          *ngIf="data?.type === 1"
+          dataField="details.sqlServerConfiguration.databaseName"
+          editorType="dxTextBox"
+          [editorOptions]="{
+            stylingMode: 'filled',
+            mode: 'text',
+            inputAttr: { autocomplete: 'databaseName' }
+          }"
+          cssClass="form-item"
+        >
+          <dxi-validation-rule
+            type="required"
+            [message]="'ValidationRules.RequiredField' | translate"
+          ></dxi-validation-rule>
+          <dxo-label template="databaseNameLabel"></dxo-label>
+        </dxi-item>
+      </dxi-item>
+
+      <dxi-item
+        itemType="group"
+        [colSpan]="2"
+        [colCount]="2"
+        cssClass="custom-group"
+      >
+        <dxi-item
+          *ngIf="data?.type === 1"
+          dataField="details.sqlServerConfiguration.username"
+          editorType="dxTextBox"
+          [editorOptions]="{
+            stylingMode: 'filled',
+            mode: 'text',
+            inputAttr: { autocomplete: 'username' }
+          }"
+          cssClass="form-item"
+        >
+          <dxi-validation-rule
+            type="required"
+            [message]="'ValidationRules.RequiredField' | translate"
+          ></dxi-validation-rule>
+          <dxo-label template="usernameLabel"></dxo-label>
+        </dxi-item>
+
+        <dxi-item
+          *ngIf="data?.type === 1"
+          dataField="details.sqlServerConfiguration.password"
+          editorType="dxTextBox"
+          [editorOptions]="{
+            stylingMode: 'filled',
+            mode: 'password',
+            inputAttr: { autocomplete: 'new-password' }
+          }"
+          cssClass="form-item"
+        >
+          <dxi-validation-rule
+            type="required"
+            [message]="'ValidationRules.RequiredField' | translate"
+          ></dxi-validation-rule>
+          <dxo-label template="passwordLabel"></dxo-label>
+        </dxi-item>
+      </dxi-item>
+
+      <dxi-item
+        itemType="group"
+        [colSpan]="2"
+        [colCount]="2"
+        cssClass="custom-group"
+      >
+        <span></span>
+      </dxi-item>
+
+      <dxi-item
+        *ngIf="!isCreateForm"
+        itemType="group"
+        [colSpan]="2"
+        [colCount]="5"
+        cssClass="custom-group"
+      >
+        <dxi-item [colSpan]="1">
+          <dx-button
+            class="submit-btn"
+            width="100%"
+            stylingMode="contained"
+            type="default"
+            [useSubmitBehavior]="false"
+            (onClick)="goToDatabaseSchema()"
+          >
+            <div *ngIf="!nextLoading">{{ "UpdateSchema" | translate }}</div>
+          </dx-button>
+        </dxi-item>
+      </dxi-item>
+
+      <div *dxTemplate="let data of 'providerLabel'">
+        <span>{{ "Type" | translate }}</span>
+      </div>
+
+      <div *dxTemplate="let data of 'nameLabel'">
+        <span>{{ "Name" | translate }}</span>
+      </div>
+
+      <div *dxTemplate="let data of 'databaseNameLabel'">
+        <span>{{ "DatabaseName" | translate }}</span>
+      </div>
+
+      <div *dxTemplate="let data of 'instanceNameLabel'">
+        <span>{{ "InstanceName" | translate }}</span>
+      </div>
+
+      <div *dxTemplate="let data of 'usernameLabel'">
+        <span>{{ "Username" | translate }}</span>
+      </div>
+
+      <div *dxTemplate="let data of 'passwordLabel'">
+        <span>{{ "Password" | translate }}</span>
+      </div>
+
+      <div *dxTemplate="let _ of 'cancelTpl'">
+        <dx-button
+          class="submit-btn"
+          width="100%"
+          stylingMode="contained"
+          type="default"
+          [useSubmitBehavior]="false"
+          (onClick)="cancel()"
+        >
+          <div>{{ "Cancel" | translate }}</div>
+        </dx-button>
+      </div>
+
+      <div *dxTemplate="let _ of 'nextTpl'">
+        <dx-button
+          class="submit-btn"
+          width="100%"
+          stylingMode="contained"
+          type="default"
+          [useSubmitBehavior]="false"
+          (onClick)="next()"
+          [disabled]="nextLoading"
+        >
+          <dx-load-indicator
+            *ngIf="nextLoading"
+            width="24px"
+            height="24px"
+            [visible]="true"
+          >
+          </dx-load-indicator>
+          <div *ngIf="!nextLoading">{{ "Next" | translate }}</div>
+        </dx-button>
+      </div>
+
+      <div *dxTemplate="let _ of 'submitTpl'">
+        <dx-button
+          class="submit-btn"
+          width="100%"
+          stylingMode="contained"
+          type="default"
+          [useSubmitBehavior]="false"
+          (onClick)="updateProvider()"
+          [disabled]="nextLoading"
+        >
+          <dx-load-indicator
+            *ngIf="nextLoading"
+            width="24px"
+            height="24px"
+            [visible]="true"
+          >
+          </dx-load-indicator>
+          <div *ngIf="!nextLoading">{{ "Submit" | translate }}</div>
+        </dx-button>
+      </div>
+    </dx-form>
+  </form>
+</div>

@@ -71,9 +71,9 @@ export class SideNavigationMenuComponent
     private elementRef: ElementRef,
     private languageService: LanguageService,
     private router: Router,
-    private companyObserver: WorkspaceIdObserver
+    private workspaceObserver: WorkspaceIdObserver
   ) {
-    this.companyObserver.workspaceId$.subscribe((id) => {
+    this.workspaceObserver.workspaceId$.subscribe((id) => {
       this.workspaceId = id ?? 0;
       this.updateMenuItems();
     });
@@ -119,11 +119,11 @@ export class SideNavigationMenuComponent
           item.items.map((innerMenu: any) => {
             if (innerMenu.path) {
               let parts: any[] = innerMenu.path.split('/');
-              console.log(parts);
-              // if (parts.includes('workspaces')) {
-              //   parts[2] = this.companyId;
-              //   innerMenu.path = parts.join('/');
-              // }
+
+              if (parts.includes(':workspaceId')) {
+                parts[2] = this.workspaceId;
+                item.path = parts.join('/');
+              }
             }
 
             innerMenu.text = this.languageService.translateInstant(

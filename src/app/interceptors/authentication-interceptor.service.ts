@@ -129,7 +129,6 @@ function getCookie(name: string): string | null {
 }
 
 function hasWorkspaceIdSegment(url: string): boolean {
-  console.log(url);
   const regex = /\/api\/\d+\//;
   return regex.test(url);
 }

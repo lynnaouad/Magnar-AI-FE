@@ -19,9 +19,7 @@ import { ToastNotificationManager } from '../../shared/utils/toast-notification.
 import { ProvidersService } from '../../shared/services/providers.service';
 import CustomStore from 'devextreme/data/custom_store';
 import { OdataUtilityService } from '../../shared/services/odata-utility.service';
-import { ProviderDto } from '../../Dtos/ProviderDto';
 import { LanguageService } from '../../shared/services/language.service';
-import { CreateProviderComponent } from './create-provider/create-provider.component';
 
 @Component({
   selector: 'app-providers-list',
@@ -40,17 +38,14 @@ import { CreateProviderComponent } from './create-provider/create-provider.compo
     DxLoadIndicatorModule,
     DxPopupModule,
     TranslateModule,
-    CreateProviderComponent,
     VerificationPopupFormComponent,
   ],
 })
 export class ProvidersListComponent implements OnInit {
   isLoading = false;
   deleteLoading = false;
-  isPopupOpened = false;
   dataSource: any;
 
-  newProvider: ProviderDto = new ProviderDto();
   totalCount = 0;
 
   tempIdToDelete = '';
@@ -99,31 +94,17 @@ export class ProvidersListComponent implements OnInit {
     });
   }
 
-  isDefaultText = (rowData: any) => {
-    return rowData.isDefault
-      ? this.languageService.translateInstant('Yes')
-      : this.languageService.translateInstant('No');
-  };
-
   translateProvider = (rowData: any) => {
-    return this.languageService.translateInstant(rowData.provider);
+    return this.languageService.translateInstant(rowData.type);
   };
 
   onAddingNewRecord() {
-    this.reset();
-    this.newProvider = new ProviderDto();
-    this.isPopupOpened = true;
+    this.router.navigate(['./create'], { relativeTo: this.route})
   }
 
   onEditRecord(record: any) {
-    this.newProvider = cloneDeep(record);
-    this.isPopupOpened = true;
+     this.router.navigate([`./${record.id}`], { relativeTo: this.route})
 
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { id: record.id },
-      queryParamsHandling: 'merge',
-    });
   }
 
   onDeleteRecord(record: any) {
@@ -153,14 +134,5 @@ export class ProvidersListComponent implements OnInit {
 
         this.loadData();
       });
-  }
-
-  onSubmitPopup() {
-    this.reset();
-    this.loadData();
-  }
-
-  reset() {
-    this.newProvider = new ProviderDto();
   }
 }
