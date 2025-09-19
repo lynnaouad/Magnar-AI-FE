@@ -10,19 +10,32 @@
       #createProviderForm
       [colCount]="2"
     >
-      <dxi-item itemType="group" [colSpan]="2" [colCount]="5">
+      <dxi-item itemType="group" [colSpan]="2" [colCount]="8">
         <!-- Cancel -->
-        <dxi-item template="cancelTpl" [colSpan]="1">
-          <dxo-label [visible]="false"></dxo-label>
-        </dxi-item>
-
-        <!-- Next (create mode) -->
-        <dxi-item *ngIf="isCreateForm" template="nextTpl" [colSpan]="1">
+        <dxi-item template="cancelTpl">
           <dxo-label [visible]="false"></dxo-label>
         </dxi-item>
 
         <!-- Submit (edit mode) -->
-        <dxi-item *ngIf="!isCreateForm" template="submitTpl" [colSpan]="1">
+        <dxi-item *ngIf="!isCreateForm" template="submitTpl">
+          <dxo-label [visible]="false"></dxo-label>
+        </dxi-item>
+
+        <!-- Next (create mode for SQL) -->
+        <dxi-item
+          *ngIf="isCreateForm && data?.type === 1"
+          template="nextTpl"
+          [colSpan]="1"
+        >
+          <dxo-label [visible]="false"></dxo-label>
+        </dxi-item>
+
+        <!-- Submit (create mode for non-SQL) -->
+        <dxi-item
+          *ngIf="isCreateForm && data?.type !== 1"
+          template="submitProvTemplate"
+          [colSpan]="1"
+        >
           <dxo-label [visible]="false"></dxo-label>
         </dxi-item>
       </dxi-item>
@@ -69,7 +82,8 @@
             displayExpr: 'nameTranslated',
             valueExpr: 'id',
             stylingMode: 'filled',
-            searchEnabled: false
+            searchEnabled: false,
+            disabled: !isCreateForm
           }"
         >
           <dxo-label [text]="'Provider' | translate"></dxo-label>
@@ -177,7 +191,7 @@
       </dxi-item>
 
       <dxi-item
-        *ngIf="!isCreateForm"
+        *ngIf="!isCreateForm && this.data.type === 1"
         itemType="group"
         [colSpan]="2"
         [colCount]="5"
@@ -225,7 +239,7 @@
         <dx-button
           class="submit-btn"
           width="100%"
-          stylingMode="contained"
+          stylingMode="outlined"
           type="default"
           [useSubmitBehavior]="false"
           (onClick)="cancel()"
@@ -272,9 +286,365 @@
             [visible]="true"
           >
           </dx-load-indicator>
+          <div *ngIf="!nextLoading">{{ "Update" | translate }}</div>
+        </dx-button>
+      </div>
+
+      <div *dxTemplate="let _ of 'submitProvTemplate'">
+        <dx-button
+          class="submit-btn"
+          width="100%"
+          stylingMode="contained"
+          type="default"
+          [useSubmitBehavior]="false"
+          (onClick)="defaultCreateProvider()"
+          [disabled]="nextLoading"
+        >
+          <dx-load-indicator
+            *ngIf="nextLoading"
+            width="24px"
+            height="24px"
+            [visible]="true"
+          >
+          </dx-load-indicator>
           <div *ngIf="!nextLoading">{{ "Submit" | translate }}</div>
         </dx-button>
       </div>
     </dx-form>
   </form>
+
+  <dx-data-grid
+    *ngIf="data.type === 2"
+    class="dx-card content-block"
+    [dataSource]="data.details.apiProviderDetails"
+    [remoteOperations]="true"
+    [showBorders]="true"
+    [focusedRowEnabled]="false"
+    [focusedRowIndex]="0"
+    [columnAutoWidth]="true"
+    [columnHidingEnabled]="false"
+  >
+    <dxo-scrolling rowRenderingMode="virtual"> </dxo-scrolling>
+    <dxo-paging [pageSize]="5"> </dxo-paging>
+    <dxo-pager
+      [visible]="true"
+      [allowedPageSizes]="[5, 10, 20, 30, 40, 50, 100]"
+      displayMode="full"
+      [showPageSizeSelector]="true"
+      [showInfo]="true"
+      [showNavigationButtons]="true"
+    >
+    </dxo-pager>
+
+    <dxo-filter-row [visible]="true" applyFilter="auto"></dxo-filter-row>
+
+    <dxo-pager [visible]="true"></dxo-pager>
+
+    <!----------------------------------- Toolbar ----------------------------------------->
+
+    <dxo-toolbar class="table-toolbar">
+      <dxi-item location="before">
+        <div class="grid-header">{{ "APIs" | translate }}</div>
+      </dxi-item>
+
+      <dxi-item location="after" locateInMenu="after">
+        <div *dxTemplate="let data of 'content'">
+          <dx-button
+            [text]="'Add' | translate"
+            icon="plus"
+            type="default"
+            stylingMode="contained"
+            (onClick)="onAddingNewApiRecord()"
+          ></dx-button>
+        </div>
+      </dxi-item>
+
+      <dxi-item name="exportButton"></dxi-item>
+      <dxi-item name="searchPanel" locateInMenu="auto"></dxi-item>
+    </dxo-toolbar>
+
+    <!----------------------------------- Columns ---------------------------------------->
+
+    <dxi-column dataField="functionName" [caption]="'FunctionName' | translate">
+    </dxi-column>
+    <dxi-column dataField="httpMethod" [caption]="'HttpMethod' | translate">
+    </dxi-column>
+    <dxi-column dataField="apiUrl" [caption]="'ApiUrl' | translate">
+    </dxi-column>
+
+    <!-- Edit & delete Column -->
+    <dxi-column cellTemplate="actionsTemplate"></dxi-column>
+
+    <div *dxTemplate="let cellInfo of 'actionsTemplate'">
+      <div class="table-btns">
+        <dx-button
+          [id]="'edit-btn-' + cellInfo.rowIndex"
+          class="table-edit-btn"
+          icon="edit"
+          stylingMode="contained"
+          (onClick)="onEditApiRecord(cellInfo.row.data)"
+        ></dx-button>
+
+        <dx-button
+          [id]="'delete-btn-' + cellInfo.rowIndex"
+          class="table-delete-btn"
+          icon="trash"
+          stylingMode="contained"
+          (onClick)="onDeleteApiRecord(cellInfo)"
+        ></dx-button>
+
+        <dx-tooltip
+          [target]="'#edit-btn-' + cellInfo.rowIndex"
+          showEvent="mouseenter"
+          hideEvent="mouseleave"
+          position="top"
+          [hideOnOutsideClick]="false"
+        >
+          <div
+            *dxTemplate="let data = data; of: 'content'"
+            style="text-align: left"
+          >
+            {{ "EditRecord" | translate }}
+          </div>
+        </dx-tooltip>
+
+        <dx-tooltip
+          [target]="'#delete-btn-' + cellInfo.rowIndex"
+          showEvent="mouseenter"
+          hideEvent="mouseleave"
+          position="top"
+          [hideOnOutsideClick]="false"
+        >
+          <div
+            *dxTemplate="let data = data; of: 'content'"
+            style="text-align: left"
+          >
+            {{ "DeleteRecord" | translate }}
+          </div>
+        </dx-tooltip>
+      </div>
+    </div>
+  </dx-data-grid>
 </div>
+
+<!----------------------------------------------------------------------->
+
+<dx-popup
+  [visible]="showApiPopup"
+  [width]="'50%'"
+  [showCloseButton]="true"
+  title="Create API"
+  (onHiding)="closeApiPopup()"
+  [wrapperAttr]="{ class: 'create-api-popup' }"
+  height="6vh"
+>
+  <div *dxTemplate="let data of 'content'">
+    <form
+      class="create-api-form"
+      (submit)="onApiSubmit($event)"
+      method="post"
+      action=""
+    >
+      <dx-form
+        [formData]="newApiRecord"
+        [disabled]="submitApiLoading"
+        [colCount]="2"
+        #createApiForm
+      >
+        <!-- Function Name -->
+        <dxi-item
+          dataField="functionName"
+          editorType="dxTextBox"
+          [editorOptions]="{
+        stylingMode: 'filled',
+        mode: 'text',
+        inputAttr: { autocomplete: 'functionName' },
+      }"
+          cssClass="form-item"
+        >
+          <dxi-validation-rule
+            type="required"
+            [message]="'ValidationRules.RequiredField' | translate"
+          ></dxi-validation-rule>
+          <dxo-label [visible]="true" template="functionNameLabel"></dxo-label>
+        </dxi-item>
+
+        <dxi-item><span></span></dxi-item>
+
+        <!-- Description -->
+        <dxi-item
+          [colSpan]="2"
+          dataField="description"
+          editorType="dxTextArea"
+          [editorOptions]="{ stylingMode: 'filled', height: 80 }"
+        >
+          <dxo-label template="descriptionLabel"></dxo-label>
+        </dxi-item>
+
+        <!-- HTTP Method -->
+        <dxi-item
+          dataField="httpMethod"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            stylingMode: 'filled',
+            items: httpMethods,
+            valueExpr: 'name',
+            displayExpr: 'name'
+          }"
+        >
+          <dxi-validation-rule
+            type="required"
+            [message]="'ValidationRules.RequiredField' | translate"
+          ></dxi-validation-rule>
+          <dxo-label template="httpMethodLabel"></dxo-label>
+        </dxi-item>
+
+        <!-- API URL -->
+        <dxi-item
+          dataField="apiUrl"
+          [editorOptions]="{ stylingMode: 'filled' }"
+        >
+          <dxi-validation-rule
+            type="required"
+            [message]="'ValidationRules.RequiredField' | translate"
+          ></dxi-validation-rule>
+          <dxo-label template="apiUrlLabel"></dxo-label>
+        </dxi-item>
+
+        <!-- Payload -->
+        <dxi-item
+          [colSpan]="2"
+          *ngIf="
+            newApiRecord.httpMethod === 'POST' ||
+            newApiRecord.httpMethod === 'PUT'
+          "
+          dataField="payload"
+          editorType="dxTextArea"
+          [editorOptions]="{ height: 120, stylingMode: 'filled' }"
+        >
+          <dxo-label template="payloadLabel"></dxo-label>
+        </dxi-item>
+
+        <div *dxTemplate="let data of 'functionNameLabel'">
+          <span>{{ "FunctionName" | translate }}</span>
+        </div>
+
+        <div *dxTemplate="let data of 'payloadLabel'">
+          <span>{{ "PayloadJSON" | translate }}</span>
+        </div>
+
+        <div *dxTemplate="let data of 'apiUrlLabel'">
+          <span>{{ "APIUrl" | translate }}</span>
+        </div>
+
+        <div *dxTemplate="let data of 'httpMethodLabel'">
+          <span>{{ "HttpMethod" | translate }}</span>
+        </div>
+
+        <div *dxTemplate="let data of 'descriptionLabel'">
+          <span>{{ "Description" | translate }}</span>
+        </div>
+      </dx-form>
+
+      <!-- Parameters Section -->
+      <h4 style="margin-top: 20px">{{ "Parameters" | translate }}</h4>
+      <div
+        *ngFor="let param of parameters; let i = index"
+        style="
+          display: flex;
+          gap: 12px;
+          align-items: center;
+          margin-bottom: 8px;
+          width: 100%;
+        "
+      >
+        <dx-text-box
+          [(value)]="param.name"
+          placeholder="Name"
+          stylingMode="outlined"
+          width="150"
+        >
+          <dx-validator>
+            <dxi-validation-rule type="required"></dxi-validation-rule>
+          </dx-validator>
+        </dx-text-box>
+
+        <dx-select-box
+          [(value)]="param.type"
+          [items]="apiParameterTypes"
+          placeholder="Type"
+          stylingMode="outlined"
+          valueExpr="name"
+          displayExpr="name"
+          width="120"
+        >
+          <dx-validator>
+            <dxi-validation-rule type="required"></dxi-validation-rule>
+          </dx-validator>
+        </dx-select-box>
+
+        <dx-select-box
+          [(value)]="param.location"
+          [items]="apiParameterLocation"
+          placeholder="Location"
+          stylingMode="outlined"
+          valueExpr="name"
+          displayExpr="name"
+          width="120"
+        >
+          <dx-validator>
+            <dxi-validation-rule type="required"></dxi-validation-rule>
+          </dx-validator>
+        </dx-select-box>
+
+        <dx-text-box
+          [(value)]="param.description"
+          placeholder="Description"
+          stylingMode="outlined"
+          width="250"
+        ></dx-text-box>
+
+        <dx-check-box [(value)]="param.required" text="Required"></dx-check-box>
+
+        <dx-button
+          icon="trash"
+          type="danger"
+          stylingMode="text"
+          (onClick)="removeParam(i)"
+        ></dx-button>
+      </div>
+
+      <dx-button
+        text="Add Parameter"
+        icon="plus"
+        type="default"
+        stylingMode="outlined"
+        (onClick)="addParam()"
+      ></dx-button>
+
+      <!-- Submit Row -->
+      <div style="display: flex; justify-content: flex-end; margin-top: 20px">
+        <dx-button
+          class="submit-btn"
+          width="150px"
+          stylingMode="contained"
+          type="default"
+          [useSubmitBehavior]="true"
+          [disabled]="submitApiLoading"
+        >
+          <dx-load-indicator
+            *ngIf="submitApiLoading"
+            width="24"
+            height="24"
+            [visible]="true"
+          ></dx-load-indicator>
+          <span *ngIf="!submitApiLoading">{{ "Submit" | translate }}</span>
+        </dx-button>
+      </div>
+
+      <br />
+    </form>
+  </div>
+</dx-popup>
+
+<!----------------------------------------------------------------------->

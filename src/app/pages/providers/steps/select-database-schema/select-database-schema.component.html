@@ -17,19 +17,23 @@
 
       <div style="margin-bottom: 20px">
         <dx-button
+          class="submit-btn"
           text="{{ 'Cancel' | translate }}"
           type="default"
-          stylingMode="contained"
+          stylingMode="outlined"
+          width="120px"
           (onClick)="cancel()"
         >
         </dx-button>
 
-        &nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
         <dx-button
+          class="submit-btn"
           text="{{ 'Submit' | translate }}"
           type="default"
           stylingMode="contained"
+          width="120px"
           [disabled]="displayLoader"
           (onClick)="submit()"
         >
@@ -60,7 +64,7 @@
         [showCheckBoxesMode]="'selectAll'"
         [selectedExpr]="'selected'"
         (onSelectionChanged)="onSelectionChanged($event)"
-          (onContentReady)="primeSelection()"
+        (onContentReady)="primeSelection()"
         (onItemClick)="onItemClick($event)"
         class="database-treeview"
       >
@@ -81,7 +85,6 @@
 
             <!-- Column Node -->
             <div *ngSwitchCase="'column'" class="tree-column">
-              <i class="dx-icon dx-icon-columnfield"></i>
               <span
                 ><b>{{ item.name }}</b></span
               >
@@ -89,7 +92,9 @@
                 >&nbsp;&nbsp;({{ item.data.dataType
                 }}<span *ngIf="item.data.isNullable">, nullable</span>)
               </small>
-              <span *ngIf="item.data.isPrimaryKey" class="pk"> <i class="dx-icon dx-icon-key"></i></span>
+              <span *ngIf="item.data.isPrimaryKey" class="pk">
+                <i class="dx-icon dx-icon-key"></i
+              ></span>
               <span *ngIf="item.data.isForeignKey" class="fk">
                 <i class="dx-icon dx-icon-link"></i>
                 <small
@@ -129,17 +134,17 @@
       >
       </dx-text-area>
 
-      <br />
-
-      <dx-button
-        class="submit-btn"
-        width="20%"
-        stylingMode="contained"
-        type="default"
-        [text]="'Save' | translate"
-        (onClick)="closeTablePopup()"
-      >
-      </dx-button>
+      <div style="margin-top: 10px; display: flex; justify-content: flex-end">
+        <dx-button
+          class="submit-btn"
+          width="20%"
+          stylingMode="contained"
+          type="default"
+          [text]="'Save' | translate"
+          (onClick)="closeTablePopup()"
+        >
+        </dx-button>
+      </div>
     </div>
   </dx-popup>
 
@@ -159,17 +164,17 @@
       >
       </dx-text-area>
 
-      <br />
-
-      <dx-button
-        class="submit-btn"
-        width="20%"
-        stylingMode="contained"
-        type="default"
-        [text]="'Save' | translate"
-        (onClick)="closeColumnPopup()"
-      >
-      </dx-button>
+      <div style="margin-top: 10px; display: flex; justify-content: flex-end">
+        <dx-button
+          class="submit-btn"
+          width="20%"
+          stylingMode="contained"
+          type="default"
+          [text]="'Save' | translate"
+          (onClick)="closeColumnPopup()"
+        >
+        </dx-button>
+      </div>
     </div>
   </dx-popup>
 </div>

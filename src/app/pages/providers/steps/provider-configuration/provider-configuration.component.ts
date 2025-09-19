@@ -19,16 +19,33 @@ import {
   DxLoadIndicatorModule,
   DxSwitchModule,
   DxFormComponent,
+  DxToolbarModule,
+  DxLoadPanelModule,
+  DxTooltipModule,
+  DxTextBoxModule,
+  DxCheckBoxModule,
+  DxValidatorModule,
 } from 'devextreme-angular';
-import { DxiButtonModule } from 'devextreme-angular/ui/nested';
+import {
+  DxiButtonModule,
+  DxoToolbarModule,
+} from 'devextreme-angular/ui/nested';
 import { finalize, Observable, of, switchMap, take, tap } from 'rxjs';
 import { ScreenService } from '../../../../shared/services';
 import { LanguageService } from '../../../../shared/services/language.service';
 import { ProvidersService } from '../../../../shared/services/providers.service';
 import { TypesService } from '../../../../shared/services/types.service';
 import { ToastNotificationManager } from '../../../../shared/utils/toast-notification.service';
-import { ProviderDto } from '../../../../Dtos/ProviderDto';
+import {
+  ApiParameterDto,
+  ApiProviderDetailsDto,
+  ProviderDetailsDto,
+  ProviderDto,
+} from '../../../../Dtos/ProviderDto';
 import { ActivatedRoute, Params, Route, Router } from '@angular/router';
+import { DxDataGridModule } from 'devextreme-angular/ui/data-grid';
+import { TextEditorComponent } from '../../../../shared/components/text-editor/text-editor.component';
+import { Utilities } from '../../../../shared/utils/utilities.service';
 
 @Component({
   selector: 'app-provider-configuration',
@@ -48,6 +65,13 @@ import { ActivatedRoute, Params, Route, Router } from '@angular/router';
     DxSelectBoxModule,
     DxLoadIndicatorModule,
     DxSwitchModule,
+    DxoToolbarModule,
+    DxDataGridModule,
+    DxTooltipModule,
+    TextEditorComponent,
+    DxTextBoxModule,
+    DxCheckBoxModule,
+    DxValidatorModule,
   ],
 })
 export class ProviderConfigurationComponent implements OnInit {
@@ -56,8 +80,25 @@ export class ProviderConfigurationComponent implements OnInit {
   data: ProviderDto = new ProviderDto();
   isCreateForm: boolean = true;
 
+  showApiPopup: boolean = false;
+  submitApiLoading: boolean = false;
+  newApiRecord: ApiProviderDetailsDto = new ApiProviderDetailsDto();
+
+  apiParameterLocation: any[] = [];
+  httpMethods: any[] = [];
+  apiParameterTypes: any[] = [];
+
+  parameters: ApiParameterDto[] = [];
+
+  isEditingApi: boolean = false;
+  editIndex: number = -1;
+
   @ViewChild('createProviderForm', { static: false })
   form!: DxFormComponent;
+
+  @ViewChild('createApiForm', { static: false })
+  apiForm!: DxFormComponent;
+
   constructor(
     protected screen: ScreenService,
     private typesService: TypesService,
@@ -65,21 +106,27 @@ export class ProviderConfigurationComponent implements OnInit {
     private providerService: ProvidersService,
     private toastNoatification: ToastNotificationManager,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private utilities: Utilities
   ) {}
 
   ngOnInit(): void {
+    this.getApiParameterLocation().subscribe();
+    this.getHttpMethods().subscribe();
+    this.getApiParameterTypes().subscribe();
+
     this.getProviderTypes()
       .pipe(
-        switchMap(() => this.route.paramMap), // wait for types first
+        switchMap(() => this.route.paramMap),
         switchMap((pm) => {
           const id = +(pm.get('id') ?? 0);
           if (id > 0) {
             this.isCreateForm = false;
-            return this.getProvider(id); // load provider
+            return this.getProvider(id); 
           } else {
             this.isCreateForm = true;
             this.data = new ProviderDto();
+
             return of(null);
           }
         })
@@ -96,6 +143,24 @@ export class ProviderConfigurationComponent implements OnInit {
         ).id;
       })
     );
+  }
+
+  getApiParameterLocation(): Observable<any[]> {
+    return this.typesService
+      .get('ApiParameterLocation')
+      .pipe(tap((res) => (this.apiParameterLocation = res)));
+  }
+
+  getHttpMethods(): Observable<any[]> {
+    return this.typesService
+      .get('HttpMethods')
+      .pipe(tap((res) => (this.httpMethods = res)));
+  }
+
+  getApiParameterTypes(): Observable<any[]> {
+    return this.typesService
+      .get('ApiParameterDataType')
+      .pipe(tap((res) => (this.apiParameterTypes = res)));
   }
 
   getProviderTypes(): Observable<any[]> {
@@ -157,9 +222,27 @@ export class ProviderConfigurationComponent implements OnInit {
       .subscribe((res: number) => {
         if (res) {
           this.data.id = res;
-          this.goToDatabaseSchema();
+
+          if (this.data.type == 1) {
+            this.goToDatabaseSchema();
+          } else {
+            this.toastNoatification.success(
+              'ToastNotifications.RecordCreatedSuccessfully'
+            );
+            this.router.navigate(['.'], { relativeTo: this.route.parent });
+          }
         }
       });
+  }
+
+  defaultCreateProvider() {
+    this.nextLoading = true;
+    if (!this.form?.instance?.validate().isValid) {
+      this.nextLoading = false;
+      return;
+    }
+
+    this.createProvider();
   }
 
   updateProvider() {
@@ -180,5 +263,81 @@ export class ProviderConfigurationComponent implements OnInit {
     this.router.navigate([`providers/${this.data.id}/database-schema`], {
       relativeTo: this.route.parent,
     });
+  }
+
+  onAddingNewApiRecord() {
+    this.showApiPopup = true;
+    this.newApiRecord = new ApiProviderDetailsDto();
+  }
+
+  onEditApiRecord(apiRecord: ApiProviderDetailsDto) {
+    this.isEditingApi = true;
+    this.showApiPopup = true;
+    this.editIndex = this.data.details.apiProviderDetails.indexOf(apiRecord);
+
+    // Clone record so you don’t bind directly to the grid’s object
+    this.newApiRecord = { ...apiRecord };
+
+    // Parse parameters back from JSON into array
+    this.parameters = apiRecord.parameters ?? [];
+  }
+
+  onDeleteApiRecord(cellInfo: any) {
+    const index = cellInfo.rowIndex;
+
+    if (index >= 0) {
+      this.data.details.apiProviderDetails.splice(index, 1);
+      this.toastNoatification.success('API record removed');
+    }
+  }
+
+  closeApiPopup() {
+    this.isEditingApi = false;
+    this.editIndex = -1;
+    this.newApiRecord = new ApiProviderDetailsDto();
+    this.parameters = [];
+    this.showApiPopup = false;
+    this.utilities.resetFormData(this.apiForm);
+  }
+
+  async onApiSubmit(event: Event) {
+    event.preventDefault();
+
+    if (!this.apiForm?.instance?.validate().isValid) {
+      return;
+    }
+
+    const dto = {
+      ...this.newApiRecord,
+      parameters: this.parameters,
+    };
+
+    if (this.isEditingApi && this.editIndex >= 0) {
+      // Replace existing record
+      this.data.details.apiProviderDetails[this.editIndex] = dto;
+      this.toastNoatification.success(
+        'ToastNotifications.RecordUpdatedSuccessfully'
+      );
+    } else {
+      // Add new record
+      this.data.details.apiProviderDetails.push(dto);
+      this.toastNoatification.success(
+        'ToastNotifications.RecordAddedSuccessfully'
+      );
+    }
+
+    this.closeApiPopup();
+  }
+
+  addParam() {
+    var param = new ApiParameterDto();
+    param.name = '';
+    param.description = '';
+
+    this.parameters.push(param);
+  }
+
+  removeParam(index: number) {
+    this.parameters.splice(index, 1);
   }
 }

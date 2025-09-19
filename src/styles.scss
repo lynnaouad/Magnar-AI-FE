@@ -136,46 +136,46 @@ a {
   display: flex;
 }
 
-.table-wrapper .table-btns dx-button.table-edit-btn,
-.table-wrapper .table-btns dx-button.table-delete-btn,
-.table-wrapper .table-btns dx-button.table-share-btn,
-.table-wrapper .table-btns dx-button.table-revert-btn,
-.table-wrapper .table-btns dx-button.table-clear-btn,
-.table-wrapper .table-btns dx-button.table-view-btn,
-.table-wrapper .table-btns dx-button.table-download-btn {
+.table-btns dx-button.table-edit-btn,
+.table-btns dx-button.table-delete-btn,
+.table-btns dx-button.table-share-btn,
+.table-btns dx-button.table-revert-btn,
+.table-btns dx-button.table-clear-btn,
+.table-btns dx-button.table-view-btn,
+.table-btns dx-button.table-download-btn {
   background: none !important;
   box-shadow: none !important;
 }
 
-.table-wrapper .table-btns dx-button.table-edit-btn .dx-icon-edit,
-.table-wrapper .table-btns dx-button.table-delete-btn .dx-icon-trash,
-.table-wrapper .table-btns dx-button.table-share-btn .dx-icon-share,
-.table-wrapper .table-btns dx-button.table-revert-btn .dx-icon-revert,
-.table-wrapper .table-btns dx-button.table-clear-btn .dx-icon-clear,
-.table-wrapper .table-btns dx-button.table-view-btn .dx-icon-eyeopen,
-.table-wrapper .table-btns dx-button.table-download-btn .dx-icon-download {
+.table-btns dx-button.table-edit-btn .dx-icon-edit,
+.table-btns dx-button.table-delete-btn .dx-icon-trash,
+.table-btns dx-button.table-share-btn .dx-icon-share,
+.table-btns dx-button.table-revert-btn .dx-icon-revert,
+.table-btns dx-button.table-clear-btn .dx-icon-clear,
+.table-btns dx-button.table-view-btn .dx-icon-eyeopen,
+.table-btns dx-button.table-download-btn .dx-icon-download {
   font-size: 20px;
   color: black;
 }
 
-.table-wrapper .table-btns dx-button.table-edit-btn .dx-icon-edit:hover {
+.table-btns dx-button.table-edit-btn .dx-icon-edit:hover {
   color: rgba(2, 85, 2, 0.568);
   font-weight: bold;
 }
 
-.table-wrapper .table-btns dx-button.table-delete-btn .dx-icon-trash:hover {
+.table-btns dx-button.table-delete-btn .dx-icon-trash:hover {
   color: rgba(139, 0, 0, 0.815);
   font-weight: bold;
 }
 
-.table-wrapper .table-btns dx-button.table-view-btn .dx-icon-eyeopen:hover {
+.table-btns dx-button.table-view-btn .dx-icon-eyeopen:hover {
   color: var(--dx-magnar-blue);
   font-weight: bold;
 }
 
-.table-wrapper .table-btns dx-button.table-revert-btn .dx-icon-revert:hover,
-.table-wrapper .table-btns dx-button.table-share-btn .dx-icon-share:hover,
-.table-wrapper .table-btns dx-button.table-clear-btn .dx-icon-clear:hover,
+.table-btns dx-button.table-revert-btn .dx-icon-revert:hover,
+.table-btns dx-button.table-share-btn .dx-icon-share:hover,
+.table-btns dx-button.table-clear-btn .dx-icon-clear:hover,
 .table-wrapper
   .table-btns
   dx-button.table-download-btn
@@ -504,7 +504,7 @@ h5 {
   font-weight: 400;
 }
 
-.page-container{
+.page-container {
   padding: 30px;
   background-color: white;
   min-height: 85vh;
