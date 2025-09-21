@@ -2,6 +2,15 @@
   <h2>
     {{ (isCreateForm ? "CreateProvider" : "UpdateProvider") | translate }}
   </h2>
+
+  <dx-load-indicator
+    class="custom-loader"
+    id="large-indicator"
+    height="60"
+    width="60"
+    *ngIf="displayLoader"
+  ></dx-load-indicator>
+
   <br />
   <form class="create-provider-form" method="post" action="">
     <dx-form
@@ -10,6 +19,7 @@
       #createProviderForm
       [colCount]="2"
     >
+      <!-- Buttons -->
       <dxi-item itemType="group" [colSpan]="2" [colCount]="8">
         <!-- Cancel -->
         <dxi-item template="cancelTpl">
@@ -96,13 +106,13 @@
 
       <!-- SQL Server config fields -->
       <dxi-item
+        *ngIf="data?.type === 1"
         itemType="group"
         [colCount]="2"
         [colSpan]="2"
         cssClass="custom-group"
       >
         <dxi-item
-          *ngIf="data?.type === 1"
           dataField="details.sqlServerConfiguration.instanceName"
           editorType="dxTextBox"
           [editorOptions]="{
@@ -120,7 +130,6 @@
         </dxi-item>
 
         <dxi-item
-          *ngIf="data?.type === 1"
           dataField="details.sqlServerConfiguration.databaseName"
           editorType="dxTextBox"
           [editorOptions]="{
@@ -139,13 +148,13 @@
       </dxi-item>
 
       <dxi-item
+        *ngIf="data?.type === 1"
         itemType="group"
         [colSpan]="2"
         [colCount]="2"
         cssClass="custom-group"
       >
         <dxi-item
-          *ngIf="data?.type === 1"
           dataField="details.sqlServerConfiguration.username"
           editorType="dxTextBox"
           [editorOptions]="{
@@ -163,7 +172,6 @@
         </dxi-item>
 
         <dxi-item
-          *ngIf="data?.type === 1"
           dataField="details.sqlServerConfiguration.password"
           editorType="dxTextBox"
           [editorOptions]="{
@@ -182,6 +190,7 @@
       </dxi-item>
 
       <dxi-item
+        *ngIf="!isCreateForm && this.data.type === 1"
         itemType="group"
         [colSpan]="2"
         [colCount]="2"
@@ -211,6 +220,156 @@
         </dxi-item>
       </dxi-item>
 
+      <!-- Api -->
+      <dxi-item
+        *ngIf="this.data.type === 2"
+        itemType="group"
+        [colCount]="2"
+        [colSpan]="2"
+        cssClass="custom-group"
+      >
+        <dxi-item
+          dataField="details.apiProviderAuthDetails.authType"
+          editorType="dxSelectBox"
+          [editorOptions]="{
+            items: authTypes,
+            displayExpr: 'nameTranslated',
+            valueExpr: 'id',
+            stylingMode: 'filled',
+            searchEnabled: false,
+          }"
+        >
+          <dxo-label [text]="'AuthenticationType' | translate"></dxo-label>
+          <dxi-validation-rule
+            type="required"
+            [message]="'ValidationRules.RequiredField' | translate"
+          ></dxi-validation-rule>
+        </dxi-item>
+      </dxi-item>
+
+      <!-- Token Url -->
+      <dxi-item
+        *ngIf="
+          this.data.type === 2 &&
+          (this.data.details.apiProviderAuthDetails?.authType === 3 ||
+            this.data.details.apiProviderAuthDetails?.authType === 2)
+        "
+        itemType="group"
+        [colCount]="2"
+        [colSpan]="2"
+        cssClass="custom-group"
+      >
+        <dxi-item
+          dataField="details.apiProviderAuthDetails.tokenUrl"
+          editorType="dxTextBox"
+          [editorOptions]="{
+            stylingMode: 'filled',
+            mode: 'text',
+            inputAttr: { autocomplete: 'tokenUrl' }
+          }"
+          cssClass="form-item"
+        >
+          <dxi-validation-rule
+            type="required"
+            [message]="'ValidationRules.RequiredField' | translate"
+          ></dxi-validation-rule>
+          <dxo-label template="tokenUrlLabel"></dxo-label>
+        </dxi-item>
+      </dxi-item>
+
+      <!-- Client Id & Client Secret -->
+      <dxi-item
+        *ngIf="
+          this.data.type === 2 &&
+          (this.data.details.apiProviderAuthDetails?.authType === 2 ||
+            this.data.details.apiProviderAuthDetails?.authType === 3)
+        "
+        itemType="group"
+        [colCount]="2"
+        [colSpan]="2"
+        cssClass="custom-group"
+      >
+        <dxi-item
+          dataField="details.apiProviderAuthDetails.clientId"
+          editorType="dxTextBox"
+          [editorOptions]="{
+            stylingMode: 'filled',
+            mode: 'text',
+            inputAttr: { autocomplete: 'clientId' }
+          }"
+          cssClass="form-item"
+        >
+          <dxi-validation-rule
+            type="required"
+            [message]="'ValidationRules.RequiredField' | translate"
+          ></dxi-validation-rule>
+          <dxo-label template="clientIdLabel"></dxo-label>
+        </dxi-item>
+
+        <dxi-item
+          dataField="details.apiProviderAuthDetails.clientSecret"
+          editorType="dxTextBox"
+          [editorOptions]="{
+            stylingMode: 'filled',
+            mode: 'password',
+            inputAttr: { autocomplete: 'new-password' }
+          }"
+          cssClass="form-item"
+        >
+          <dxi-validation-rule
+            type="required"
+            [message]="'ValidationRules.RequiredField' | translate"
+          ></dxi-validation-rule>
+          <dxo-label template="clientSecretLabel"></dxo-label>
+        </dxi-item>
+      </dxi-item>
+
+      <!--  Username & Password -->
+      <dxi-item
+        *ngIf="
+          this.data.type === 2 &&
+          this.data.details.apiProviderAuthDetails?.authType === 2
+        "
+        itemType="group"
+        [colCount]="2"
+        [colSpan]="2"
+        cssClass="custom-group"
+      >
+        <dxi-item
+          dataField="details.apiProviderAuthDetails.username"
+          editorType="dxTextBox"
+          [editorOptions]="{
+            stylingMode: 'filled',
+            mode: 'text',
+            inputAttr: { autocomplete: 'username' }
+          }"
+          cssClass="form-item"
+        >
+          <dxi-validation-rule
+            type="required"
+            [message]="'ValidationRules.RequiredField' | translate"
+          ></dxi-validation-rule>
+          <dxo-label template="usernameLabel"></dxo-label>
+        </dxi-item>
+
+        <dxi-item
+          dataField="details.apiProviderAuthDetails.password"
+          editorType="dxTextBox"
+          [editorOptions]="{
+            stylingMode: 'filled',
+            mode: 'password',
+            inputAttr: { autocomplete: 'new-password' }
+          }"
+          cssClass="form-item"
+        >
+          <dxi-validation-rule
+            type="required"
+            [message]="'ValidationRules.RequiredField' | translate"
+          ></dxi-validation-rule>
+          <dxo-label template="passwordLabel"></dxo-label>
+        </dxi-item>
+      </dxi-item>
+
       <div *dxTemplate="let data of 'providerLabel'">
         <span>{{ "Type" | translate }}</span>
       </div>
@@ -233,6 +392,18 @@
 
       <div *dxTemplate="let data of 'passwordLabel'">
         <span>{{ "Password" | translate }}</span>
+      </div>
+
+      <div *dxTemplate="let data of 'tokenUrlLabel'">
+        <span>{{ "TokenUrl" | translate }}</span>
+      </div>
+
+      <div *dxTemplate="let data of 'clientIdLabel'">
+        <span>{{ "ClientId" | translate }}</span>
+      </div>
+
+      <div *dxTemplate="let data of 'clientSecretLabel'">
+        <span>{{ "ClientSecret" | translate }}</span>
       </div>
 
       <div *dxTemplate="let _ of 'cancelTpl'">
@@ -316,7 +487,7 @@
   <dx-data-grid
     *ngIf="data.type === 2"
     class="dx-card content-block"
-    [dataSource]="data.details.apiProviderDetails"
+    [dataSource]="data.apiProviderDetails"
     [remoteOperations]="true"
     [showBorders]="true"
     [focusedRowEnabled]="false"
@@ -436,7 +607,7 @@
   title="Create API"
   (onHiding)="closeApiPopup()"
   [wrapperAttr]="{ class: 'create-api-popup' }"
-  height="6vh"
+  height="60vh"
 >
   <div *dxTemplate="let data of 'content'">
     <form
@@ -469,18 +640,6 @@
           <dxo-label [visible]="true" template="functionNameLabel"></dxo-label>
         </dxi-item>
 
-        <dxi-item><span></span></dxi-item>
-
-        <!-- Description -->
-        <dxi-item
-          [colSpan]="2"
-          dataField="description"
-          editorType="dxTextArea"
-          [editorOptions]="{ stylingMode: 'filled', height: 80 }"
-        >
-          <dxo-label template="descriptionLabel"></dxo-label>
-        </dxi-item>
-
         <!-- HTTP Method -->
         <dxi-item
           dataField="httpMethod"
@@ -501,6 +660,7 @@
 
         <!-- API URL -->
         <dxi-item
+          [colSpan]="2"
           dataField="apiUrl"
           [editorOptions]="{ stylingMode: 'filled' }"
         >
@@ -509,6 +669,16 @@
             [message]="'ValidationRules.RequiredField' | translate"
           ></dxi-validation-rule>
           <dxo-label template="apiUrlLabel"></dxo-label>
+        </dxi-item>
+
+        <!-- Description -->
+        <dxi-item
+          [colSpan]="2"
+          dataField="description"
+          editorType="dxTextArea"
+          [editorOptions]="{ stylingMode: 'filled', height: 80 }"
+        >
+          <dxo-label template="descriptionLabel"></dxo-label>
         </dxi-item>
 
         <!-- Payload -->
@@ -520,7 +690,13 @@
           "
           dataField="payload"
           editorType="dxTextArea"
-          [editorOptions]="{ height: 120, stylingMode: 'filled' }"
+          [editorOptions]="{
+            stylingMode: 'filled',
+            width: '100%',
+            autoResizeEnabled: true,
+            minHeight: 300,
+            maxHeight: 400
+          }"
         >
           <dxo-label template="payloadLabel"></dxo-label>
         </dxi-item>

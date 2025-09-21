@@ -79,6 +79,7 @@ export class ProviderConfigurationComponent implements OnInit {
   providerTypes: any[] = [];
   data: ProviderDto = new ProviderDto();
   isCreateForm: boolean = true;
+  displayLoader: boolean = false;
 
   showApiPopup: boolean = false;
   submitApiLoading: boolean = false;
@@ -87,6 +88,7 @@ export class ProviderConfigurationComponent implements OnInit {
   apiParameterLocation: any[] = [];
   httpMethods: any[] = [];
   apiParameterTypes: any[] = [];
+  authTypes: any[] = [];
 
   parameters: ApiParameterDto[] = [];
 
@@ -114,19 +116,24 @@ export class ProviderConfigurationComponent implements OnInit {
     this.getApiParameterLocation().subscribe();
     this.getHttpMethods().subscribe();
     this.getApiParameterTypes().subscribe();
+    this.getAuthTypes().subscribe();
+
+    this.displayLoader = true;
 
     this.getProviderTypes()
       .pipe(
+        switchMap(() => this.getAuthTypes()),
         switchMap(() => this.route.paramMap),
         switchMap((pm) => {
           const id = +(pm.get('id') ?? 0);
+
           if (id > 0) {
             this.isCreateForm = false;
-            return this.getProvider(id); 
+            return this.getProvider(id);
           } else {
             this.isCreateForm = true;
             this.data = new ProviderDto();
-
+            this.displayLoader = false;
             return of(null);
           }
         })
@@ -136,11 +143,20 @@ export class ProviderConfigurationComponent implements OnInit {
 
   getProvider(id: number): Observable<ProviderDto> {
     return this.providerService.get(id).pipe(
+      finalize(() => (this.displayLoader = false)),
       tap((p) => {
         this.data = p;
         this.data.type = this.providerTypes.find(
           (x) => x.name === this.data.type
         ).id;
+
+        if (this.data?.details?.apiProviderAuthDetails != null) {
+          this.data.details.apiProviderAuthDetails.authType =
+            this.authTypes.find(
+              (x) =>
+                x.name === this.data.details?.apiProviderAuthDetails?.authType
+            ).id;
+        }
       })
     );
   }
@@ -161,6 +177,20 @@ export class ProviderConfigurationComponent implements OnInit {
     return this.typesService
       .get('ApiParameterDataType')
       .pipe(tap((res) => (this.apiParameterTypes = res)));
+  }
+
+  getAuthTypes(): Observable<any[]> {
+    return this.typesService.get('AuthType').pipe(
+      tap(
+        (res) =>
+          (this.authTypes = res.map((item: any) => {
+            item.nameTranslated = this.languageService.translateInstant(
+              item.name
+            );
+            return item;
+          }))
+      )
+    );
   }
 
   getProviderTypes(): Observable<any[]> {
@@ -246,6 +276,8 @@ export class ProviderConfigurationComponent implements OnInit {
   }
 
   updateProvider() {
+    this.nextLoading = true;
+
     this.providerService
       .update(this.data)
       .pipe(finalize(() => (this.nextLoading = false)))
@@ -273,7 +305,7 @@ export class ProviderConfigurationComponent implements OnInit {
   onEditApiRecord(apiRecord: ApiProviderDetailsDto) {
     this.isEditingApi = true;
     this.showApiPopup = true;
-    this.editIndex = this.data.details.apiProviderDetails.indexOf(apiRecord);
+    this.editIndex = this.data.apiProviderDetails.indexOf(apiRecord);
 
     // Clone record so you don’t bind directly to the grid’s object
     this.newApiRecord = { ...apiRecord };
@@ -286,7 +318,7 @@ export class ProviderConfigurationComponent implements OnInit {
     const index = cellInfo.rowIndex;
 
     if (index >= 0) {
-      this.data.details.apiProviderDetails.splice(index, 1);
+      this.data.apiProviderDetails.splice(index, 1);
       this.toastNoatification.success('API record removed');
     }
   }
@@ -314,13 +346,13 @@ export class ProviderConfigurationComponent implements OnInit {
 
     if (this.isEditingApi && this.editIndex >= 0) {
       // Replace existing record
-      this.data.details.apiProviderDetails[this.editIndex] = dto;
+      this.data.apiProviderDetails[this.editIndex] = dto;
       this.toastNoatification.success(
         'ToastNotifications.RecordUpdatedSuccessfully'
       );
     } else {
       // Add new record
-      this.data.details.apiProviderDetails.push(dto);
+      this.data.apiProviderDetails.push(dto);
       this.toastNoatification.success(
         'ToastNotifications.RecordAddedSuccessfully'
       );

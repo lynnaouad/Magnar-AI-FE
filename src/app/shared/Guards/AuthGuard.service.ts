@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
+  ActivatedRoute,
   ActivatedRouteSnapshot,
   CanActivate,
   Router,
@@ -17,6 +18,7 @@ export class AuthGuardService implements CanActivate {
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private authService: AuthService,
     private workspaceService: WorkspaceService
   ) {}
@@ -25,7 +27,7 @@ export class AuthGuardService implements CanActivate {
     route: ActivatedRouteSnapshot,
     routerState: RouterStateSnapshot
   ): Promise<boolean> {
-    const workspaceId = Number(route.paramMap.get('id'));
+    const workspaceId = Number(route.paramMap.get('workspaceId'));
     const isLoggedIn = this.authService.loggedIn;
 
     const isAuthForm = [
@@ -52,7 +54,7 @@ export class AuthGuardService implements CanActivate {
           this.router.navigate(['/workspaces']);
           return false;
         }),
-        catchError(() => of(this.router.parseUrl('/workspaces')))
+        catchError(() => of(this.router.navigate(['/workspaces'])))
       ).subscribe();
     }
 

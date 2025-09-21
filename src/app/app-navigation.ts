@@ -7,7 +7,15 @@ export const Navigation = [
     selected: true,
   },
 
-   {
+  {
+    id: 'Prompts',
+    text: 'Prompt',
+    path: '/workspaces/:workspaceId/prompt',
+    icon: 'description',
+    selected: false,
+  },
+
+  {
     id: 'Dashboard',
     text: 'Dashboard',
     path: '/workspaces/:workspaceId/dashboard',

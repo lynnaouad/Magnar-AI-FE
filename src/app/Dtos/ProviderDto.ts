@@ -1,10 +1,11 @@
-import { String } from "lodash";
+import { String } from 'lodash';
 
 export class ProviderDto {
   id: number = 0;
   workspaceId!: number;
   type!: number;
   details: ProviderDetailsDto = new ProviderDetailsDto();
+  apiProviderDetails: ApiProviderDetailsDto[] = [];
   createdAt!: Date;
   castModifiedAt!: Date | null;
   CreatedBy!: string;
@@ -13,7 +14,7 @@ export class ProviderDto {
 
 export class ProviderDetailsDto {
   sqlServerConfiguration!: SqlServerProviderDetailsDto | null;
-  apiProviderDetails: ApiProviderDetailsDto[] = [];
+  apiProviderAuthDetails!: ApiProviderAuthDetailsDto | null
 }
 
 export class SqlServerProviderDetailsDto {
@@ -21,6 +22,18 @@ export class SqlServerProviderDetailsDto {
   databaseName!: string;
   username!: string;
   password!: string;
+}
+
+export class ApiProviderAuthDetailsDto {
+  authType: number = 1;
+  tokenUrl!: string;
+  clientId: string = '';
+  clientSecret: string = '';
+  scope: string = '';
+  username: string = '';
+  password: string = '';
+  apiKeyName: string = '';
+  apiKeyValue: string = '';
 }
 
 export class ApiProviderDetailsDto {
@@ -41,8 +54,8 @@ export class ApiProviderDetailsDto {
 
 export class ApiParameterDto {
   name!: string;
-  type: string = "String";
+  type: string = 'String';
   description!: string;
   required: boolean = true;
-  location: string = "Query";
+  location: string = 'Query';
 }

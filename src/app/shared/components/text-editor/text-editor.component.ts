@@ -118,4 +118,17 @@ export class TextEditorComponent implements OnChanges, OnInit {
   generateWithAI() {
     this.onGenerateWithAI.emit(this.canGenerateWithAI);
   }
+
+  getJsonOnly(html: string | null | undefined): string {
+    if (!html) return '';
+
+    // Convert HTML → text (preserves JSON characters)
+    const div = document.createElement('div');
+    div.innerHTML = html;
+
+    const text = div.textContent || div.innerText || '';
+
+    // Trim extra spaces/newlines outside JSON
+    return text.trim();
+  }
 }

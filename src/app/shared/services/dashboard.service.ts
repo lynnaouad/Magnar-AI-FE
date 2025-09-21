@@ -7,7 +7,7 @@ import { Utilities } from '../utils/utilities.service';
 
 @Injectable({ providedIn: 'root' })
 export class DashboardService {
-  backEndUrl: string = environment.apiUrl + '/api/custom-dashboard';
+  backEndUrl: string = environment.apiUrl + '/api/CustomDashboard';
 
   constructor(
     private http: HttpClient,

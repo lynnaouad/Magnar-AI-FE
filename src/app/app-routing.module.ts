@@ -17,9 +17,10 @@ export const routes: Routes = [
   },
   {
     path: 'workspaces',
+    canActivate: [AuthGuardService],
     loadComponent: () => import('./layouts/login-layout/nav-bar.component').then((m) => m.NavBarComponent),
     children: [
-       { path: '', loadComponent: () => import('./pages/workspaces/workspaces.component').then((m) => m.WorkspacesComponent), canActivate: [ AuthGuardService ]},
+       { path: '', loadComponent: () => import('./pages/workspaces/workspaces.component').then((m) => m.WorkspacesComponent)},
     ]
   },
 
@@ -32,8 +33,10 @@ export const routes: Routes = [
       { path: 'providers', loadComponent: () => import('./pages/providers/providers-list.component').then((m) => m.ProvidersListComponent)},
       { path: 'providers/create', loadComponent: () => import('./pages/providers/steps/provider-configuration/provider-configuration.component').then((m) => m.ProviderConfigurationComponent)},
       { path: 'providers/:id', loadComponent: () => import('./pages/providers/steps/provider-configuration/provider-configuration.component').then((m) => m.ProviderConfigurationComponent)},
-     { path: 'providers/:id/database-schema', loadComponent: () => import('./pages/providers/steps/select-database-schema/select-database-schema.component').then((m) => m.SelectDatabaseSchemaComponent)},
+      { path: 'providers/:id/database-schema', loadComponent: () => import('./pages/providers/steps/select-database-schema/select-database-schema.component').then((m) => m.SelectDatabaseSchemaComponent)},
      
+      { path: 'prompt', loadComponent: () => import('./pages/prompt/prompt.component').then((m) => m.PromptComponent)},
+      
       { path: 'dashboard', loadComponent: () => import('./pages/dashboard/dashboard.component').then((m) => m.DashboardComponent)},
       
       { path: '', redirectTo: 'providers', pathMatch: 'full' },
