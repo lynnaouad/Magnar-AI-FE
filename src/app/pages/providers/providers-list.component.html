@@ -21,7 +21,7 @@
         [showNavigationButtons]="true"
       >
       </dxo-pager>
-      
+
       <dxo-filter-row [visible]="true" applyFilter="auto"></dxo-filter-row>
 
       <dxo-pager [visible]="true"></dxo-pager>
@@ -55,7 +55,18 @@
 
       <dxi-column dataField="name" [caption]="'Name' | translate"> </dxi-column>
 
-      <dxi-column dataField="provider" [caption]="'Provider' | translate" [calculateCellValue]="translateProvider">
+      <dxi-column
+        dataField="provider"
+        [caption]="'Provider' | translate"
+        [calculateCellValue]="translateProvider"
+      >
+      </dxi-column>
+
+      <dxi-column
+        dataField="isDefault"
+        [caption]="'Default' | translate"
+        [calculateCellValue]="displayDefault"
+      >
       </dxi-column>
 
       <dxi-column dataField="createdBy" [caption]="'CreatedBy' | translate">

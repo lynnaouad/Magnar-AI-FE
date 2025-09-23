@@ -1,4 +1,4 @@
-<div class="main-dashboard-container">
+<div class="page-container">
   <div style="width: 80%">
     <h3>{{ "AskAI" | translate }}</h3>
     <br />
@@ -14,6 +14,7 @@
           <dx-text-area
             [(value)]="data.prompt"
             valueChangeEvent="input"
+            stylingMode="filled"
             [height]="200"
             [placeholder]="'PlaceHolders.AskAIDescription' | translate"
           >
@@ -56,11 +57,13 @@
     <h3>{{ "Result" | translate }}</h3>
     <div>
       <div *ngFor="let msg of messages">
-        <b>{{ msg.role }}:</b> {{ msg.content }}
+        <ng-container *ngIf="msg.content">
+          <b>{{ msg.role }}:</b> {{ msg.content }}
+        </ng-container>
       </div>
 
       <hr />
-      Latest Result: {{ latest }}
+      <pre>{{ latest }}</pre>
     </div>
   </div>
 </div>

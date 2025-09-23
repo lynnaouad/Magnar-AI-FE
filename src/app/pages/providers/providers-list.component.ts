@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { DxButtonModule } from 'devextreme-angular/ui/button';
 import { DxDataGridModule } from 'devextreme-angular/ui/data-grid';
 import { DxFormModule } from 'devextreme-angular/ui/form';
@@ -58,7 +58,8 @@ export class ProvidersListComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private odataUtilityService: OdataUtilityService,
-    private languageService: LanguageService
+    private languageService: LanguageService,
+    private translateService: TranslateService
   ) {}
 
   ngOnInit() {
@@ -93,6 +94,11 @@ export class ProvidersListComponent implements OnInit {
         }),
     });
   }
+
+  displayDefault = (rowData: any) => {
+  return rowData.isDefault ? this.translateService.instant('Yes') : this.translateService.instant('No');
+};
+
 
   translateProvider = (rowData: any) => {
     return this.languageService.translateInstant(rowData.type);

@@ -264,4 +264,19 @@ export class Utilities {
       return null;
     }
   }
+
+  copyToClipBoard(text: any) {
+    if (text == null) {
+      return;
+    }
+
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        this.toastNotificationManager.success('CopiedToClipboard');
+      })
+      .catch((err) => {
+        console.error('Failed to copy:', err);
+      });
+  }
 }

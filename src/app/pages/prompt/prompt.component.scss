@@ -2,4 +2,17 @@
   margin-top: 10px;
   padding: 10px;
   height: auto;
+  width: 100%;
+}
+
+.response-viewer-section div{
+  width: 100%;
+}
+
+.response-viewer-section pre {
+  white-space: pre-wrap;   /* preserve whitespace but allow wrapping */
+  word-wrap: break-word;   /* break long words if needed */
+  overflow-x: auto;        /* optional: adds scroll if still too wide */
+  max-width: 100%;         /* respect container width */
+  box-sizing: border-box;  /* padding included in width */
 }

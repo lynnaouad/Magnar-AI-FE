@@ -92,8 +92,29 @@ export class ProviderConfigurationComponent implements OnInit {
 
   parameters: ApiParameterDto[] = [];
 
+  showJsonPopup: boolean = false;
+
   isEditingApi: boolean = false;
   editIndex: number = -1;
+
+jsonPlaceholder: string = JSON.stringify(
+  {
+    type: "object",
+    properties: {
+      Id: { type: "number", description: "Unique identifier" },
+      FullName: { type: "string" },
+      Age:  { type: "number" },
+      Birthdate: {type: "date"},
+    },
+    required: ["FullName"]
+  },
+  null,
+  2 // indent with 2 spaces
+);
+
+copyJsonToClipboard(jsonPlaceholder: any) {
+  this.utilities.copyToClipBoard(jsonPlaceholder)
+}
 
   @ViewChild('createProviderForm', { static: false })
   form!: DxFormComponent;
