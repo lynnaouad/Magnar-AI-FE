@@ -20,6 +20,7 @@ import { ProvidersService } from '../../shared/services/providers.service';
 import CustomStore from 'devextreme/data/custom_store';
 import { OdataUtilityService } from '../../shared/services/odata-utility.service';
 import { LanguageService } from '../../shared/services/language.service';
+import { WorkspaceIdObserver } from '../../app-store/Observables/WorkspaceIdObserver.service';
 
 @Component({
   selector: 'app-providers-list',
@@ -51,6 +52,8 @@ export class ProvidersListComponent implements OnInit {
   tempIdToDelete = '';
   isDeletePopupOpened = false;
 
+  workspaceId: number = 0;
+
   constructor(
     protected screen: ScreenService,
     private providersService: ProvidersService,
@@ -59,10 +62,15 @@ export class ProvidersListComponent implements OnInit {
     private route: ActivatedRoute,
     private odataUtilityService: OdataUtilityService,
     private languageService: LanguageService,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private workspaceObserver: WorkspaceIdObserver
   ) {}
 
   ngOnInit() {
+    this.workspaceObserver.workspaceId$.subscribe((id) => {
+      this.workspaceId = id ?? 0;
+    });
+
     this.loadData();
   }
 
@@ -76,41 +84,43 @@ export class ProvidersListComponent implements OnInit {
             []
           );
 
-          this.providersService.getOdata(queryString).subscribe(
-            (res: any) => {
-              resolve({
-                data: res?.value ?? [],
-                totalCount: res?.totalCount ?? 0,
-              });
-            },
-            (error) => {
-              resolve({
-                data: [],
-                totalCount: 0,
-              });
-              console.error('Error occured while fetching data...');
-            }
-          );
+          this.providersService
+            .getOdata(queryString, this.workspaceId)
+            .subscribe(
+              (res: any) => {
+                resolve({
+                  data: res?.value ?? [],
+                  totalCount: res?.totalCount ?? 0,
+                });
+              },
+              (error) => {
+                resolve({
+                  data: [],
+                  totalCount: 0,
+                });
+                console.error('Error occured while fetching data...');
+              }
+            );
         }),
     });
   }
 
   displayDefault = (rowData: any) => {
-  return rowData.isDefault ? this.translateService.instant('Yes') : this.translateService.instant('No');
-};
-
+    return rowData.isDefault
+      ? this.translateService.instant('Yes')
+      : this.translateService.instant('No');
+  };
 
   translateProvider = (rowData: any) => {
     return this.languageService.translateInstant(rowData.type);
   };
 
   onAddingNewRecord() {
-    this.router.navigate(['./create'], { relativeTo: this.route})
+    this.router.navigate(['./create'], { relativeTo: this.route });
   }
 
   onEditRecord(record: any) {
-     this.router.navigate([`./${record.id}`], { relativeTo: this.route})
-
+    this.router.navigate([`./${record.id}`], { relativeTo: this.route });
   }
 
   onDeleteRecord(record: any) {

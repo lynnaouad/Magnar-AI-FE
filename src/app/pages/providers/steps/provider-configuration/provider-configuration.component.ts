@@ -46,6 +46,7 @@ import { ActivatedRoute, Params, Route, Router } from '@angular/router';
 import { DxDataGridModule } from 'devextreme-angular/ui/data-grid';
 import { TextEditorComponent } from '../../../../shared/components/text-editor/text-editor.component';
 import { Utilities } from '../../../../shared/utils/utilities.service';
+import { WorkspaceIdObserver } from '../../../../app-store/Observables/WorkspaceIdObserver.service';
 
 @Component({
   selector: 'app-provider-configuration',
@@ -97,24 +98,26 @@ export class ProviderConfigurationComponent implements OnInit {
   isEditingApi: boolean = false;
   editIndex: number = -1;
 
-jsonPlaceholder: string = JSON.stringify(
-  {
-    type: "object",
-    properties: {
-      Id: { type: "number", description: "Unique identifier" },
-      FullName: { type: "string" },
-      Age:  { type: "number" },
-      Birthdate: {type: "date"},
-    },
-    required: ["FullName"]
-  },
-  null,
-  2 // indent with 2 spaces
-);
+  workspaceId: number = 0;
 
-copyJsonToClipboard(jsonPlaceholder: any) {
-  this.utilities.copyToClipBoard(jsonPlaceholder)
-}
+  jsonPlaceholder: string = JSON.stringify(
+    {
+      type: 'object',
+      properties: {
+        Id: { type: 'number', description: 'Unique identifier' },
+        FullName: { type: 'string' },
+        Age: { type: 'number' },
+        Birthdate: { type: 'date' },
+      },
+      required: ['FullName'],
+    },
+    null,
+    2 // indent with 2 spaces
+  );
+
+  copyJsonToClipboard(jsonPlaceholder: any) {
+    this.utilities.copyToClipBoard(jsonPlaceholder);
+  }
 
   @ViewChild('createProviderForm', { static: false })
   form!: DxFormComponent;
@@ -130,10 +133,15 @@ copyJsonToClipboard(jsonPlaceholder: any) {
     private toastNoatification: ToastNotificationManager,
     private router: Router,
     private route: ActivatedRoute,
-    private utilities: Utilities
+    private utilities: Utilities,
+    private workspaceObserver: WorkspaceIdObserver
   ) {}
 
   ngOnInit(): void {
+    this.workspaceObserver.workspaceId$.subscribe((id) => {
+      this.workspaceId = id ?? 0;
+    });
+
     this.getApiParameterLocation().subscribe();
     this.getHttpMethods().subscribe();
     this.getApiParameterTypes().subscribe();
@@ -267,6 +275,8 @@ copyJsonToClipboard(jsonPlaceholder: any) {
   }
 
   createProvider() {
+    this.data.workspaceId = this.workspaceId;
+    
     this.providerService
       .create(this.data)
       .pipe(finalize(() => (this.nextLoading = false)))

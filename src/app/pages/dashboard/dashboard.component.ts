@@ -18,6 +18,7 @@ import { take } from 'lodash';
 import { finalize } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ScreenService } from '../../shared/services';
+import { WorkspaceIdObserver } from '../../app-store/Observables/WorkspaceIdObserver.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -47,16 +48,22 @@ export class DashboardComponent implements OnInit {
   chartTypes: any[] = [];
 
   backendUrl = environment.apiUrl + '/api/dashboard';
+  workspaceId: number = 0;
 
   @ViewChild('dashboard', { static: true }) dashboard!: ElementRef<any>;
 
   constructor(
     private typesService: TypesService,
     private dashboardService: DashboardService,
-    public screen: ScreenService
+    public screen: ScreenService,
+    public workspaceObserver: WorkspaceIdObserver
   ) {}
 
   ngOnInit(): void {
+    this.workspaceObserver.workspaceId$.subscribe((id) => {
+      this.workspaceId = id ?? 0;
+    });
+
     this.getDahsboardTypes();
   }
 
@@ -66,6 +73,7 @@ export class DashboardComponent implements OnInit {
     // attach auth header for every dashboard request
     this.dashboardControl.remoteService.headers = {
       Authorization: `Bearer ${sessionStorage.getItem('access_token')}`,
+      'X-Workspace-Id': this.workspaceId
     };
   }
 
@@ -88,10 +96,11 @@ export class DashboardComponent implements OnInit {
     let data = {
       Prompt: this.data.prompt,
       ChartType: this.data.selectedChartType,
+      WorkspaceId: this.workspaceId,
     };
 
     this.dashboardService
-      .get(data)
+      .generateDashboard(data)
       .pipe(finalize(() => (this.generateLoading = false)))
       .subscribe((res: any) => {
         if (this.dashboardControl) {
@@ -107,10 +116,11 @@ export class DashboardComponent implements OnInit {
 
     let data = {
       ChartType: this.data.selectedChartType,
+      WorkspaceId: this.workspaceId,
     };
 
     this.dashboardService
-      .changeType(data)
+      .changeDashboardType(data)
       .pipe(finalize(() => {}))
       .subscribe((res: any) => {
         if (this.dashboardControl && res.dashboardId) {

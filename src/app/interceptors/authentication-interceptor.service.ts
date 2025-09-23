@@ -19,7 +19,7 @@ import { jwtDecode } from 'jwt-decode';
 import { MagnarApiAnonymousEndpoints } from '../shared/constants/constants';
 import { select, Store } from '@ngrx/store';
 
-let workspaceId: number = 0;
+// let workspaceId: number = 0;
 
 const isRefreshing = new BehaviorSubject<boolean>(false);
 const refreshTokenSubject = new BehaviorSubject<string | null>(null);
@@ -35,9 +35,9 @@ export const authInterceptor: HttpInterceptorFn = (
   const authService = inject(AuthService);
   const store = inject(Store);
 
-  store.pipe(select("workspace")).subscribe((workspace) => {
-    workspaceId = workspace?.workspaceId ?? 0
-    });
+  // store.pipe(select("workspace")).subscribe((workspace) => {
+  //   workspaceId = workspace?.workspaceId ?? 0
+  //   });
 
   const token = sessionStorage.getItem('access_token');
   // Check if the access token is expired before making the request
@@ -113,7 +113,7 @@ function addAuthHeader(req: HttpRequest<unknown>) {
         Authorization: `Bearer ${token}`,
         'Accept-Language': lang,
       },
-      url: workspaceId == 0 || hasWorkspaceIdSegment(req.url) ? req.url : req.url.replace('api/',`api/${(workspaceId).toString()}/`)
+      // url: workspaceId == 0 || hasWorkspaceIdSegment(req.url) ? req.url : req.url.replace('api/',`api/${(workspaceId).toString()}/`)
     });
   }
   return req.clone({
@@ -128,7 +128,7 @@ function getCookie(name: string): string | null {
   return match ? match[2] : null;
 }
 
-function hasWorkspaceIdSegment(url: string): boolean {
-  const regex = /\/api\/\d+\//;
-  return regex.test(url);
-}
+// function hasWorkspaceIdSegment(url: string): boolean {
+//   const regex = /\/api\/\d+\//;
+//   return regex.test(url);
+// }

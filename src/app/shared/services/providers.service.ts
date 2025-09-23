@@ -21,9 +21,9 @@ export class ProvidersService {
       .pipe(catchError(this.utilities.handleErrorGlobal));
   }
 
-  getOdata(queryString: string) {
+  getOdata(queryString: string, workspaceId: number) {
     return this.http
-      .get(this.backEndUrl + `/odata?${queryString}`)
+      .get(this.backEndUrl + `/odata?workspaceId=${workspaceId}&${queryString}`)
       .pipe(catchError(this.utilities.handleErrorGlobal));
   }
 

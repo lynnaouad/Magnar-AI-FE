@@ -30,6 +30,7 @@ import { ProviderDto } from '../../../../Dtos/ProviderDto';
 import { ProvidersService } from '../../../../shared/services/providers.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { ToastNotificationManager } from '../../../../shared/utils/toast-notification.service';
+import { WorkspaceIdObserver } from '../../../../app-store/Observables/WorkspaceIdObserver.service';
 
 class TableDto {
   schemaName: string = '';
@@ -108,10 +109,15 @@ export class SelectDatabaseSchemaComponent implements OnInit {
     protected router: Router,
     protected route: ActivatedRoute,
     protected providerService: ProvidersService,
-    protected toastNotificationManager: ToastNotificationManager
+    protected toastNotificationManager: ToastNotificationManager,
+    protected workspaceObserver: WorkspaceIdObserver
   ) {}
 
   ngOnInit() {
+    this.workspaceObserver.workspaceId$.subscribe((id) => {
+      this.workspaceId = id ?? 0;
+    });
+
     this.route.params
       .pipe(
         tap((params: Params) => {
@@ -229,7 +235,6 @@ export class SelectDatabaseSchemaComponent implements OnInit {
     this.displayLoader = true;
     var selectedTables = this.selectedTables.map((x) => x.data);
 
-    console.log('Selected tables:', selectedTables);
     this.schemaService
       .annotate(selectedTables, this.configuration.id)
       .pipe(finalize(() => (this.displayLoader = false)))

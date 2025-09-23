@@ -11,9 +11,9 @@ export class PromptsService {
   backEndUrl: string = environment.apiUrl + '/api/Prompts';
   constructor(private http: HttpClient, private utilities: Utilities) {}
 
-  executePrompt(data: any) {
+  executePrompt(data: any, workspaceId: number) {
     return this.http
-      .post(this.backEndUrl, data)
+      .post(`${this.backEndUrl}?workspaceId=${workspaceId}`, data)
       .pipe(catchError(this.utilities.handleErrorGlobal));
   }
 }

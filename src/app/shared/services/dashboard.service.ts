@@ -15,13 +15,13 @@ export class DashboardService {
     private utilities: Utilities
   ) {}
 
-  get(data: any) {
+  generateDashboard(data: any) {
     return this.http
       .post(this.backEndUrl, data)
       .pipe(catchError(this.utilities.handleErrorGlobal));
   }
 
-  changeType(data: any) {
+  changeDashboardType(data: any) {
     return this.http
       .post(this.backEndUrl + `/change-type`, data)
       .pipe(catchError(this.utilities.handleErrorGlobal));
