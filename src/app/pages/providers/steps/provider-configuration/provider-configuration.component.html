@@ -107,7 +107,7 @@
             valueExpr: 'id',
             stylingMode: 'filled',
             searchEnabled: false,
-            disabled: !isCreateForm
+            readOnly: !isCreateForm
           }"
         >
           <dxo-label [text]="'Provider' | translate"></dxo-label>
@@ -558,7 +558,7 @@
     </dxi-column>
     <dxi-column dataField="httpMethod" [caption]="'HttpMethod' | translate">
     </dxi-column>
-    <dxi-column dataField="apiUrl" [caption]="'ApiUrl' | translate">
+    <dxi-column dataField="apiUrl" [caption]="'APIUrl' | translate">
     </dxi-column>
 
     <!-- Edit & delete Column -->
@@ -622,7 +622,7 @@
   [visible]="showApiPopup"
   [width]="'50%'"
   [showCloseButton]="true"
-  title="Create API"
+  [title]="'CreateAPI' | translate"
   (onHiding)="closeApiPopup()"
   [wrapperAttr]="{ class: 'create-api-popup' }"
   height="60vh"
@@ -757,7 +757,7 @@
       >
         <dx-text-box
           [(value)]="param.name"
-          placeholder="Name"
+          [placeholder]="'Name' | translate"
           stylingMode="outlined"
           width="150"
         >
@@ -796,12 +796,12 @@
 
         <dx-text-box
           [(value)]="param.description"
-          placeholder="Description"
+          [placeholder]="'Description' | translate"
           stylingMode="outlined"
           width="250"
         ></dx-text-box>
 
-        <dx-check-box [(value)]="param.required" text="Required"></dx-check-box>
+        <dx-check-box [(value)]="param.required" [text]="'Required' | translate"></dx-check-box>
 
         <dx-button
           icon="trash"
@@ -812,7 +812,7 @@
       </div>
 
       <dx-button
-        text="Add Parameter"
+        [text]="'AddParameter' | translate"
         icon="plus"
         type="default"
         stylingMode="outlined"

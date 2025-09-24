@@ -9,7 +9,7 @@ import {
   DxTextAreaModule,
 } from 'devextreme-angular';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TextEditorComponent } from '../../shared/components/text-editor/text-editor.component';
 import { TypesService } from '../../shared/services/types.service';
 import { DashboardService } from '../../shared/services/dashboard.service';
@@ -56,7 +56,8 @@ export class DashboardComponent implements OnInit {
     private typesService: TypesService,
     private dashboardService: DashboardService,
     public screen: ScreenService,
-    public workspaceObserver: WorkspaceIdObserver
+    public workspaceObserver: WorkspaceIdObserver,
+      public translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -79,7 +80,10 @@ export class DashboardComponent implements OnInit {
 
   getDahsboardTypes() {
     this.typesService.get('DashboardTypes').subscribe((res) => {
-      this.chartTypes = res;
+      this.chartTypes = res.map((x: any) => {
+        x.nameTranslated = this.translateService.instant(x.name);
+        return x;
+      });
     });
   }
 

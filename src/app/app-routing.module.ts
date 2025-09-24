@@ -12,10 +12,12 @@ export const routes: Routes = [
       { path: 'create-account', loadComponent: () => import('./shared/components/create-account-form/create-account-form.component').then((m) => m.CreateAccountFormComponent), canActivate: [ AuthGuardService ]},
       { path: 'change-password/:userId', loadComponent: () => import('./shared/components/change-password-form/change-password-form.component').then((m) => m.ChangePasswordFormComponent), canActivate: [ AuthGuardService ]},
       { path: 'confirm-email/:userId', loadComponent: () => import('./shared/components/confirmation-form/confirmation-form.component').then((m) => m.ConfirmationFormComponent), canActivate: [ AuthGuardService ]},
+      { path: 'api-keys', loadComponent: () => import('./pages/api-keys/api-keys.component').then((m) => m.ApiKeysComponent)},
       { path: '', redirectTo: 'login', pathMatch: 'full' }, 
     ]
   },
-  {
+  
+ {
     path: 'workspaces',
     canActivate: [AuthGuardService],
     loadComponent: () => import('./layouts/login-layout/nav-bar.component').then((m) => m.NavBarComponent),
@@ -34,11 +36,8 @@ export const routes: Routes = [
       { path: 'providers/create', loadComponent: () => import('./pages/providers/steps/provider-configuration/provider-configuration.component').then((m) => m.ProviderConfigurationComponent)},
       { path: 'providers/:id', loadComponent: () => import('./pages/providers/steps/provider-configuration/provider-configuration.component').then((m) => m.ProviderConfigurationComponent)},
       { path: 'providers/:id/database-schema', loadComponent: () => import('./pages/providers/steps/select-database-schema/select-database-schema.component').then((m) => m.SelectDatabaseSchemaComponent)},
-     
-      { path: 'prompt', loadComponent: () => import('./pages/prompt/prompt.component').then((m) => m.PromptComponent)},
-      
+      { path: 'prompt', loadComponent: () => import('./pages/prompt/prompt.component').then((m) => m.PromptComponent)},      
       { path: 'dashboard', loadComponent: () => import('./pages/dashboard/dashboard.component').then((m) => m.DashboardComponent)},
-      
       { path: '', redirectTo: 'providers', pathMatch: 'full' },
     ]
   },

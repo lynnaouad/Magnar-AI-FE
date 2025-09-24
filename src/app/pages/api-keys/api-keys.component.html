@@ -1,0 +1,280 @@
+<div class="page-container">
+  <div style="display: flex; justify-content: space-between">
+    <div>
+      <h2>
+        {{ "ApiKeys" | translate }}
+      </h2>
+    </div>
+
+    <div>
+      <dx-button
+        [text]="'CreateNewSecretKey' | translate"
+        icon="plus"
+        stylingMode="contained"
+        type="default"
+        (onClick)="createNewSecretKey()"
+      ></dx-button>
+    </div>
+  </div>
+
+  <div>
+    <p>{{ "ApiKeyPageDesc1" | translate }}</p>
+    <p>{{ "ApiKeyPageDesc2" | translate }}</p>
+  </div>
+
+  <div>
+    <ng-container>
+      <dx-data-grid
+        class="dx-card content-block"
+        [dataSource]="dataSource"
+        [remoteOperations]="true"
+        [showBorders]="true"
+        [focusedRowEnabled]="false"
+        [focusedRowIndex]="0"
+        [columnAutoWidth]="true"
+        [columnHidingEnabled]="false"
+      >
+        <dxo-scrolling rowRenderingMode="virtual"> </dxo-scrolling>
+        <dxo-paging [pageSize]="5"> </dxo-paging>
+        <dxo-pager
+          [visible]="true"
+          [allowedPageSizes]="[5, 10, 20, 30, 40, 50, 100]"
+          displayMode="full"
+          [showPageSizeSelector]="true"
+          [showInfo]="true"
+          [showNavigationButtons]="true"
+        >
+        </dxo-pager>
+
+        <dxo-pager [visible]="true"></dxo-pager>
+
+        <!----------------------------------- Columns ---------------------------------------->
+
+        <dxi-column dataField="name" [caption]="'Name' | translate">
+        </dxi-column>
+
+        <dxi-column
+          dataField="workspaceName"
+          [caption]="'Workspace' | translate"
+        >
+        </dxi-column>
+
+        <dxi-column
+          dataField="createdUtc"
+          [caption]="'Created' | translate"
+          dataType="datetime"
+          format="d MMMM yyyy"
+        >
+        </dxi-column>
+
+        <dxi-column
+          dataField="lastUsedUtc"
+          [caption]="'LastUsed' | translate"
+          dataType="datetime"
+          format="d MMMM yyyy"
+        >
+        </dxi-column>
+
+        <!-- Edit & delete Column -->
+        <dxi-column cellTemplate="actionsTemplate"></dxi-column>
+
+        <div *dxTemplate="let cellInfo of 'actionsTemplate'">
+          <div class="table-btns">
+            <dx-button
+              [id]="'edit-btn-' + cellInfo.rowIndex"
+              class="table-edit-btn"
+              icon="edit"
+              stylingMode="contained"
+              (onClick)="onEditRecord(cellInfo.row.data)"
+            ></dx-button>
+
+            <dx-button
+              [id]="'delete-btn-' + cellInfo.rowIndex"
+              class="table-delete-btn"
+              icon="trash"
+              stylingMode="contained"
+              (onClick)="onDeleteRecord(cellInfo.row.data)"
+            ></dx-button>
+
+            <dx-tooltip
+              [target]="'#edit-btn-' + cellInfo.rowIndex"
+              showEvent="mouseenter"
+              hideEvent="mouseleave"
+              position="top"
+              [hideOnOutsideClick]="false"
+            >
+              <div
+                *dxTemplate="let data = data; of: 'content'"
+                style="text-align: left"
+              >
+                {{ "EditRecord" | translate }}
+              </div>
+            </dx-tooltip>
+
+            <dx-tooltip
+              [target]="'#delete-btn-' + cellInfo.rowIndex"
+              showEvent="mouseenter"
+              hideEvent="mouseleave"
+              position="top"
+              [hideOnOutsideClick]="false"
+            >
+              <div
+                *dxTemplate="let data = data; of: 'content'"
+                style="text-align: left"
+              >
+                {{ "DeleteRecord" | translate }}
+              </div>
+            </dx-tooltip>
+          </div>
+        </div>
+      </dx-data-grid>
+    </ng-container>
+  </div>
+
+  <div style="margin-top: 30px">
+    <dx-button
+      [text]="'Cancel' | translate"
+      stylingMode="outlined"
+      type="default"
+      width="10%"
+      (onClick)="Cancel()"
+    ></dx-button>
+  </div>
+</div>
+
+<!----------------------------------------------------------------->
+
+<dx-popup
+  [title]="(isCreatePopup ? 'CreateSecretKey' : 'UpdateSecretKey') | translate"
+  [(visible)]="showPopup"
+  [fullScreen]="!!(screen.xSmallScreenChanged | async)"
+  [wrapperAttr]="{ class: 'create-api-key-popup' }"
+  width="30%"
+  [disabled]="submitLoading"
+>
+  <form
+    class="create-api-key-form"
+    (submit)="onCreateApiKey($event)"
+    method="post"
+    action=""
+  >
+    <dx-form
+      [formData]="newKey"
+      [disabled]="submitLoading"
+      [colCount]="1"
+      #createApiKeyForm
+    >
+      <dxi-item
+        dataField="name"
+        editorType="dxTextBox"
+        [editorOptions]="{
+        stylingMode: 'filled',
+        mode: 'text',
+        inputAttr: { autocomplete: 'name' },
+      }"
+        cssClass="form-item"
+      >
+        <dxi-validation-rule
+          type="required"
+          [message]="'ValidationRules.RequiredField' | translate"
+        ></dxi-validation-rule>
+        <dxo-label template="nameLabel"></dxo-label>
+      </dxi-item>
+
+      <div *dxTemplate="let data of 'nameLabel'">
+        <span>{{ "Name" | translate }}</span>
+      </div>
+
+      <dxi-item
+        dataField="tenantId"
+        editorType="dxSelectBox"
+        [editorOptions]="{
+          items: workspaces,
+          displayExpr: 'name',
+          valueExpr: 'id',
+          stylingMode: 'filled',
+          searchEnabled: false,
+          readOnly: !isCreatePopup
+        }"
+      >
+        <dxo-label [text]="'Workspaces' | translate"></dxo-label>
+        <dxi-validation-rule
+          type="required"
+          [message]="'ValidationRules.RequiredField' | translate"
+        ></dxi-validation-rule>
+      </dxi-item>
+
+      <dxi-item itemType="group" [colCount]="2">
+        <dxi-item [colSpan]="1"><span></span></dxi-item>
+        <dxi-item [colSpan]="1">
+          <dx-button
+            class="submit-btn"
+            width="100%"
+            stylingMode="contained"
+            type="default"
+            [useSubmitBehavior]="true"
+            [disabled]="submitLoading"
+          >
+            <dx-load-indicator
+              *ngIf="submitLoading"
+              width="24px"
+              height="24px"
+              [visible]="true"
+            ></dx-load-indicator>
+
+            <div *ngIf="!submitLoading">
+              {{ (isCreatePopup ? "Submit" : "Save") | translate }}
+            </div>
+          </dx-button>
+        </dxi-item>
+      </dxi-item>
+    </dx-form>
+  </form>
+</dx-popup>
+
+<!----------------------------------------------------------------->
+
+<dx-popup
+  [title]="'SaveYourKey' | translate"
+  [(visible)]="showSecretKeyPopup"
+  [fullScreen]="!!(screen.xSmallScreenChanged | async)"
+  [wrapperAttr]="{ class: 'save-api-key-popup' }"
+  width="30%"
+>
+  <p>
+    {{ "SaveSecretKeyDesc" | translate }}
+  </p>
+  <dx-text-box
+    [(value)]="secretKey"
+    stylingMode="filled"
+    mode="text"
+    [inputAttr]="{ autocomplete: 'name' }"
+    class="form-item"
+    [readOnly]="true"
+    [buttons]="[
+      {
+        name: 'Copy' | translate,
+        location: 'after',
+        options: {
+          icon: 'copy',
+          stylingMode: 'text',
+          disabled: false,
+          onClick: copySecretKey
+        }
+      }
+    ]"
+  >
+  </dx-text-box>
+</dx-popup>
+
+<!----------------------------------------------------------------->
+
+<verification-popup-form
+  [title]="'RevokeApiKey' | translate"
+  [message]="'RevokeApiKeyValidation' | translate"
+  [(visible)]="isDeletePopupOpened"
+  (onConfirm)="deleteRecord()"
+  [(isLoading)]="deleteLoading"
+  [isWarningButton]="true"
+>
+</verification-popup-form>
