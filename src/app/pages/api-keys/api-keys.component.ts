@@ -22,6 +22,7 @@ import { cloneDeep } from 'lodash';
 import { ToastNotificationManager } from '../../shared/utils/toast-notification.service';
 import { VerificationPopupFormComponent } from '../../shared/components/verification-popup-form/verification-popup-form.component';
 import { Location } from '@angular/common';
+import { WorkspaceIdObserver } from '../../app-store/Observables/WorkspaceIdObserver.service';
 
 @Component({
   selector: 'app-api-keys',
@@ -54,6 +55,7 @@ export class ApiKeysComponent implements OnInit {
   tempIdToDelete: any = 0;
 
   secretKey: string = '';
+  workspaceId: number = 0;
 
   @ViewChild('createApiKeyForm', { static: false })
   apiKeyForm!: DxFormComponent;
@@ -65,23 +67,16 @@ export class ApiKeysComponent implements OnInit {
     protected screen: ScreenService,
     protected workspacesService: WorkspaceService,
     protected toastNotificationManager: ToastNotificationManager,
-    protected location: Location
+    protected location: Location,
+    protected workspaceObserver: WorkspaceIdObserver
   ) {}
 
   ngOnInit() {
-    this.loadData();
-    this.getWorkspaces();
-  }
-
-  getWorkspaces() {
-    this.workspacesService.getAll().subscribe((res) => {
-      if (res) {
-        this.workspaces = res.map((x: any) => {
-          x.id = x.id.toString();
-          return x;
-        });
-      }
+    this.workspaceObserver.workspaceId$.subscribe((id) => {
+      this.workspaceId = id ?? 0;
     });
+
+    this.loadData();
   }
 
   loadData() {
@@ -89,9 +84,12 @@ export class ApiKeysComponent implements OnInit {
       key: 'id',
       load: (loadOptions) =>
         new Promise((resolve, reject) => {
+          let customFilter = `TenantId eq '${this.workspaceId}'`;
+
           let queryString = this.odataUtilityService.constructQueryString(
             loadOptions,
-            []
+            [],
+            customFilter
           );
 
           this.apiKeysService.getOdata(queryString).subscribe(
@@ -128,6 +126,7 @@ export class ApiKeysComponent implements OnInit {
     }
 
     this.submitLoading = true;
+    this.newKey.tenantId = this.workspaceId.toString();
 
     if (this.newKey.id) {
       this.apiKeysService
@@ -188,7 +187,7 @@ export class ApiKeysComponent implements OnInit {
 
   onDeleteRecord(item: any) {
     this.tempIdToDelete = item.id;
-   
+
     this.isDeletePopupOpened = true;
   }
 
@@ -216,7 +215,7 @@ export class ApiKeysComponent implements OnInit {
       });
   }
 
-  Cancel(){
+  Cancel() {
     this.location.back();
   }
 }

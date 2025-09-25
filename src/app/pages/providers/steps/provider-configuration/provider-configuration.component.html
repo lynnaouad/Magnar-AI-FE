@@ -66,10 +66,7 @@
         [colSpan]="2"
         cssClass="custom-group"
       >
-        <dxi-item
-          dataField="isDefault"
-          editorType="dxSwitch"
-        >
+        <dxi-item dataField="isDefault" editorType="dxSwitch">
           <dxo-label template="isDefaultLabel"></dxo-label>
         </dxi-item>
       </dxi-item>
@@ -118,7 +115,7 @@
         </dxi-item>
       </dxi-item>
 
-      <!-- SQL Server config fields -->
+      <!------------ SQL Server config fields ------------>
       <dxi-item
         *ngIf="data?.type === 1"
         itemType="group"
@@ -234,7 +231,7 @@
         </dxi-item>
       </dxi-item>
 
-      <!-- Api -->
+      <!------------ Api fields ------------>
       <dxi-item
         *ngIf="this.data.type === 2"
         itemType="group"
@@ -288,6 +285,130 @@
             [message]="'ValidationRules.RequiredField' | translate"
           ></dxi-validation-rule>
           <dxo-label template="tokenUrlLabel"></dxo-label>
+        </dxi-item>
+      </dxi-item>
+
+      <!-- Cookie session  -->
+      <dxi-item
+        *ngIf="
+          this.data.type === 2 &&
+          this.data.details.apiProviderAuthDetails?.authType === 4
+        "
+        itemType="group"
+        cssClass="custom-group"
+      >
+        <dxi-item
+          dataField="details.apiProviderAuthDetails.tokenUrl"
+          editorType="dxTextBox"
+          [editorOptions]="{
+            stylingMode: 'filled',
+            mode: 'text',
+            inputAttr: { autocomplete: 'tokenUrl' }
+          }"
+          cssClass="form-item"
+        >
+          <dxi-validation-rule
+            type="required"
+            [message]="'ValidationRules.RequiredField' | translate"
+          ></dxi-validation-rule>
+          <dxo-label template="UrlLabel"></dxo-label>
+        </dxi-item>
+      </dxi-item>
+
+      <!-- HTTP Method -->
+      <dxi-item
+        *ngIf="
+          this.data.type === 2 &&
+          this.data.details.apiProviderAuthDetails?.authType === 4
+        "
+        editorType="dxSelectBox"
+        [editorOptions]="{
+          stylingMode: 'filled',
+          items: httpMethods,
+          valueExpr: 'name',
+          displayExpr: 'name',
+          value: 'POST',
+          readOnly: true
+        }"
+      >
+        <dxi-validation-rule
+          type="required"
+          [message]="'ValidationRules.RequiredField' | translate"
+        ></dxi-validation-rule>
+        <dxo-label template="httpMethodLabel"></dxo-label>
+      </dxi-item>
+
+      <!-- Payload -->
+      <dxi-item
+        [colSpan]="2"
+        [colCount]="2"
+        *ngIf="
+          this.data.type === 2 &&
+          this.data.details.apiProviderAuthDetails?.authType === 4
+        "
+        dataField="details.apiProviderAuthDetails.payload"
+        editorType="dxTextArea"
+        [editorOptions]="{
+            stylingMode: 'filled',
+            width: '100%',
+            autoResizeEnabled: true,
+            minHeight: 200,
+            maxHeight: 200,
+          }"
+      >
+        <dxo-label template="payloadLabel"></dxo-label>
+      </dxi-item>
+
+      <!-- Api key -->
+      <dxi-item
+        *ngIf="
+          this.data.type === 2 &&
+          this.data.details.apiProviderAuthDetails?.authType === 5
+        "
+        itemType="group"
+        cssClass="custom-group"
+      >
+        <dxi-item
+          dataField="details.apiProviderAuthDetails.apiKeyName"
+          editorType="dxTextBox"
+          [editorOptions]="{
+            stylingMode: 'filled',
+            mode: 'text',
+            inputAttr: { autocomplete: 'apiKeyName' }
+          }"
+          cssClass="form-item"
+        >
+          <dxi-validation-rule
+            type="required"
+            [message]="'ValidationRules.RequiredField' | translate"
+          ></dxi-validation-rule>
+          <dxo-label template="apiKeyNameLabel"></dxo-label>
+        </dxi-item>
+      </dxi-item>
+
+            <dxi-item
+        *ngIf="
+          this.data.type === 2 &&
+          this.data.details.apiProviderAuthDetails?.authType === 5
+        "
+        itemType="group"
+        cssClass="custom-group"
+      >
+        <dxi-item
+          dataField="details.apiProviderAuthDetails.apiKeyValue"
+          editorType="dxTextBox"
+          [editorOptions]="{
+            stylingMode: 'filled',
+            mode: 'text',
+            inputAttr: { autocomplete: 'apiKeyValue' }
+          }"
+          cssClass="form-item"
+        >
+          <dxi-validation-rule
+            type="required"
+            [message]="'ValidationRules.RequiredField' | translate"
+          ></dxi-validation-rule>
+          <dxo-label template="apiKeyValueLabel"></dxo-label>
         </dxi-item>
       </dxi-item>
 
@@ -412,6 +533,10 @@
         <span>{{ "TokenUrl" | translate }}</span>
       </div>
 
+      <div *dxTemplate="let data of 'UrlLabel'">
+        <span>{{ "Url" | translate }}</span>
+      </div>
+
       <div *dxTemplate="let data of 'clientIdLabel'">
         <span>{{ "ClientId" | translate }}</span>
       </div>
@@ -423,6 +548,23 @@
       <div *dxTemplate="let data of 'isDefaultLabel'">
         <span>{{ "Default" | translate }}</span>
       </div>
+
+      <div *dxTemplate="let data of 'httpMethodLabel'">
+        <span>{{ "HttpMethod" | translate }}</span>
+      </div>
+
+      <div *dxTemplate="let data of 'payloadLabel'">
+        <span>{{ "PayloadJSON" | translate }}</span>
+      </div>
+
+         <div *dxTemplate="let data of 'apiKeyNameLabel'">
+        <span>{{ "ApiKey" | translate }}</span>
+      </div>
+
+               <div *dxTemplate="let data of 'apiKeyValueLabel'">
+        <span>{{ "ApiValue" | translate }}</span>
+      </div>
+
 
       <div *dxTemplate="let _ of 'cancelTpl'">
         <dx-button
@@ -801,7 +943,10 @@
           width="250"
         ></dx-text-box>
 
-        <dx-check-box [(value)]="param.required" [text]="'Required' | translate"></dx-check-box>
+        <dx-check-box
+          [(value)]="param.required"
+          [text]="'Required' | translate"
+        ></dx-check-box>
 
         <dx-button
           icon="trash"

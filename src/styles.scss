@@ -509,3 +509,13 @@ h5 {
   background-color: white;
   min-height: 85vh;
 }
+
+.dx-textarea {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.dx-textarea.dx-texteditor.dx-state-focused::before {
+  border-bottom: none;
+}

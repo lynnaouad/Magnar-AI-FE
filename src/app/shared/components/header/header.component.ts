@@ -106,18 +106,9 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     this.languageService
-      .getTranslations(['SignOut', 'ApiKeys'])
+      .getTranslations(['SignOut'])
       .subscribe((translations) => {
         this.menuItems = [
-          {
-            text: translations['ApiKeys'],
-            icon: 'key',
-            code: 'ApiKeys',
-            order: 1,
-            click: () => {
-              this.navigateTo('/api-keys');
-            },
-          },
           {
             text: translations['SignOut'],
             icon: 'runner',

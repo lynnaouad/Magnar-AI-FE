@@ -6,7 +6,13 @@ export const Navigation = [
     icon: 'preferences',
     selected: true,
   },
-
+  {
+    id: 'ApiKeys',
+    text: 'ApiKeys',
+    path: '/workspaces/:workspaceId/api-keys',
+    icon: 'key',
+    selected: false,
+  },
   {
     id: 'Prompts',
     text: 'Prompt',

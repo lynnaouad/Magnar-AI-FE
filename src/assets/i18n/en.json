@@ -299,6 +299,9 @@
   "Workspace": "Workspace",
   "Delete": "Delete",
   "Type": "Type",
+  "CookieSession": "Cookie Session",
+  "NoAuth": "No Auth",
+  "ApiValue": "Api Value",
 
   "NavBar.Home": "Home",
   "NavBar.MyCv": "My CV",

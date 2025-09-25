@@ -54,12 +54,6 @@
         </dxi-column>
 
         <dxi-column
-          dataField="workspaceName"
-          [caption]="'Workspace' | translate"
-        >
-        </dxi-column>
-
-        <dxi-column
           dataField="createdUtc"
           [caption]="'Created' | translate"
           dataType="datetime"
@@ -131,7 +125,7 @@
     </ng-container>
   </div>
 
-  <div style="margin-top: 30px">
+  <!-- <div style="margin-top: 30px">
     <dx-button
       [text]="'Cancel' | translate"
       stylingMode="outlined"
@@ -139,7 +133,7 @@
       width="10%"
       (onClick)="Cancel()"
     ></dx-button>
-  </div>
+  </div> -->
 </div>
 
 <!----------------------------------------------------------------->
@@ -184,25 +178,6 @@
       <div *dxTemplate="let data of 'nameLabel'">
         <span>{{ "Name" | translate }}</span>
       </div>
-
-      <dxi-item
-        dataField="tenantId"
-        editorType="dxSelectBox"
-        [editorOptions]="{
-          items: workspaces,
-          displayExpr: 'name',
-          valueExpr: 'id',
-          stylingMode: 'filled',
-          searchEnabled: false,
-          readOnly: !isCreatePopup
-        }"
-      >
-        <dxo-label [text]="'Workspaces' | translate"></dxo-label>
-        <dxi-validation-rule
-          type="required"
-          [message]="'ValidationRules.RequiredField' | translate"
-        ></dxi-validation-rule>
-      </dxi-item>
 
       <dxi-item itemType="group" [colCount]="2">
         <dxi-item [colSpan]="1"><span></span></dxi-item>

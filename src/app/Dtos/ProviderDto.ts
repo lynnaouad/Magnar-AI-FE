@@ -34,6 +34,7 @@ export class ApiProviderAuthDetailsDto {
   password: string = '';
   apiKeyName: string = '';
   apiKeyValue: string = '';
+  payload: string= '';
 }
 
 export class ApiProviderDetailsDto {

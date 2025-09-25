@@ -299,6 +299,9 @@
   "Workspace": "مساحة العمل",
   "Delete": "حذف",
   "Type": "النوع",
+  "CookieSession": "جلسة كوكي",
+  "NoAuth": "بدون مصادقة",
+  "ApiValue": "قيمة واجهة البرمجة (API)",
 
   "NavBar.Home": "الصفحة الرئيسية",
   "NavBar.MyCv": "سيرتي الذاتية",
