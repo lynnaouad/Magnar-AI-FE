@@ -39,7 +39,8 @@
   [wrapperAttr]="{ class: 'crop-image-popup' }"
   (onHidden)="cancelCrop()"
   [width]="'50%'"
-  height="auto"
+  [height]="'auto'"
+  [maxHeight]="'78vh'"
 >
   <div class="popup-content">
     <div class="popup-image-cropper">

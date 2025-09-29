@@ -16,4 +16,10 @@ export class PromptsService {
       .post(`${this.backEndUrl}?workspaceId=${workspaceId}`, data)
       .pipe(catchError(this.utilities.handleErrorGlobal));
   }
+
+  loadHistory(workspaceId: number) {
+    return this.http
+      .get(`${this.backEndUrl}?workspaceId=${workspaceId}`)
+      .pipe(catchError(this.utilities.handleErrorGlobal));
+  }
 }

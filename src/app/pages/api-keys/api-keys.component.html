@@ -144,6 +144,8 @@
   [fullScreen]="!!(screen.xSmallScreenChanged | async)"
   [wrapperAttr]="{ class: 'create-api-key-popup' }"
   width="30%"
+  [height]="'auto'"
+  [maxHeight]="'78vh'"
   [disabled]="submitLoading"
 >
   <form
@@ -215,6 +217,8 @@
   [fullScreen]="!!(screen.xSmallScreenChanged | async)"
   [wrapperAttr]="{ class: 'save-api-key-popup' }"
   width="30%"
+    [height]="'auto'"
+   [maxHeight]="'78vh'"
 >
   <p>
     {{ "SaveSecretKeyDesc" | translate }}

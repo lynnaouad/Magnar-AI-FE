@@ -2,6 +2,8 @@
 
 @use "variables.scss" as *;
 
+@import url("../node_modules/@devexpress/analytics-core/dist/css/dx-analytics.common.css");  
+@import url("../node_modules/@devexpress/analytics-core/dist/css/dx-querybuilder.css");  
 @import url("../node_modules/devexpress-dashboard/dist/css/dx-dashboard.light.css");
 
 [dir="rtl"] {
@@ -35,20 +37,6 @@
   }
 }
 
-/*********************************** Splitter *******************************************/
-
-.dx-splitter .dx-resize-handle {
-  background-color: transparent !important;
-}
-
-.dx-splitter .dx-resize-handle:focus {
-  color: rgba(0, 0, 0, 0.685);
-}
-
-.dx-resize-handle.dx-resize-handle-horizontal.dx-resize-handle-resizable {
-  background-color: #fafafa !important;
-  width: 20px !important;
-}
 
 /*********************************** Scroller Bars *******************************************/
 
@@ -183,128 +171,6 @@ a {
   color: rgba(0, 38, 255, 0.815);
   font-weight: bold;
 }
-
-/*********************************** File Uploader *******************************************/
-
-.dx-fileuploader-wrapper {
-  padding: 0px !important;
-}
-
-.uploaded-file {
-  padding: 8px;
-  border-radius: 4px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  display: flex;
-  justify-content: space-between;
-  font-weight: bold;
-  margin-top: 15px;
-}
-
-.uploaded-file a {
-  color: #007bff;
-  text-decoration: none;
-}
-
-.uploaded-file a:hover {
-  text-decoration: underline;
-}
-
-.uploaded-file .dx-icon:hover {
-  font-weight: bold;
-}
-
-/*********************************** Stack *******************************************/
-
-.stack-icon {
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 25px;
-  color: var(--dx-magnar-blue);
-}
-
-.stack-icon:hover {
-  color: var(--dx-magnar-blue-hover);
-}
-
-.stack-list {
-  margin-top: 10px;
-}
-
-.stack-item-container {
-  display: flex;
-  flex-direction: column;
-}
-
-.stack-item {
-  display: flex;
-  flex-direction: row;
-}
-
-.stack-details {
-  flex: 1;
-}
-
-.stack-details h3 {
-  margin: 0;
-  font-size: 18px;
-  color: #333;
-}
-
-.stack-details p {
-  margin: 5px 0;
-  font-size: 14px;
-  color: #666;
-}
-
-.stack-actions {
-  display: flex;
-  gap: 10px;
-}
-
-.stack-show-more {
-  border-top: 1px solid var(--dx-color-border);
-  text-align: center;
-  margin-top: 10px;
-}
-
-.stack-show-more div {
-  margin-top: 10px;
-  cursor: pointer;
-  color: var(--dx-magnar-blue);
-  font-weight: 500;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.stack-show-more div:hover {
-  color: var(--dx-magnar-blue-hover);
-}
-
-.stack-separator {
-  height: 1px;
-  width: 100%;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  background: var(--dx-color-border);
-}
-
-/*********************************** Popup *******************************************/
-
-.dx-overlay-content.dx-popup-normal.dx-popup-draggable.dx-resizable {
-  max-height: 95vh !important;
-  height: auto !important;
-}
-
-.popup-body {
-  height: 100%;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
 /*********************************** Form *******************************************/
 
 dx-form {

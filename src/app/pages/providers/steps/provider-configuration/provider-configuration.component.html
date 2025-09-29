@@ -767,7 +767,8 @@
   [title]="'CreateAPI' | translate"
   (onHiding)="closeApiPopup()"
   [wrapperAttr]="{ class: 'create-api-popup' }"
-  height="60vh"
+  [height]="'auto'"
+  [maxHeight]="'78vh'"
 >
   <div *dxTemplate="let data of 'content'">
     <form

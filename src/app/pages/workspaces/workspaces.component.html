@@ -25,7 +25,11 @@
     <div class="workspaces-block">
       <div class="workspaces-container">
         <div class="workspaces" *ngFor="let item of workspaces">
-          <div class="workspace" (click)="openWorkspace(item)" style="display: flex; flex-direction: column">
+          <div
+            class="workspace"
+            (click)="openWorkspace(item)"
+            style="display: flex; flex-direction: column"
+          >
             <div style="display: flex; justify-content: flex-end">
               <div>
                 <span
@@ -84,7 +88,8 @@
   [wrapperAttr]="{ class: 'create-workdpace-popup' }"
   (onHidden)="closePopup()"
   width="40%"
-  height="auto"
+  [height]="'auto'"
+  [maxHeight]="'78vh'"
   #popupRef
 >
   <form

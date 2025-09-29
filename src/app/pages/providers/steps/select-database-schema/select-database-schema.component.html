@@ -125,7 +125,8 @@
     [wrapperAttr]="{ class: 'create-workdpace-popup' }"
     (onHidden)="tablePopupVisible = false"
     width="40%"
-    height="auto"
+    [height]="'auto'"
+    [maxHeight]="'78vh'"
   >
     <div *dxTemplate="let data of 'content'">
       <dx-text-area
@@ -155,7 +156,8 @@
     [wrapperAttr]="{ class: 'create-workdpace-popup' }"
     (onHidden)="columnPopupVisible = false"
     width="40%"
-    height="auto"
+    [height]="'auto'"
+    [maxHeight]="'78vh'"
   >
     <div *dxTemplate="let data of 'content'">
       <dx-text-area

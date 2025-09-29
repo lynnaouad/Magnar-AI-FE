@@ -1,69 +1,107 @@
-<div class="page-container">
-  <div style="width: 80%">
-    <h3>{{ "AskAI" | translate }}</h3>
-    <br />
-    <form
-      class="dashboard-generator-form"
-      (submit)="onPromptSubmit($event)"
-      method="post"
-      action=""
-    >
-      <dx-form [colCount]="5" #dashboardGenerationForm [formData]="data">
-        <!-- Description -->
-        <dxi-item [colSpan]="5">
-          <dx-text-area
-            [(value)]="data.prompt"
-            valueChangeEvent="input"
-            stylingMode="filled"
-            [height]="200"
-            [placeholder]="'PlaceHolders.AskAIDescription' | translate"
-          >
-          </dx-text-area>
-        </dxi-item>
-
-        <dxi-item>
-          <dx-button
-            class="submit-btn"
-            width="100%"
-            stylingMode="contained"
-            type="default"
-            [useSubmitBehavior]="true"
-            [disabled]="generateLoading"
-          >
-            <dx-load-indicator
-              *ngIf="generateLoading"
-              width="24px"
-              height="24px"
-              [visible]="true"
-            ></dx-load-indicator>
-
-            <div *ngIf="!generateLoading">{{ "Execute" | translate }}</div>
-          </dx-button>
-
-          <dxo-label template="btnLabel"> </dxo-label>
-        </dxi-item>
-
-        <div *dxTemplate="let data of 'typeLabel'">
-          <span>{{ "Type" | translate }}</span>
-        </div>
-        <div *dxTemplate="let data of 'btnLabel'">
-          <span></span>
-        </div>
-      </dx-form>
-    </form>
-  </div>
-
-  <div class="response-viewer-section" *ngIf="messages">
-    <h3>{{ "Result" | translate }}</h3>
-    <div>
-      <div *ngFor="let msg of messages">
-        <ng-container *ngIf="msg.content">
-          <b>{{ msg.role }}:</b> {{ msg.content }}
-        </ng-container>
+<div class="prompt-page-container">
+  <div class="chat-container">
+    <!-- Empty state -->
+    <div *ngIf="messages.length === 0" class="empty-state">
+      <!-- Fixed header -->
+      <div class="chat-header">
+        <h3>{{ "AskAI" | translate }}</h3>
       </div>
 
-      <hr />
-      <pre>{{ latest }}</pre>
+      <h2>{{ "WhatAreYouWorkingOn" | translate }}</h2>
+
+      <form class="empty-input-wrapper" (submit)="onPromptSubmit($event)">
+        <dx-text-area
+          [(value)]="data.prompt"
+          valueChangeEvent="input"
+          [maxHeight]="250"
+          [autoResizeEnabled]="true"
+          [placeholder]="'PlaceHolders.AskAIDescription' | translate"
+          stylingMode="filled"
+          class="empty-input"
+        >
+        </dx-text-area>
+
+        <dx-button
+          class="send-btn"
+          icon="send"
+          type="default"
+          stylingMode="contained"
+          [useSubmitBehavior]="true"
+          [disabled]="!data.prompt?.trim()"
+        ></dx-button>
+      </form>
     </div>
+
+    <!-- Chat state -->
+    <ng-container *ngIf="messages.length > 0">
+      <!-- Messages -->
+      <div class="messages-window" #messagesWindow>
+        <div
+          *ngFor="let msg of messages"
+          class="message-wrapper"
+          [ngClass]="msg.role"
+        >
+          <div class="message-bubble">
+            <div class="message-role">
+              {{
+                msg.role === "user" ? ("You" | translate) : ("AI" | translate)
+              }}
+
+              <!-- Copy button only for AI -->
+              <button
+                *ngIf="msg.role === 'assistant'"
+                class="copy-btn"
+                (click)="utilityService.copyToClipBoard(msg.content)"
+              >
+                <i class="dx-icon dx-icon-copy"></i>
+              </button>
+            </div>
+
+            <div class="message-text">{{ msg.content }}</div>
+          </div>
+        </div>
+
+        <dx-load-indicator
+          class="chat-loader"
+          *ngIf="generateLoading"
+          height="32"
+          width="32"
+        ></dx-load-indicator>
+      </div>
+
+      <!-- Prompt input -->
+      <form class="chat-input-wrapper" (submit)="onPromptSubmit($event)">
+        <dx-text-area
+          [(value)]="data.prompt"
+          valueChangeEvent="input"
+          [maxHeight]="250"
+          [autoResizeEnabled]="true"
+          [placeholder]="'PlaceHolders.AskAIDescription' | translate"
+          stylingMode="filled"
+          class="chat-input"
+        >
+        </dx-text-area>
+
+        <!-- Toggle button -->
+        <dx-button
+          *ngIf="!generateLoading"
+          class="send-btn"
+          icon="send"
+          type="default"
+          stylingMode="contained"
+          [useSubmitBehavior]="true"
+          [disabled]="!data.prompt?.trim()"
+        ></dx-button>
+
+        <dx-button
+          *ngIf="generateLoading"
+          class="stop-btn"
+          icon="square"
+          type="default"
+          stylingMode="contained"
+          (onClick)="onStop()"
+        ></dx-button>
+      </form>
+    </ng-container>
   </div>
 </div>
