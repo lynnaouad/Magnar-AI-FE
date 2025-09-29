@@ -21,7 +21,7 @@
           </dx-text-area>
         </dxi-item>
 
-        <dxi-item>
+        <dxi-item [colSpan]="1">
           <dx-select-box
             [items]="chartTypes"
             [(value)]="data['selectedChartType']"
@@ -36,7 +36,21 @@
           <dxo-label [visible]="true" template="typeLabel"></dxo-label>
         </dxi-item>
 
-        <dxi-item>
+        <dxi-item [colSpan]="2">
+          <dx-select-box
+            [items]="providers"
+            [(value)]="data['providerId']"
+            [placeholder]="'PlaceHolders.Select' | translate"
+            stylingMode="filled"
+            displayExpr="name"
+            valueExpr="id"
+          >
+            >
+          </dx-select-box>
+          <dxo-label [visible]="true" template="providersLabel"></dxo-label>
+        </dxi-item>
+
+        <dxi-item [colSpan]="1">
           <dx-button
             class="submit-btn"
             width="100%"
@@ -58,9 +72,14 @@
           <dxo-label template="btnLabel"> </dxo-label>
         </dxi-item>
 
+        <div *dxTemplate="let data of 'providersLabel'">
+          <span>{{ "Provider" | translate }}</span>
+        </div>
+
         <div *dxTemplate="let data of 'typeLabel'">
           <span>{{ "Type" | translate }}</span>
         </div>
+
         <div *dxTemplate="let data of 'btnLabel'">
           <span></span>
         </div>

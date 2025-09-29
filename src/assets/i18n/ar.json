@@ -302,7 +302,8 @@
   "CookieSession": "جلسة كوكي",
   "NoAuth": "بدون مصادقة",
   "ApiValue": "قيمة واجهة البرمجة (API)",
-   "WhatAreYouWorkingOn": "ماذا تعمل عليه؟",
+  "WhatAreYouWorkingOn": "ماذا تعمل عليه؟",
+  "MagnarAI": "Magnar AI",
 
   "NavBar.Home": "الصفحة الرئيسية",
   "NavBar.MyCv": "سيرتي الذاتية",

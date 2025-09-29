@@ -31,6 +31,7 @@ import { ProvidersService } from '../../../../shared/services/providers.service'
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { ToastNotificationManager } from '../../../../shared/utils/toast-notification.service';
 import { WorkspaceIdObserver } from '../../../../app-store/Observables/WorkspaceIdObserver.service';
+import { v4 as uuidv4 } from 'uuid';
 
 class TableDto {
   schemaName: string = '';
@@ -160,19 +161,21 @@ export class SelectDatabaseSchemaComponent implements OnInit {
   buildTree(tables: TableDto[]): TreeItem[] {
     const items: TreeItem[] = [];
     for (const t of tables) {
-      const tableId = t.fullName;
+      const tableId = `${t.fullName}_${uuidv4()}`;
 
       items.push({
         id: tableId,
-        name: tableId,
+        name: t.fullName,
         type: 'table',
         data: t,
         selected: t.isSelected ?? false,
       });
 
       for (const c of t.columns) {
+        const colId = `${t.fullName}.${c.columnName}_${uuidv4()}`;
+
         items.push({
-          id: `${tableId}.${c.columnName}`,
+          id: colId,
           parentId: tableId,
           name: c.columnName,
           type: 'column',

@@ -15,6 +15,12 @@ export class ProvidersService {
     private utilities: Utilities
   ) {}
 
+  getAll(workspaceId: number, providerType: any) {
+    return this.http
+      .get(this.backEndUrl + `?WorkspaceId=${workspaceId}&ProviderType=${providerType}`)
+      .pipe(catchError(this.utilities.handleErrorGlobal));
+  }
+
   get(id: number) {
     return this.http
       .get(this.backEndUrl + `/${id}`)
